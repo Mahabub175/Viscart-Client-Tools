@@ -7,6 +7,7 @@ const nextConfig = {
       "viscart.api.vitasoftsolutions.com",
       "anayase.com",
       "mahabubapi2.moonsgallerysystem.com",
+      "shokhbazar.com",
     ],
   },
 };

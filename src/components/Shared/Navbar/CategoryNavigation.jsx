@@ -76,7 +76,7 @@ const CategoryNavigation = () => {
           link: "/offers",
         },
         {
-          name: "Contact",
+          name: "Contact Us",
           link: "/contact",
         },
       ].map((item, index) => (
@@ -97,7 +97,7 @@ const CategoryNavigation = () => {
 
   return (
     <div className="bg-primary lg:bg-white lg:text-black border-y mb-5">
-      <div className="container mx-auto flex flex-col lg:flex-row gap-10 lg:items-center px-5">
+      <div className="my-container mx-auto flex flex-col lg:flex-row gap-10 lg:items-center">
         <Dropdown
           overlay={
             <Menu>

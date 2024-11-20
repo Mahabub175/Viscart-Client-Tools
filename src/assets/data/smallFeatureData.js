@@ -1,21 +1,23 @@
-import feature1 from "@/assets/images/homepage/f1.jpeg";
-import feature2 from "@/assets/images/homepage/f2.jpeg";
-import feature3 from "@/assets/images/homepage/f3.jpeg";
-
 export const smallFeatureData = [
   {
-    name: "Best Prices & Deals",
-    feature: "Don’t miss our daily amazing deals and prices",
-    image: feature1,
+    name: "Free Shipping",
+    feature:
+      "Free shipping for all orders over BDT. 5000 Contrary to popular believe",
+    image: "https://shokhbazar.com/assets/images/162196463701.png",
   },
   {
-    name: "Refundable",
-    feature: "If your items have damage we agree to refund it",
-    image: feature2,
+    name: "Replacement Guarantee",
+    feature: "We Provide Replacement Guarantee within 7 days",
+    image: "https://shokhbazar.com/assets/images/162196467602.png",
   },
   {
-    name: "Free delivery",
-    feature: "Do purchase over $50 and get free delivery anywhere",
-    image: feature3,
+    name: "Dedicated Customer Support",
+    feature: "Friendly 9 AM-10 PM Daily customer support",
+    image: "https://shokhbazar.com/assets/images/162196471103.png",
+  },
+  {
+    name: "Cash On delivery",
+    feature: "We Delivery whole Bangladesh on Cash Delivery",
+    image: "https://shokhbazar.com/assets/images/162196474904.png",
   },
 ];

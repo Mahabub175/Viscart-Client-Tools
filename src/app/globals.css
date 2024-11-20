@@ -6,6 +6,7 @@
   :root {
     --primaryColor: theme("colors.primary");
     --primaryLightColor: theme("colors.primaryLight");
+    background-color: #f3f5f6;
   }
 }
 
