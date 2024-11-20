@@ -1,24 +1,31 @@
+import { useState } from "react";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
+import { RightOutlined } from "@ant-design/icons";
 import { Menu, Dropdown } from "antd";
 import Link from "next/link";
-import React from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { usePathname } from "next/navigation";
 
 const CategoryNavigation = () => {
+  const pathname = usePathname();
+
   const { data: categories } = useGetAllCategoriesQuery();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
 
   const renderSubcategories = (category) => {
     if (category?.subcategories && category?.subcategories.length > 0) {
       return (
         <Menu>
           {category.subcategories.map((subCategory) => (
-            <Menu.Item key={subCategory?._id}>
+            <Menu.Item key={subCategory?._id} className="hover:text-white">
               <Link href={`/products/filtered?filter=${subCategory?.name}`}>
-                {subCategory?.name}
-                {subCategory?.subcategories &&
-                  subCategory?.subcategories.length > 0 && (
-                    <RightOutlined className="ml-2" />
-                  )}
+                <div className="flex items-center justify-between">
+                  {subCategory?.name}
+                </div>
               </Link>
             </Menu.Item>
           ))}
@@ -37,9 +44,12 @@ const CategoryNavigation = () => {
             title={
               <Link
                 href={`/products/filtered?filter=${category?.name}`}
-                className="flex items-center"
+                className="flex items-center justify-between"
               >
-                {category?.name}
+                <div className="flex items-center hover:text-white">
+                  {category?.name}
+                  {category?.subcategories?.length > 0 && <RightOutlined />}
+                </div>
               </Link>
             }
           >
@@ -50,34 +60,80 @@ const CategoryNavigation = () => {
     );
   };
 
-  const renderParentCategories = () => {
-    return categories?.results
-      ?.filter((item) => item?.level === "parentCategory")
-      .map((parentCategory) => (
-        <Dropdown
-          key={parentCategory?._id}
-          overlay={renderCategories(parentCategory)}
-          trigger={["hover"]}
-          className="mr-4"
+  const routes = (
+    <div className="flex flex-col md:flex-row md:items-center gap-10">
+      {[
+        {
+          name: "Home",
+          link: "/",
+        },
+        {
+          name: "Products",
+          link: "/products",
+        },
+        {
+          name: "Offers",
+          link: "/offers",
+        },
+        {
+          name: "Contact",
+          link: "/contact",
+        },
+      ].map((item, index) => (
+        <Link
+          key={index}
+          href={item.link}
+          className={`flex flex-col items-center font-bold duration-300 ${
+            pathname === item.link
+              ? "text-primary hover:text-primary"
+              : "text-black hover:text-primary"
+          }`}
         >
-          <Link
-            href={`/products/filtered?filter=${parentCategory?.name}`}
-            className="flex items-center cursor-pointer"
-          >
-            <span className="mr-2">{parentCategory?.name}</span>
-            {parentCategory?.categories &&
-              parentCategory?.categories.length > 0 && (
-                <DownOutlined className="!text-sm" />
-              )}
-          </Link>
-        </Dropdown>
-      ));
-  };
+          <span>{item.name}</span>
+        </Link>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="lg:bg-primary py-2 lg:text-white">
-      <div className="container mx-auto flex flex-col lg:flex-row gap-10 lg:gap-0 lg:items-center px-5">
-        {renderParentCategories()}
+    <div className="bg-primary lg:bg-white lg:text-black border-y mb-5">
+      <div className="container mx-auto flex flex-col lg:flex-row gap-10 lg:items-center px-5">
+        <Dropdown
+          overlay={
+            <Menu>
+              {categories?.results
+                ?.filter((item) => item?.level === "parentCategory")
+                .map((parentCategory) => (
+                  <Menu.SubMenu
+                    key={parentCategory?._id}
+                    title={
+                      <Link
+                        href={`/products/filtered?filter=${parentCategory?.name}`}
+                        className="flex items-center"
+                      >
+                        <div className="flex items-center justify-between">
+                          {parentCategory?.name}
+                        </div>
+                      </Link>
+                    }
+                  >
+                    {renderCategories(parentCategory)}
+                  </Menu.SubMenu>
+                ))}
+            </Menu>
+          }
+          open={dropdownVisible}
+          onOpenChange={setDropdownVisible}
+        >
+          <div
+            onClick={handleDropdownToggle}
+            className="bg-primary py-4 px-8 font-bold flex items-center gap-2 text-white rounded cursor-pointer"
+          >
+            <GiHamburgerMenu />
+            Categories
+          </div>
+        </Dropdown>
+        {routes}
       </div>
     </div>
   );

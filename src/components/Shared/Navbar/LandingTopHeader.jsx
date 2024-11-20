@@ -10,7 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaCartPlus, FaSearch } from "react-icons/fa";
-import { FaCartArrowDown } from "react-icons/fa6";
+import { FaCartArrowDown, FaCodeCompare } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -118,9 +118,9 @@ const LandingTopHeader = () => {
 
   const routes = (
     <div className="flex flex-col md:flex-row md:items-center gap-10">
-      <Link
+      {/* <Link
         href={"/products"}
-        className={`flex items-center gap-2 font-bold duration-300 ${
+        className={`flex flex-col items-center font-bold duration-300 ${
           pathname == "/products"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
@@ -128,11 +128,31 @@ const LandingTopHeader = () => {
       >
         <FaCartArrowDown />
         <span>Products</span>
+      </Link> */}
+      <Link
+        href={"/compare"}
+        className={`flex flex-col items-center font-bold duration-300 ${
+          pathname == "/products"
+            ? "text-primary hover:text-primary"
+            : "text-black hover:text-primary"
+        }`}
+      >
+        {wishListData?.length > 0 ? (
+          <span className="relative">
+            <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+              {wishListData?.length}
+            </span>
+            <FaCodeCompare className="rotate-90" />
+          </span>
+        ) : (
+          <FaCodeCompare className="rotate-90" />
+        )}
+        <span>Compare</span>
       </Link>
       <Link
         href={"/wishlist"}
-        className={`flex items-center gap-2 font-bold duration-300 ${
-          pathname == "/wishlist"
+        className={`flex flex-col items-center font-bold duration-300 ${
+          pathname == "/products"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
         }`}
@@ -151,8 +171,8 @@ const LandingTopHeader = () => {
       </Link>
       <Link
         href={"/cart"}
-        className={`flex items-center gap-2 font-bold duration-300 ${
-          pathname == "/cart"
+        className={`flex flex-col items-center font-bold duration-300 ${
+          pathname == "/products"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
         }`}
@@ -167,7 +187,7 @@ const LandingTopHeader = () => {
         ) : (
           <FaCartPlus />
         )}
-        <span>My Cart</span>
+        <span>Cart</span>
       </Link>
     </div>
   );
@@ -176,7 +196,7 @@ const LandingTopHeader = () => {
     <div className="md:flex items-center justify-between container mx-auto px-5 my-5">
       <div className="flex flex-col md:flex-row gap-10">
         <Link href={"/"}>
-          <p className="text-2xl font-extrabold text-primary lg:flex">
+          <p className="text-2xl font-extrabold text-primary lg:flex mt-1">
             Viscart
           </p>
         </Link>

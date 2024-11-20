@@ -13,7 +13,7 @@ export const metadata = {
 
 const page = async () => {
   return (
-    <div className="overflow-x-hidden -mt-5">
+    <div className="overflow-x-hidden">
       <Banner />
       <Categories />
       <Brands />

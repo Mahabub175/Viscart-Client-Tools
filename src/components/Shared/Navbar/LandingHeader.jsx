@@ -6,8 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import LandingTopHeader from "./LandingTopHeader";
 import { GiCancel } from "react-icons/gi";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
 import BottomNavigation from "./BottomNavigation";
 
@@ -36,33 +35,19 @@ const LandingHeader = () => {
   }, []);
 
   const top = (
-    <div className="bg-grey">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between px-5 py-2">
-        <Link href={"/"}>Hotline: +880 1810 169 101</Link>
-        <div className="flex items-center gap-4">
-          <Link href={"/"}>Contact Us</Link>
-          <div>|</div>
-          <div className="flex items-center gap-4">
-            <Link href={"/"} target="_blank">
-              <FaFacebook className="text-2xl rounded-full text-primary hover:scale-110 duration-300" />
-            </Link>
-            <Link href={"/"} target="_blank">
-              <FaLinkedin className="text-2xl rounded-full text-primary hover:scale-110 duration-300" />
-            </Link>
-            <Link href={"/"} target="_blank">
-              <FaInstagram className="text-2xl rounded-full text-primary hover:scale-110 duration-300" />
-            </Link>
-            <Link href={"/"} target="_blank">
-              <FaSquareXTwitter className="text-2xl rounded-full text-primary hover:scale-110 duration-300" />
-            </Link>
-          </div>
-        </div>
+    <div className="bg-primary">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between px-5 py-2 text-white font-bold">
+        <Link href={"/"} className="flex items-center gap-2">
+          <FaLocationDot />
+          Track Order
+        </Link>
+        <div></div>
       </div>
     </div>
   );
 
   return (
-    <nav className="mb-5">
+    <nav className="mb-5 relative">
       {isMobile ? (
         <>
           {top}
@@ -110,7 +95,7 @@ const LandingHeader = () => {
           </div>
         </>
       ) : (
-        <div>
+        <div className="!sticky top-0 z-50 bg-white">
           {top}
           <LandingTopHeader />
           <CategoryNavigation />
