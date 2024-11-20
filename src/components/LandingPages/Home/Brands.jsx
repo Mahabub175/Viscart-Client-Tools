@@ -19,11 +19,11 @@ const Brands = () => {
   );
 
   return (
-    <section className="my-container bg-white shadow-xl p-5 rounded-xl mt-20">
-      <h2 className="text-2xl lg:text-4xl font-bold text-center mb-10">
+    <section className="my-container p-5 rounded-xl mt-20 relative">
+      <h2 className="text-2xl lg:text-4xl font-bold text-start mb-10 border-b pb-4">
         Our Brands
       </h2>
-      <div className="relative">
+      <div>
         <Swiper
           onBeforeInit={(swiper) => {
             swiperRef.current = swiper;
@@ -48,32 +48,30 @@ const Brands = () => {
             return (
               <SwiperSlide key={item?._id}>
                 <Link href={`/products/filtered?filter=${item?.name}`}>
-                  <div className="group cursor-pointer overflow-hidden w-[260px] h-[260px] rounded-xl mx-auto flex justify-center items-center">
-                    <Image
-                      src={
-                        item?.attachment ??
-                        "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
-                      }
-                      alt={item.name}
-                      width={260}
-                      height={260}
-                      className="group-hover:scale-110 duration-500 object-cover rounded-xl shadow-xl"
-                    />
-                  </div>
+                  <Image
+                    src={
+                      item?.attachment ??
+                      "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
+                    }
+                    alt={item.name}
+                    width={240}
+                    height={120}
+                    className="border-2 border-transparent hover:border-primary duration-500 w-[240px] h-[120px] rounded-xl"
+                  />
                 </Link>
               </SwiperSlide>
             );
           })}
         </Swiper>
-        <div className="flex items-center justify-between gap-5 mt-10">
+        <div className="flex items-center justify-center gap-5 mt-10">
           <button
-            className="z-50 lg:w-12 lg:h-12 flex items-center justify-center rounded-full bg-transparent text-primary border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[40%] left-5"
+            className="z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-24"
             onClick={() => swiperRef.current.slidePrev()}
           >
             <FaAngleLeft className="text-xl" />
           </button>
           <button
-            className="z-50 lg:w-12 lg:h-12 flex items-center justify-center rounded-full bg-transparent text-primary border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[40%] right-5"
+            className="z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-12"
             onClick={() => swiperRef.current.slideNext()}
           >
             <FaAngleRight className="text-xl" />
