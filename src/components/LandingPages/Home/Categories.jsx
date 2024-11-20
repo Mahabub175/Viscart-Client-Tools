@@ -1,48 +1,102 @@
 "use client";
 
+import { useState, useRef } from "react";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import Image from "next/image";
-import Link from "next/link";
+import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
+import { Tabs } from "antd";
+import ProductCard from "./Products/ProductCard";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { SwiperSlide, Swiper } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const Categories = () => {
+  const swiperRef = useRef(null);
   const { data: categories } = useGetAllCategoriesQuery();
+  const { data: productData } = useGetAllProductsQuery();
 
   const activeCategories = categories?.results?.filter(
-    (item) => item?.status !== "Inactive" && item?.level === "category"
+    (item) => item?.status !== "Inactive"
+  );
+
+  const activeProducts = productData?.results?.filter(
+    (item) => item?.status !== "Inactive"
+  );
+
+  const [activeCategory, setActiveCategory] = useState(
+    activeCategories?.[0]?._id
+  );
+
+  const filteredProducts = activeProducts?.filter(
+    (product) => product?.category?._id === activeCategory
   );
 
   return (
-    <section className="-mt-10 lg:mt-0 relative my-container">
-      <div className="bg-white shadow-xl rounded-xl p-10">
-        <h2 className="text-2xl lg:text-4xl font-bold text-center">
-          Top Categories
+    <section className="my-container">
+      <div className="flex flex-col lg:flex-row items-center justify-between border-b">
+        <h2 className="text-2xl lg:text-3xl font-semibold text-center mb-5">
+          All Categories
         </h2>
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {activeCategories?.slice(0, 9).map((category) => (
-            <Link
-              href={`/products/filtered?filter=${category?.name}`}
-              key={category?._id}
-              className="text-center relative"
-            >
-              <div className="group cursor-pointer overflow-hidden w-[260px] h-[260px] rounded-xl mx-auto">
-                <Image
-                  src={
-                    category?.attachment ??
-                    "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
-                  }
-                  alt={category?.name}
-                  width={260}
-                  height={260}
-                  className="group-hover:scale-110 duration-500 object-cover rounded-xl"
-                />
-              </div>
-              <h3 className="font-bold text-xl absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white">
-                {category?.name}
-              </h3>
-            </Link>
+        <Tabs
+          defaultActiveKey={activeCategories?.[0]?._id}
+          size="large"
+          className="font-semibold max-w-[600px] px-5 lg:px-0"
+          onChange={(key) => setActiveCategory(key)}
+        >
+          {activeCategories?.map((category) => (
+            <Tabs.TabPane tab={category?.name} key={category?._id} />
           ))}
-        </div>
+        </Tabs>
       </div>
+      {filteredProducts?.length > 0 ? (
+        <div className="relative mt-5">
+          <Swiper
+            onBeforeInit={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            loop={true}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 5 },
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            className="mySwiper"
+          >
+            {filteredProducts.map((product) => (
+              <SwiperSlide key={product?._id}>
+                <ProductCard item={product} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className="flex items-center justify-center gap-5">
+            <button
+              className="absolute top-[45%] -left-2 z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              onClick={() => swiperRef.current?.slidePrev()}
+            >
+              <FaAngleLeft className="text-xl" />
+            </button>
+            <button
+              className="absolute top-[45%] -right-2 z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              onClick={() => swiperRef.current?.slideNext()}
+            >
+              <FaAngleRight className="text-xl" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="text-center text-xl font-semibold my-10">
+          No products found for this category.
+        </div>
+      )}
     </section>
   );
 };
