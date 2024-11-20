@@ -18,15 +18,4 @@ export const footerData = [
       { name: "New products", to: "new-products" },
     ],
   },
-  {
-    title: "Help Center",
-    links: [
-      { name: "Payments", to: "payments" },
-      { name: "Refund", to: "refund" },
-      { name: "Checkout", to: "checkout" },
-      { name: "Shipping", to: "shippings" },
-      { name: "Q&A", to: "q&a" },
-      { name: "Privacy Policy", to: "privacy-policy" },
-    ],
-  },
 ];

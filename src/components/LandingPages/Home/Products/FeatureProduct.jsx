@@ -37,7 +37,7 @@ const FeatureProduct = () => {
     .slice(0, 3);
 
   return (
-    <section className="py-10 my-container">
+    <section className="pt-10 my-container">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {topCategories?.map((category) => (
           <div key={category.name} className="mb-10 relative">
@@ -71,7 +71,7 @@ const FeatureProduct = () => {
                   delay: 3000,
                   disableOnInteraction: false,
                 }}
-                className="mySwiper"
+                className="mySwiper rounded-xl"
               >
                 {category?.products
                   ?.reduce((acc, product, index) => {
