@@ -37,7 +37,7 @@ const ProductCard = ({ item }) => {
               {item?.category?.name}
             </h2>
 
-            <h2 className="text-xl text-start font-semibold mt-2 mb-6">
+            <h2 className="text-lg text-start font-semibold mt-2 mb-6">
               {item?.name}
             </h2>
             <div className="flex items-center mb-2 gap-4 font-bold">

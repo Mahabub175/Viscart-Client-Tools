@@ -1,57 +1,70 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { Tabs } from "antd";
-import ProductCard from "./Products/ProductCard";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import ProductCard from "./ProductCard";
 
-const Categories = () => {
+const tabs = ["Featured", "Best Selling", "Top Rated", "New Arrivals"];
+
+const ProductTab = () => {
   const swiperRef = useRef(null);
-  const { data: categories } = useGetAllCategoriesQuery();
   const { data: productData } = useGetAllProductsQuery();
-
-  const activeCategories = categories?.results?.filter(
-    (item) => item?.status !== "Inactive"
-  );
 
   const activeProducts = productData?.results?.filter(
     (item) => item?.status !== "Inactive"
   );
 
-  const [activeCategory, setActiveCategory] = useState(
-    activeCategories?.[0]?._id
-  );
+  const [activeTab, setActiveTab] = useState("Featured");
 
-  const filteredProducts = activeProducts?.filter(
-    (product) => product?.category?._id === activeCategory
-  );
+  const filteredProducts = (tab) => {
+    switch (tab) {
+      case "Featured":
+        return activeProducts?.filter((product) => product?.featured);
+      case "Best Selling":
+        return activeProducts
+          ?.sort(
+            (a, b) => (b?.ratings?.average || 0) - (a?.ratings?.average || 0)
+          )
+          .slice(0, 8);
+      case "Top Rated":
+        return activeProducts
+          ?.sort(
+            (a, b) => (b?.ratings?.average || 0) - (a?.ratings?.average || 0)
+          )
+          .slice(0, 8);
+      case "New Arrivals":
+        return activeProducts
+          ?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
+          .slice(0, 8);
+      default:
+        return activeProducts;
+    }
+  };
 
   return (
-    <section className="my-container">
+    <section className="my-container relative">
       <div className="flex flex-col lg:flex-row items-center justify-between border-b">
-        <h2 className="text-2xl lg:text-3xl font-semibold text-center mb-5">
-          All Categories
-        </h2>
         <Tabs
-          defaultActiveKey={activeCategories?.[0]?._id}
+          activeKey={activeTab}
           size="large"
           className="font-semibold max-w-[600px] px-5 lg:px-0"
-          onChange={(key) => setActiveCategory(key)}
+          onChange={(key) => setActiveTab(key)}
         >
-          {activeCategories?.map((category) => (
-            <Tabs.TabPane tab={category?.name} key={category?._id} />
+          {tabs?.map((item) => (
+            <Tabs.TabPane tab={item} key={item} />
           ))}
         </Tabs>
       </div>
-      {filteredProducts?.length > 0 ? (
-        <div className="relative mt-5">
+
+      {filteredProducts(activeTab)?.length > 0 ? (
+        <div className="mt-5">
           <Swiper
             onBeforeInit={(swiper) => {
               swiperRef.current = swiper;
@@ -71,7 +84,7 @@ const Categories = () => {
             }}
             className="mySwiper"
           >
-            {filteredProducts.map((product) => (
+            {filteredProducts(activeTab).map((product) => (
               <SwiperSlide key={product?._id}>
                 <ProductCard item={product} />
               </SwiperSlide>
@@ -79,13 +92,13 @@ const Categories = () => {
           </Swiper>
           <div className="flex items-center justify-center gap-5">
             <button
-              className="absolute top-[45%] -left-2 lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[3%] right-20 lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slidePrev()}
             >
               <FaAngleLeft className="text-xl" />
             </button>
             <button
-              className="absolute top-[45%] -right-2 lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[3%] right-8 lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slideNext()}
             >
               <FaAngleRight className="text-xl" />
@@ -94,11 +107,11 @@ const Categories = () => {
         </div>
       ) : (
         <div className="text-center text-xl font-semibold my-10">
-          No products found for this category.
+          No products found for this tab.
         </div>
       )}
     </section>
   );
 };
 
-export default Categories;
+export default ProductTab;
