@@ -3,6 +3,7 @@ import SmallFeature from "@/components/LandingPages/Home/SmallFeature";
 import Categories from "@/components/LandingPages/Home/Categories";
 import ProductTab from "@/components/LandingPages/Home/Products/ProductTab";
 import Brands from "@/components/LandingPages/Home/Brands";
+import FeatureProduct from "@/components/LandingPages/Home/Products/FeatureProduct";
 
 export const metadata = {
   title: "Home | Viscart",
@@ -16,6 +17,7 @@ const page = async () => {
       <SmallFeature />
       <Categories />
       <ProductTab />
+      <FeatureProduct />
       <Brands />
     </div>
   );
