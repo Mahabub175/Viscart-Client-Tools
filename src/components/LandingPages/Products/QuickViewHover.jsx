@@ -7,6 +7,7 @@ import { Tooltip } from "antd";
 import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineFullscreen } from "react-icons/ai";
+import { FaCodeCompare } from "react-icons/fa6";
 import { TbHeart, TbListDetails } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -51,33 +52,40 @@ const QuickViewHover = ({ item }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 bg-white/60 px-3 py-4">
+    <div className="flex items-center justify-center gap-4 px-3 py-4 bg-white lg:bg-transparent">
       <Tooltip placement="top" title={"Quick View"}>
         <div
-          className="text-xl cursor-pointer hover:scale-110 duration-300 hover:text-primary"
+          className="text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
           onClick={showModal}
         >
           <AiOutlineFullscreen />
         </div>
       </Tooltip>
 
-      <span className="border h-4 w-[1px] border-textColor"></span>
       <Tooltip placement="top" title={"Details"}>
         <Link
           href={`/products/${item?.slug}`}
-          className="text-lg cursor-pointer hover:scale-110 duration-300 hover:text-primary"
+          className="text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
         >
           <TbListDetails />
         </Link>
       </Tooltip>
 
-      <span className="border h-4 w-[1px] border-textColor"></span>
       <Tooltip placement="top" title={"Add to Wishlist"}>
         <div
-          className="text-lg cursor-pointer hover:scale-110 duration-300 hover:text-danger"
+          className="text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
           onClick={() => addToWishlist(item?._id)}
         >
           <TbHeart />
+        </div>
+      </Tooltip>
+
+      <Tooltip placement="top" title={"Add to Compare"}>
+        <div
+          className="text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
+          onClick={() => addToWishlist(item?._id)}
+        >
+          <FaCodeCompare className="rotate-90" />
         </div>
       </Tooltip>
 

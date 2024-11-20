@@ -12,7 +12,7 @@ const ProductCard = ({ item }) => {
     <section className="py-10">
       <div
         key={item?._id}
-        className="bg-gray-100 border rounded-xl shadow-xl relative group w-[300px] mx-auto"
+        className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[300px] mx-auto"
       >
         <div className="relative overflow-hidden rounded-t-xl">
           <Image
@@ -22,41 +22,46 @@ const ProductCard = ({ item }) => {
             height={260}
             className="rounded-t-xl h-[260px] group-hover:scale-110 duration-500"
           />
-        </div>
-        <QuickViewHover item={item} />
-        <div className="px-5 pb-5">
-          <div className="flex items-center mt-4 gap-4 font-bold">
-            <Rate disabled value={item?.ratings?.average} allowHalf />(
-            {item?.ratings?.count})
+
+          <div className="hidden lg:block absolute inset-x-0 bottom-0 transform translate-y-full group-hover:translate-y-0 duration-500 z-10">
+            <QuickViewHover item={item} />
           </div>
-          <h2 className="text-xl text-center font-semibold my-4">
-            {item?.name}
-          </h2>
-          <div className="flex items-center gap-4 justify-center">
-            {item?.offerPrice ? (
-              <p className="text-primary text-2xl font-bold">
-                {globalData?.results?.currency + " " + item?.offerPrice}
-              </p>
-            ) : (
-              <p className="text-primary text-2xl font-bold">
-                {globalData?.results?.currency + " " + item?.sellingPrice}
-              </p>
-            )}
-            {item?.offerPrice && (
-              <p className="text-base font-bold line-through text-red-500">
-                {globalData?.results?.currency + " " + item?.sellingPrice}
-              </p>
-            )}
+          <div className="lg:hidden">
+            <QuickViewHover item={item} />
           </div>
         </div>
-        <Link
-          href={`/products/${item?.slug}`}
-          className="flex items-center justify-center"
-        >
-          <div className="w-full bg-primary text-white font-bold py-2 text-center rounded-b-xl">
-            View Details
-          </div>
-        </Link>
+
+        <div className="bg-white p-5 rounded-b-xl">
+          <Link href={`/products/${item?.slug}`}>
+            <h2 className="text-start font-normal text-textColor text-sm">
+              {item?.category?.name}
+            </h2>
+
+            <h2 className="text-xl text-start font-semibold mt-2 mb-6">
+              {item?.name}
+            </h2>
+            <div className="flex items-center mb-2 gap-4 font-bold">
+              <Rate disabled value={item?.ratings?.average} allowHalf />(
+              {item?.ratings?.count})
+            </div>
+            <div className="flex items-center gap-4 justify-start">
+              {item?.offerPrice && (
+                <p className="text-base font-bold line-through text-red-500">
+                  {globalData?.results?.currency + " " + item?.sellingPrice}
+                </p>
+              )}
+              {item?.offerPrice ? (
+                <p className="text-primary text-2xl font-bold">
+                  {globalData?.results?.currency + " " + item?.offerPrice}
+                </p>
+              ) : (
+                <p className="text-primary text-2xl font-bold">
+                  {globalData?.results?.currency + " " + item?.sellingPrice}
+                </p>
+              )}
+            </div>
+          </Link>
+        </div>
       </div>
     </section>
   );

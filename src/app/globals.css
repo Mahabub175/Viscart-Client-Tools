@@ -72,6 +72,13 @@
   overflow-x: auto !important;
 }
 
+.swiper-button-prev {
+  display: none !important;
+}
+.swiper-button-next {
+  display: none !important;
+}
+
 .two-grid {
   @apply grid grid-cols-1 lg:grid-cols-2 gap-4;
 }

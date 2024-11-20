@@ -118,17 +118,6 @@ const LandingTopHeader = () => {
 
   const routes = (
     <div className="flex flex-col md:flex-row md:items-center gap-10">
-      {/* <Link
-        href={"/products"}
-        className={`flex flex-col items-center font-bold duration-300 ${
-          pathname == "/products"
-            ? "text-primary hover:text-primary"
-            : "text-black hover:text-primary"
-        }`}
-      >
-        <FaCartArrowDown />
-        <span>Products</span>
-      </Link> */}
       <Link
         href={"/compare"}
         className={`flex flex-col items-center font-bold duration-300 ${
