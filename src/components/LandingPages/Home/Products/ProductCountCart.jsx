@@ -64,8 +64,6 @@ const ProductCountCart = ({
 
     const toastId = toast.loading("Adding to cart");
 
-    console.log(type);
-
     try {
       const res = await addCart(data);
       if (res?.data?.success) {
