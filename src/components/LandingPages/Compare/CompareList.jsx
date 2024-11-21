@@ -59,7 +59,7 @@ const CompareList = () => {
 
   return (
     <section className="my-container lg:my-32 bg-white p-5 rounded-xl">
-      {compareData?.length === 0 ? (
+      {compareData?.length === 0 || !compareData ? (
         <div className="flex items-center justify-center my-10">
           <h2 className="text-2xl font-bold text-black/80">
             Please add a product to compare to see them here
@@ -70,7 +70,7 @@ const CompareList = () => {
           <div className="border rounded-xl p-5 mb-10 lg:mb-0">
             <p className="text-center font-bold text-xl border-b">Summary</p>
             <div className="space-y-8 mt-4 text-center lg:text-start">
-              {compareData[0]?.product?.map((item) => (
+              {compareData?.[0]?.product?.map((item) => (
                 <div key={item?._id}>
                   <h2>{item?.name}</h2>
                   <div className="flex items-center gap-4 justify-center lg:justify-start">
@@ -110,10 +110,10 @@ const CompareList = () => {
                 onClick={() => handleDelete(compareData[0]?._id)}
               />
             </div>
-            <div className="mt-4 flex flex-col lg:flex-row items-center justify-center gap-10">
-              {compareData[0]?.product?.map((item) => (
+            <div className="mt-4 flex flex-col lg:flex-row items-center justify-center gap-10 max-w-[400px] mx-auto">
+              {compareData?.[0]?.product?.map((item) => (
                 <div key={item?._id}>
-                  <div className="flex flex-col flex-[2] items-center gap-4 border rounded-xl p-5">
+                  <div className="flex flex-col items-center gap-4 border rounded-xl p-5">
                     <Image
                       src={`${base_url_image}${
                         formatImagePath(item?.mainImage) || "placeholder.jpg"
@@ -125,7 +125,7 @@ const CompareList = () => {
                     />
                     <Link
                       href={`/products/${item?.slug}`}
-                      className="text-base font-normal hover:underline text-center"
+                      className="text-sm font-normal hover:underline text-center"
                     >
                       {item?.name}
                     </Link>

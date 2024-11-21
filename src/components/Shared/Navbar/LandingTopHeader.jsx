@@ -132,10 +132,10 @@ const LandingTopHeader = () => {
             : "text-black hover:text-primary"
         }`}
       >
-        {compareData[0]?.product?.length > 0 ? (
+        {compareData?.[0]?.product?.length > 0 ? (
           <span className="relative">
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-              {compareData[0]?.product?.length}
+              {compareData?.[0]?.product?.length}
             </span>
             <FaCodeCompare className="rotate-90" />
           </span>
