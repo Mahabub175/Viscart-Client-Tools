@@ -9,7 +9,7 @@ const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
-    <section className="py-10">
+    <section className="">
       <div
         key={item?._id}
         className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[300px] mx-auto"

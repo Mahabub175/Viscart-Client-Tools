@@ -127,7 +127,7 @@ const LandingTopHeader = () => {
       <Link
         href={"/compare"}
         className={`flex flex-col items-center font-bold duration-300 ${
-          pathname == "/products"
+          pathname == "/compare"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
         }`}
@@ -147,7 +147,7 @@ const LandingTopHeader = () => {
       <Link
         href={"/wishlist"}
         className={`flex flex-col items-center font-bold duration-300 ${
-          pathname == "/products"
+          pathname == "/wishlist"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
         }`}
@@ -167,7 +167,7 @@ const LandingTopHeader = () => {
       <Link
         href={"/cart"}
         className={`flex flex-col items-center font-bold duration-300 ${
-          pathname == "/products"
+          pathname == "/cart"
             ? "text-primary hover:text-primary"
             : "text-black hover:text-primary"
         }`}
