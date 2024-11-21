@@ -64,7 +64,7 @@ const GlobalCart = () => {
       )}
 
       <div
-        className={`fixed bottom-[20%] right-5 z-50 ${user ? "" : "hidden"}`}
+        className={`fixed bottom-[30%] right-5 z-50 ${user ? "" : "hidden"}`}
       >
         <div
           onClick={toggleCart}
