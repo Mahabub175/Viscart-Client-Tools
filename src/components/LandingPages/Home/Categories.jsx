@@ -69,7 +69,7 @@ const Categories = () => {
               delay: 3000,
               disableOnInteraction: false,
             }}
-            className="mySwiper"
+            className="mySwiper my-10"
           >
             {filteredProducts.map((product) => (
               <SwiperSlide key={product?._id}>

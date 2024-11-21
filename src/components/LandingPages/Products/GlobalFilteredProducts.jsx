@@ -35,7 +35,11 @@ const GlobalFilteredProducts = ({ searchParams }) => {
           <div className="capitalize text-center text-3xl text-primary font-semibold">
             {searchParams}
           </div>
-          <ProductCard data={filteredProducts} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10">
+            {filteredProducts?.map((product) => (
+              <ProductCard key={product?.id} item={product} />
+            ))}
+          </div>
         </>
       ) : (
         <p className="text-center">No products match the search criteria.</p>

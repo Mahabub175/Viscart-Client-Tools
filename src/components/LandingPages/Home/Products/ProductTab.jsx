@@ -82,7 +82,7 @@ const ProductTab = () => {
               delay: 3000,
               disableOnInteraction: false,
             }}
-            className="mySwiper"
+            className="mySwiper my-10"
           >
             {filteredProducts(activeTab).map((product) => (
               <SwiperSlide key={product?._id}>
