@@ -3,16 +3,10 @@
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
 import { Modal, Rate } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
   const [selectedVariant, setSelectedVariant] = useState(null);
-
-  useEffect(() => {
-    if (item?.variants) {
-      setSelectedVariant(item?.variants[0]);
-    }
-  }, [item]);
 
   const handleVariantSelect = (variant) => {
     setSelectedVariant(variant);

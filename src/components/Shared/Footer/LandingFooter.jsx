@@ -37,8 +37,8 @@ const LandingFooter = () => {
     }
   };
   return (
-    <>
-      <footer className="my-container border-t py-10 mt-10">
+    <section className="bg-white border-t mt-10">
+      <footer className="my-container py-10">
         <div className="grid lg:grid-cols-5 items-start justify-center">
           <ContactInfo />
           <div className="lg:flex justify-between items-start gap-10 col-span-3">
@@ -110,7 +110,7 @@ const LandingFooter = () => {
           </div>
         </div>
       </footer>
-    </>
+    </section>
   );
 };
 

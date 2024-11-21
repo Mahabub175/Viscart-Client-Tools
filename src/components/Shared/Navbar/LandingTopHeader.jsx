@@ -21,15 +21,11 @@ const LandingTopHeader = () => {
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const { data } = useGetSingleUserQuery(user?._id);
-  const { data: compareData, isFetching } = useGetSingleCompareByUserQuery(
-    user?._id
-  );
+  const { data: compareData } = useGetSingleCompareByUserQuery(user?._id);
   const { data: wishListData } = useGetSingleWishlistByUserQuery(user?._id);
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
   const { data: products } = useGetAllProductsQuery();
   const [options, setOptions] = useState([]);
-
-  if (isFetching) return <p>Loading...</p>;
 
   const handleLogout = () => {
     dispatch(logout());
