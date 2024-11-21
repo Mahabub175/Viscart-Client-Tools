@@ -3,13 +3,20 @@
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
+import { Modal } from "antd";
 import { useState } from "react";
 import { FaPlus, FaMinus, FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const ProductCountCart = ({ item, single, handleModalClose, fullWidth }) => {
+const ProductCountCart = ({
+  item,
+  single,
+  handleModalClose = () => {},
+  fullWidth,
+}) => {
   const [count, setCount] = useState(1);
+  const [openVariantModal, setOpenVariantModal] = useState(false);
 
   const user = useSelector(useCurrentUser);
   const [addCart, { isLoading }] = useAddCartMutation();
@@ -26,16 +33,31 @@ const ProductCountCart = ({ item, single, handleModalClose, fullWidth }) => {
     }
   };
 
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
+  const handleVariantSelect = (variant) => {
+    setSelectedVariant(variant);
+  };
+
   const addToCart = async () => {
+    if (item?.variants?.length > 0 && !selectedVariant) {
+      setOpenVariantModal(true);
+      return;
+    }
     if (!user) {
       toast.error("Please login to add to cart.");
       return;
     }
+
     const data = {
       user: user?._id,
       product: item?._id,
       quantity: count,
-      price: item?.sellingPrice * count,
+      price: selectedVariant?.sellingPrice
+        ? selectedVariant?.sellingPrice
+        : item?.offerPrice
+        ? item?.offerPrice
+        : item?.sellingPrice,
     };
 
     const toastId = toast.loading("Adding to cart");
@@ -46,6 +68,7 @@ const ProductCountCart = ({ item, single, handleModalClose, fullWidth }) => {
         toast.success(res.data.message, { id: toastId });
         handleModalClose();
         setCount(1);
+        setOpenVariantModal(false);
       }
       if (res?.error) {
         toast.error(res?.error?.data?.errorMessage, { id: toastId });
@@ -85,6 +108,49 @@ const ProductCountCart = ({ item, single, handleModalClose, fullWidth }) => {
         loading={isLoading}
         fullWidth={fullWidth}
       />
+      <Modal
+        open={openVariantModal}
+        onCancel={() => setOpenVariantModal(false)}
+        footer={null}
+        centered
+      >
+        <div className="flex flex-col gap-4 p-5">
+          <div className="flex flex-col gap-2 justify-center items-center mb-4">
+            <span className="font-bold">Select Variant:</span>
+            <div className="flex items-center gap-2">
+              {item?.variants?.map((variant) => (
+                <div
+                  key={variant._id}
+                  onClick={() => handleVariantSelect(variant)}
+                  className={`cursor-pointer size-10 rounded-full border-4 ${
+                    selectedVariant?._id === variant._id
+                      ? "border-primary"
+                      : "border-gray-300"
+                  }`}
+                  title={variant?.attributeCombination[0]?.label}
+                  style={{
+                    backgroundColor: variant?.attributeCombination[0]?.label,
+                  }}
+                >
+                  {" "}
+                  {variant?.attributeCombination[0]?.type === "other" && (
+                    <span className="text-black flex items-center justify-center mt-1 font-bold">
+                      {variant?.attributeCombination[0]?.label}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          <SubmitButton
+            func={addToCart}
+            text={"Add"}
+            icon={<FaCartShopping />}
+            loading={isLoading}
+            fullWidth={fullWidth}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };
