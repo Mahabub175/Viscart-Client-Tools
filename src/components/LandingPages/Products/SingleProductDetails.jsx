@@ -7,9 +7,11 @@ import {
   useGetSingleProductBySlugQuery,
 } from "@/redux/services/product/productApi";
 import { Rate } from "antd";
-import Image from "next/image";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import Image from "next/image";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -34,6 +36,7 @@ const SingleProductDetails = ({ params }) => {
     setSelectedVariant(variant);
   };
 
+  const currentImage = selectedVariant?.images?.[0] ?? singleProduct?.mainImage;
   const currentPrice = selectedVariant
     ? selectedVariant.sellingPrice
     : singleProduct?.sellingPrice;
@@ -42,19 +45,25 @@ const SingleProductDetails = ({ params }) => {
     <section className="my-container py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="bg-primaryLight p-10 rounded-xl">
-          <Image
-            src={
-              selectedVariant?.images?.[0] ??
-              singleProduct?.mainImage ??
-              "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
-            }
-            alt="product image"
-            height={400}
-            width={400}
-          />
+          {currentImage ? (
+            <Zoom>
+              <Image
+                src={
+                  selectedVariant?.images?.[0] ??
+                  singleProduct?.mainImage ??
+                  "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
+                }
+                alt="product image"
+                height={400}
+                width={400}
+              />
+            </Zoom>
+          ) : (
+            <p>No image available</p>
+          )}
         </div>
         <div className="lg:w-1/2 flex flex-col gap-3">
-          <h2 className="text-3xl lg:text-5xl font-bold">
+          <h2 className="text-3xl lg:text-4xl font-bold">
             {singleProduct?.name}
           </h2>
           <div className="flex items-center gap-2">
@@ -110,7 +119,6 @@ const SingleProductDetails = ({ params }) => {
                           variant?.attributeCombination[0]?.label,
                       }}
                     >
-                      {" "}
                       {variant?.attributeCombination[0]?.type === "other" && (
                         <span className="text-black flex items-center justify-center mt-1 font-bold">
                           {variant?.attributeCombination[0]?.label}

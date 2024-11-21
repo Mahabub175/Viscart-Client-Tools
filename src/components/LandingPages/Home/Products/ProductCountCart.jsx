@@ -4,6 +4,7 @@ import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { Modal } from "antd";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaPlus, FaMinus, FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -15,6 +16,7 @@ const ProductCountCart = ({
   handleModalClose = () => {},
   fullWidth,
 }) => {
+  const router = useRouter();
   const [count, setCount] = useState(1);
   const [openVariantModal, setOpenVariantModal] = useState(false);
 
@@ -39,7 +41,7 @@ const ProductCountCart = ({
     setSelectedVariant(variant);
   };
 
-  const addToCart = async () => {
+  const addToCart = async (type) => {
     if (item?.variants?.length > 0 && !selectedVariant) {
       setOpenVariantModal(true);
       return;
@@ -69,6 +71,9 @@ const ProductCountCart = ({
         handleModalClose();
         setCount(1);
         setOpenVariantModal(false);
+        if (type === "buy") {
+          router.push("/cart");
+        }
       }
       if (res?.error) {
         toast.error(res?.error?.data?.errorMessage, { id: toastId });
@@ -102,8 +107,15 @@ const ProductCountCart = ({
         </button>
       </div>
       <SubmitButton
-        func={addToCart}
+        func={() => addToCart("cart")}
         text={"Add"}
+        icon={<FaCartShopping />}
+        loading={isLoading}
+        fullWidth={fullWidth}
+      />
+      <SubmitButton
+        func={() => addToCart("buy")}
+        text={"Buy Now"}
         icon={<FaCartShopping />}
         loading={isLoading}
         fullWidth={fullWidth}
@@ -145,6 +157,13 @@ const ProductCountCart = ({
           <SubmitButton
             func={addToCart}
             text={"Add"}
+            icon={<FaCartShopping />}
+            loading={isLoading}
+            fullWidth={fullWidth}
+          />
+          <SubmitButton
+            func={addToCart}
+            text={"Buy Now"}
             icon={<FaCartShopping />}
             loading={isLoading}
             fullWidth={fullWidth}
