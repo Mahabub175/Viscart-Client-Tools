@@ -1,6 +1,7 @@
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
+import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
 import { UserOutlined } from "@ant-design/icons";
@@ -20,10 +21,15 @@ const LandingTopHeader = () => {
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const { data } = useGetSingleUserQuery(user?._id);
+  const { data: compareData, isFetching } = useGetSingleCompareByUserQuery(
+    user?._id
+  );
   const { data: wishListData } = useGetSingleWishlistByUserQuery(user?._id);
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
   const { data: products } = useGetAllProductsQuery();
   const [options, setOptions] = useState([]);
+
+  if (isFetching) return <p>Loading...</p>;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -126,10 +132,10 @@ const LandingTopHeader = () => {
             : "text-black hover:text-primary"
         }`}
       >
-        {wishListData?.length > 0 ? (
+        {compareData[0]?.product?.length > 0 ? (
           <span className="relative">
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-              {wishListData?.length}
+              {compareData[0]?.product?.length}
             </span>
             <FaCodeCompare className="rotate-90" />
           </span>

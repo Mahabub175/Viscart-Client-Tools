@@ -1,21 +1,21 @@
 import { baseApi } from "@/redux/api/baseApi";
 
-const cartApi = baseApi.injectEndpoints({
+const compareApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    addCart: build.mutation({
+    addCompare: build.mutation({
       query: (data) => {
         return {
-          url: "/cart/",
+          url: "/compare/",
           method: "POST",
           body: data,
         };
       },
 
-      invalidatesTags: ["cart"],
+      invalidatesTags: ["compare"],
     }),
-    getCarts: build.query({
+    getCompares: build.query({
       query: ({ page = 1, limit = 5 }) => ({
-        url: `/cart?page=${page}&limit=${limit}`,
+        url: `/compare?page=${page}&limit=${limit}`,
         method: "GET",
       }),
       transformResponse: (response) => {
@@ -24,75 +24,75 @@ const cartApi = baseApi.injectEndpoints({
           results: response?.data?.results,
         };
       },
-      providesTags: ["cart"],
+      providesTags: ["compare"],
     }),
-    getAllCarts: build.query({
+    getAllCompares: build.query({
       query: () => ({
-        url: `/cart/`,
+        url: `/compare/`,
         method: "GET",
       }),
       transformResponse: (response) => {
         return { results: response.data?.results };
       },
-      providesTags: ["cart"],
+      providesTags: ["compare"],
     }),
-    getSingleCart: build.query({
+    getSingleCompare: build.query({
       query: (id) => ({
-        url: `/cart/${id}/`,
+        url: `/compare/${id}/`,
         method: "GET",
       }),
       transformResponse: (response) => {
         return response.data;
       },
-      providesTags: ["cart"],
+      providesTags: ["compare"],
     }),
-    getSingleCartByUser: build.query({
+    getSingleCompareByUser: build.query({
       query: (id) => ({
-        url: `/cart/user/${id}/`,
+        url: `/compare/user/${id}/`,
         method: "GET",
       }),
       transformResponse: (response) => {
         return response.data;
       },
-      providesTags: ["cart"],
+      providesTags: ["compare"],
     }),
-    updateCart: build.mutation({
+    updateCompare: build.mutation({
       query: (payload) => ({
-        url: `/cart/${payload.id}/`,
+        url: `/compare/${payload.id}/`,
         method: "PATCH",
         body: payload.data,
       }),
-      invalidatesTags: ["cart"],
+      invalidatesTags: ["compare"],
     }),
-    deleteCart: build.mutation({
+    deleteCompare: build.mutation({
       query: (id) => ({
-        url: `/cart/${id}/`,
+        url: `/compare/${id}/`,
         method: "Delete",
         body: {},
       }),
-      invalidatesTags: ["cart"],
+      invalidatesTags: ["compare"],
     }),
-    deleteBulkCart: build.mutation({
+    deleteBulkCompare: build.mutation({
       query: (payload) => {
         return {
-          url: `/cart/bulk-delete/`,
+          url: `/compare/bulk-delete/`,
           method: "POST",
           body: payload,
         };
       },
-      invalidatesTags: ["cart"],
+      invalidatesTags: ["compare"],
     }),
   }),
   overrideExisting: true,
 });
 
 export const {
-  useAddCartMutation,
-  useGetCartsQuery,
-  useGetAllCartsQuery,
-  useGetSingleCartQuery,
-  useGetSingleCartByUserQuery,
-  useUpdateCartMutation,
-  useDeleteCartMutation,
-  useDeleteBulkCartMutation,
-} = cartApi;
+  useAddCompareMutation,
+  useGetComparesQuery,
+  useGetAllComparesQuery,
+  useGetSingleCompareQuery,
+  useGetSingleCompareByUserQuery,
+  useUpdateCompareMutation,
+  useDeleteCompareMutation,
+  useDeleteBulkCompareMutation,
+} = compareApi;
