@@ -97,16 +97,28 @@ const LandingFooter = () => {
           </p>
           <Image src={payment} alt="payment" width height />
           <div className="flex items-center gap-4">
-            <Link href={globalData?.results?.businessFacebook} target="_blank">
+            <Link
+              href={globalData?.results?.businessFacebook ?? "/"}
+              target="_blank"
+            >
               <FaFacebook className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={globalData?.results?.businessLinkedin} target="_blank">
+            <Link
+              href={globalData?.results?.businessLinkedin ?? "/"}
+              target="_blank"
+            >
               <FaLinkedin className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={globalData?.results?.businessInstagram} target="_blank">
+            <Link
+              href={globalData?.results?.businessInstagram ?? "/"}
+              target="_blank"
+            >
               <FaInstagram className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={globalData?.results?.businessTwitter} target="_blank">
+            <Link
+              href={globalData?.results?.businessTwitter ?? "/"}
+              target="_blank"
+            >
               <FaSquareXTwitter className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
           </div>
