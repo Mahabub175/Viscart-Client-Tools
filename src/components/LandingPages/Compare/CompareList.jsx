@@ -15,8 +15,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import deleteImage from "@/assets/images/Trash-can.png";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
+import { MdDelete } from "react-icons/md";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -101,14 +101,12 @@ const CompareList = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-10 border-b pb-2">
               <div></div>
               <p className="text-center font-bold text-xl">Products</p>
-              <Image
-                src={deleteImage}
-                width={10}
-                height={10}
-                alt="Delete Image"
-                className="w-6 h-6 cursor-pointer"
+              <div
+                className="text-2xl cursor-pointer text-red-500"
                 onClick={() => handleDelete(compareData[0]?._id)}
-              />
+              >
+                <MdDelete />
+              </div>
             </div>
             <div className="mt-4 flex flex-col lg:flex-row items-center justify-center gap-10 max-w-[400px] mx-auto">
               {compareData?.[0]?.product?.map((item) => (

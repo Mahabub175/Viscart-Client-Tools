@@ -12,6 +12,7 @@ import {
   useGetSingleOrderQuery,
   useUpdateOrderMutation,
 } from "@/redux/services/order/orderApi";
+import { generateInvoice } from "@/utilities/lib/generateInvoice";
 import {
   Button,
   Dropdown,
@@ -29,6 +30,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 import { toast } from "sonner";
+import { IoIosRefresh } from "react-icons/io";
 
 const Orders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -38,6 +40,7 @@ const Orders = () => {
   const [itemId, setItemId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [trackingCode, setTrackingCode] = useState(null);
 
   const { data: userOrders, isFetching } = useGetOrdersQuery({
     page: currentPage,
@@ -47,6 +50,8 @@ const Orders = () => {
   const { data: userOrder } = useGetSingleOrderQuery(itemId, {
     skip: !itemId,
   });
+
+  const [updateOrder, { isLoading }] = useUpdateOrderMutation();
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -64,7 +69,80 @@ const Orders = () => {
     }
   };
 
-  const [updateOrder, { isLoading }] = useUpdateOrderMutation();
+  const handleStatusCheck = async () => {
+    const apiKey = "vrmcyzdos4wvzwhhx5vap3v5tvkxmh3y";
+    const secretKey = "lfie0g8ovghga7y1kjuumk3r";
+    const api = `https://portal.packzy.com/api/v1/status_by_trackingcode/${trackingCode}`;
+    const response = await fetch(api, {
+      method: "GET",
+      headers: {
+        "api-key": apiKey,
+        "secret-key": secretKey,
+      },
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+      await updateOrder({
+        id: itemId,
+        data: {
+          deliveryStatus: result?.delivery_status,
+        },
+      });
+    } else {
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleAutoDelivery = async (item) => {
+    const apiKey = "vrmcyzdos4wvzwhhx5vap3v5tvkxmh3y";
+    const secretKey = "lfie0g8ovghga7y1kjuumk3r";
+    const api = "https://portal.packzy.com/api/v1/create_order";
+
+    const toastId = toast.loading("Creating Order Consignment...");
+
+    const submittedData = {
+      invoice: generateInvoice(),
+      recipient_name: item?.name,
+      recipient_phone: item?.number,
+      recipient_address: item?.address,
+      cod_amount: item?.paymentType === "cod" ? 0 : Number(item?.grandTotal),
+    };
+
+    try {
+      const response = await fetch(api, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": apiKey,
+          "secret-key": secretKey,
+        },
+        body: JSON.stringify(submittedData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        await updateOrder({
+          id: itemId,
+          data: {
+            invoice: submittedData?.invoice,
+            trackingCode: result?.consignment?.tracking_code,
+          },
+        });
+        toast.success(result?.message, { id: toastId });
+      } else {
+        console.error("Failed to create order:", result);
+        toast.error("Failed to create Consignment.", { id: toastId });
+      }
+    } catch (error) {
+      console.error("Error during API call:", error);
+      toast.error("An error occurred while creating the Consignment.", {
+        id: toastId,
+      });
+    }
+  };
+
   const [deleteOrder] = useDeleteOrderMutation();
 
   const columns = [
@@ -73,6 +151,26 @@ const Orders = () => {
       dataIndex: "tranId",
       key: "tranId",
       align: "center",
+    },
+    {
+      title: "Invoice",
+      dataIndex: "invoice",
+      key: "invoice",
+      align: "center",
+    },
+    {
+      title: "Tracking Code",
+      dataIndex: "trackingCode",
+      key: "trackingCode",
+      render: (item) => (
+        <Tag
+          color={"blue"}
+          className="capitalize font-semibold cursor-pointer"
+          onClick={() => setTrackingCode(item)}
+        >
+          {item}
+        </Tag>
+      ),
     },
     {
       title: "Products",
@@ -165,42 +263,39 @@ const Orders = () => {
       align: "center",
       render: (item, record) => {
         let color;
-        let text;
 
         switch (item) {
           case "delivered":
             color = "green";
-            text = "Delivered";
             break;
           case "pending":
             color = "blue";
-            text = "Pending";
             break;
           case "shipped":
             color = "orange";
-            text = "Shipped";
             break;
-          case "returned":
+          case "cancelled":
             color = "red";
-            text = "Returned";
             break;
           default:
             color = "gray";
-            text = "Unknown";
             break;
         }
 
         return (
-          <Tag
-            color={color}
-            className="capitalize font-semibold cursor-pointer"
-            onClick={() => {
-              setItemId(record.key);
-              setDeliveryModalOpen(true);
-            }}
-          >
-            {text}
-          </Tag>
+          <div className="flex items-center">
+            <Tag color={color}>{item}</Tag>
+            {record?.trackingCode && (
+              <IoIosRefresh
+                className="capitalize font-semibold cursor-pointer"
+                onClick={() => {
+                  setItemId(record.key);
+                  setTrackingCode(record.trackingCode);
+                  handleStatusCheck();
+                }}
+              />
+            )}
+          </div>
         );
       },
     },
@@ -215,7 +310,7 @@ const Orders = () => {
             toast.info("Fraud Detection is not available in demo version.");
           }}
         >
-          <Progress type="circle" percent={30} size={40} />
+          <Progress type="circle" percent={0} size={40} />
         </div>
       ),
     },
@@ -224,13 +319,12 @@ const Orders = () => {
       dataIndex: "autoDelivery",
       key: "autoDelivery",
       align: "center",
-      render: () => (
+      render: (_, record) => (
         <Button
           className="capitalize font-semibold cursor-pointer"
           type="primary"
-          onClick={() => {
-            toast.info("Auto Delivery is not available in demo version.");
-          }}
+          onClick={() => handleAutoDelivery(record)}
+          disabled={record.trackingCode}
         >
           Auto Delivery
         </Button>
@@ -284,7 +378,13 @@ const Orders = () => {
 
   const tableData = userOrders?.results?.map((item) => ({
     key: item._id,
-    tranId: item.tranId,
+    tranId: item.tranId ?? "N/A",
+    invoice: item.invoice ?? "N/A",
+    trackingCode: item.trackingCode,
+    name: item?.name,
+    email: item?.email,
+    number: item?.number,
+    address: item?.address,
     products: item?.products
       ?.map((product) => product?.product?.name)
       .join(" , "),

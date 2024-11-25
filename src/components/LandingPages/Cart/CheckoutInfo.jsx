@@ -12,6 +12,7 @@ const CheckoutInfo = () => {
 
   const paymentOptions = [
     { value: "manual", label: "Manual" },
+    { value: "cod", label: "Cash on Delivery" },
     ...(globalData?.results?.ssl === "Active"
       ? [{ value: "ssl", label: "SSL Commerz" }]
       : []),

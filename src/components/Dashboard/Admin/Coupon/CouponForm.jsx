@@ -3,7 +3,6 @@ import CustomDatePicker from "@/components/Reusable/Form/CustomDatePicker";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
 import FileUploader from "@/components/Reusable/Form/FileUploader";
-import { useGetAllUsersQuery } from "@/redux/services/auth/authApi";
 import { Form } from "antd";
 import { useEffect } from "react";
 import { RiRefreshLine } from "react-icons/ri";
@@ -12,15 +11,6 @@ const CouponForm = ({ attachment, edit }) => {
   const form = Form.useFormInstance();
 
   const type = Form.useWatch("type", form);
-
-  const { data: userData, isFetching: isUserFetching } = useGetAllUsersQuery();
-
-  const userOptions = userData?.results
-    ?.filter((item) => item?.status !== "Inactive" && item?.role === "user")
-    .map((item) => ({
-      value: item?._id,
-      label: item?.name,
-    }));
 
   const generateRandomCode = () => {
     const randomNumbers = Math.floor(100000 + Math.random() * 900000);
@@ -93,15 +83,6 @@ const CouponForm = ({ attachment, edit }) => {
           required={true}
         />
       </div>
-      <CustomSelect
-        label={"User"}
-        name={"user"}
-        options={userOptions}
-        required={false}
-        mode={"multiple"}
-        loading={isUserFetching}
-        disabled={isUserFetching}
-      />
       <FileUploader
         defaultValue={attachment}
         label="Coupon Image"
