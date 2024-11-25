@@ -90,6 +90,10 @@ const CartDetails = () => {
         subTotal,
       };
 
+      if (values.paymentType === "cod") {
+        submittedData.paymentMethod = "cod";
+      }
+
       const data = new FormData();
       appendToFormData(submittedData, data);
 

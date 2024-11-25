@@ -1,37 +1,43 @@
 import { FaLocationDot, FaPhone, FaClock } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
-import logo from "@/assets/images/logo-white.png";
 import Image from "next/image";
 
-const ContactInfo = () => {
+const ContactInfo = ({ globalData }) => {
   return (
     <div className="col-span-2">
-      <Image src={logo} alt="logo" height={200} width className="-mt-10" />
+      <Image
+        src={globalData?.results?.logo}
+        alt="logo"
+        height={200}
+        width={200}
+        className="-mt-10"
+      />
       <div className="flex items-center gap-2 lg:w-5/6 -mt-2">
         <FaLocationDot className="text-primary" />
         <p className="text-textColor">
           <span className="font-semibold">Address: </span>
-          1762 School House Road
+          {globalData?.results?.businessAddress}
         </p>
       </div>
       <div className="flex items-center gap-2 lg:w-5/6 mt-2">
         <FaPhone className="text-primary" />
         <p className="text-textColor">
-          <span className="font-semibold">Phone:</span> 1233-777
+          <span className="font-semibold">Phone:</span>{" "}
+          {globalData?.results?.businessNumber}
         </p>
       </div>
       <div className="flex items-center gap-2 lg:w-5/6 mt-2">
         <MdEmail className="text-primary" />
         <p className="text-textColor">
           <span className="font-semibold">Email:</span>{" "}
-          viscart.support@viscart.com
+          {globalData?.results?.businessEmail}
         </p>
       </div>
       <div className="flex items-center gap-2 lg:w-5/6 mt-2">
         <FaClock className="text-primary" />
         <p className="text-textColor">
-          <span className="font-semibold">Work hours:</span> 8:00 - 20:00,
-          Sunday - Thursday
+          <span className="font-semibold">Work hours:</span>{" "}
+          {globalData?.results?.businessWorkHours}
         </p>
       </div>
     </div>

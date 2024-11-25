@@ -37,6 +37,7 @@ const ProductCountCart = ({
 
   const [selectedVariant, setSelectedVariant] = useState(null);
 
+  console.log(selectedVariant);
   const handleVariantSelect = (variant) => {
     setSelectedVariant(variant);
   };
@@ -155,14 +156,14 @@ const ProductCountCart = ({
             </div>
           </div>
           <SubmitButton
-            func={addToCart}
+            func={() => addToCart("cart")}
             text={"Add"}
             icon={<FaCartShopping />}
             loading={isLoading}
             fullWidth={fullWidth}
           />
           <SubmitButton
-            func={addToCart}
+            func={() => addToCart("buy")}
             text={"Buy Now"}
             icon={<FaCartShopping />}
             loading={isLoading}

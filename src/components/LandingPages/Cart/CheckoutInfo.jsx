@@ -1,11 +1,22 @@
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { Form } from "antd";
 
 const CheckoutInfo = () => {
   const form = Form.useFormInstance();
   const paymentType = Form.useWatch("paymentType", form);
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+
+  const paymentOptions = [
+    { value: "manual", label: "Manual" },
+    { value: "cod", label: "Cash on Delivery" },
+    ...(globalData?.results?.ssl === "Active"
+      ? [{ value: "ssl", label: "SSL Commerz" }]
+      : []),
+  ];
 
   return (
     <div>
@@ -16,10 +27,7 @@ const CheckoutInfo = () => {
       <CustomSelect
         name={"paymentType"}
         label={"Payment Type"}
-        options={[
-          { value: "manual", label: "Manual" },
-          { value: "ssl", label: "SSL Commerz" },
-        ]}
+        options={paymentOptions}
         required
       />
 

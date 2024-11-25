@@ -2,6 +2,7 @@ import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
 import { UserOutlined } from "@ant-design/icons";
@@ -25,6 +26,8 @@ const LandingTopHeader = () => {
   const { data: wishListData } = useGetSingleWishlistByUserQuery(user?._id);
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
   const { data: products } = useGetAllProductsQuery();
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+
   const [options, setOptions] = useState([]);
 
   const handleLogout = () => {
@@ -184,12 +187,15 @@ const LandingTopHeader = () => {
   );
 
   return (
-    <div className="md:flex items-center justify-between container mx-auto px-5 my-5">
-      <div className="flex flex-col md:flex-row gap-10">
+    <div className="md:flex items-center justify-between container mx-auto px-5">
+      <div className="flex flex-col md:flex-row items-center gap-10">
         <Link href={"/"}>
-          <p className="text-2xl font-extrabold text-primary lg:flex mt-1">
-            Viscart
-          </p>
+          <Image
+            src={globalData?.results?.logo}
+            alt="logo"
+            width={80}
+            height={50}
+          />
         </Link>
         <div className="hidden lg:block relative">
           <AutoComplete
