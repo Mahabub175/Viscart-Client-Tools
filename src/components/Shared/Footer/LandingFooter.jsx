@@ -12,10 +12,12 @@ import { useAddNewsletterMutation } from "@/redux/services/newsletter/newsletter
 import { toast } from "sonner";
 import { Button, Form, Input } from "antd";
 import { LuSend } from "react-icons/lu";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const LandingFooter = () => {
   const [email, setEmail] = useState("");
   const [addNewsletter, { isLoading }] = useAddNewsletterMutation();
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const onSubmit = async () => {
     const toastId = toast.loading("Adding to newsletter...");
@@ -40,7 +42,7 @@ const LandingFooter = () => {
     <section className="bg-white border-t mt-10">
       <footer className="my-container py-10">
         <div className="grid lg:grid-cols-5 items-start justify-center">
-          <ContactInfo />
+          <ContactInfo globalData={globalData} />
           <div className="lg:flex justify-between items-start gap-10 col-span-3">
             {footerData?.map((item, i) => (
               <div key={i} className="mt-10 lg:mt-0">
@@ -95,16 +97,16 @@ const LandingFooter = () => {
           </p>
           <Image src={payment} alt="payment" width height />
           <div className="flex items-center gap-4">
-            <Link href={"/"} target="_blank">
+            <Link href={globalData?.results?.businessFacebook} target="_blank">
               <FaFacebook className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={"/"} target="_blank">
+            <Link href={globalData?.results?.businessLinkedin} target="_blank">
               <FaLinkedin className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={"/"} target="_blank">
+            <Link href={globalData?.results?.businessInstagram} target="_blank">
               <FaInstagram className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
-            <Link href={"/"} target="_blank">
+            <Link href={globalData?.results?.businessTwitter} target="_blank">
               <FaSquareXTwitter className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
           </div>

@@ -41,11 +41,11 @@ const CheckoutDetails = ({
 
   useEffect(() => {
     if (deliveryOption === "insideDhaka") {
-      setShippingFee(50);
+      setShippingFee(parseInt(globalData?.results?.deliveryChargeInsideDhaka));
     } else if (deliveryOption === "outsideDhaka") {
-      setShippingFee(100);
+      setShippingFee(parseInt(globalData?.results?.deliveryChargeOutsideDhaka));
     }
-  }, [deliveryOption, setShippingFee]);
+  }, [deliveryOption, setShippingFee, globalData]);
 
   const handleCode = () => {
     if (isCouponFetching || isGiftCardFetching) {

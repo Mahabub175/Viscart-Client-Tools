@@ -19,12 +19,15 @@ const BottomNavigation = () => {
     { name: "Product", href: "/products", icon: <AppstoreOutlined /> },
     { name: "Wishlist", href: "/wishlist", icon: <HeartOutlined /> },
     { name: "Cart", href: "/cart", icon: <ShoppingCartOutlined /> },
-    {
-      name: "Dashboard",
-      href: `/${data?.role}/dashboard`,
-      icon: <TbLayoutDashboardFilled />,
-    },
   ];
+
+  if (data?.role) {
+    navItems.push({
+      name: "Dashboard",
+      href: `/${data.role}/dashboard`,
+      icon: <TbLayoutDashboardFilled />,
+    });
+  }
 
   return (
     <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-300 shadow-md lg:hidden">

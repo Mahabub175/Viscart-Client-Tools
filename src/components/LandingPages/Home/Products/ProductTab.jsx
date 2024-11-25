@@ -11,7 +11,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ProductCard from "./ProductCard";
 
-const tabs = ["Featured", "Best Selling", "Top Rated", "New Arrivals"];
+const tabs = [
+  "Featured",
+  "Best Selling",
+  "Best Offer",
+  "Top Rated",
+  "New Arrivals",
+];
 
 const ProductTab = () => {
   const swiperRef = useRef(null);
@@ -32,6 +38,10 @@ const ProductTab = () => {
           ?.sort(
             (a, b) => (b?.ratings?.average || 0) - (a?.ratings?.average || 0)
           )
+          .slice(0, 8);
+      case "Best Offer":
+        return activeProducts
+          ?.filter((product) => product?.offerPrice > 0)
           .slice(0, 8);
       case "Top Rated":
         return activeProducts

@@ -103,46 +103,94 @@ const AdminAccountSetting = () => {
         />
         <div className="two-grid">
           <CustomInput
+            name={"deliveryChargeInsideDhaka"}
+            label={"Delivery Charge Inside Dhaka"}
+            required={false}
+            type={"number"}
+          />
+          <CustomInput
+            name={"deliveryChargeOutsideDhaka"}
+            label={"Delivery Charge Outside Dhaka"}
+            required={false}
+            type={"number"}
+          />
+          <CustomInput
             name={"businessNumber"}
-            type={"text"}
             label={"Business Number"}
             required={false}
+            type={"number"}
           />
           <CustomInput
             name={"businessAddress"}
-            type={"text"}
             label={"Business Address"}
             required={false}
           />
           <CustomInput
             name={"businessLocation"}
-            type={"text"}
             label={"Business Location"}
             required={false}
           />
           <CustomInput
             name={"businessSlogan"}
-            type={"text"}
             label={"Business Slogan"}
             required={false}
           />
-        </div>
-        <CustomSelect
-          name={"currency"}
-          label={"Global Currency"}
-          options={currenciesOptions}
-          required={true}
-        />
+          <CustomInput
+            name={"businessFacebook"}
+            label={"Business Facebook URL"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessTwitter"}
+            label={"Business Twitter URL"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessInstagram"}
+            label={"Business Instagram URL"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessLinkedin"}
+            label={"Business Linkedin URL"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessYoutube"}
+            label={"Business Youtube URL"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessEmail"}
+            label={"Business Email"}
+            required={false}
+          />
+          <CustomInput
+            name={"businessWhatsapp"}
+            label={"Business Whatsapp Number"}
+            required={false}
+            type={"number"}
+          />
+          <CustomInput
+            name={"businessWorkHours"}
+            label={"Business Work Hours"}
+            required={false}
+          />
+          <CustomSelect
+            name={"currency"}
+            label={"Global Currency"}
+            options={currenciesOptions}
+            required={true}
+          />
 
-        <CustomSelect
-          name={"ssl"}
-          label={"SSL Status"}
-          options={[
-            { value: "Active", label: "Active" },
-            { value: "Inactive", label: "Inactive" },
-          ]}
-        />
-        <div className="two-grid">
+          <CustomSelect
+            name={"ssl"}
+            label={"SSL Status"}
+            options={[
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+          />
           <Form.Item
             name="primaryColor"
             label="Website Primary Color"
@@ -158,6 +206,7 @@ const AdminAccountSetting = () => {
             <ColorPicker showText />
           </Form.Item>
         </div>
+
         <div className="flex justify-center my-10">
           <SubmitButton text={"Save"} loading={isLoading} fullWidth={true} />
         </div>
