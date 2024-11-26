@@ -30,7 +30,7 @@ const CompareList = () => {
   const { data: globalData, isLoading: isGlobalDataLoading } =
     useGetAllGlobalSettingQuery();
   const { data: compareData, isLoading: isCompareDataLoading } =
-    useGetSingleCompareByUserQuery(user?._id || deviceId);
+    useGetSingleCompareByUserQuery(user?._id ?? deviceId);
   const { data: productData, isLoading: isProductDataLoading } =
     useGetSingleProductQuery(productId, {
       skip: !productId,

@@ -32,12 +32,8 @@ const QuickViewHover = ({ item }) => {
   };
 
   const addToWishlist = async (id) => {
-    if (!user) {
-      toast.error("Please login to add to wishlist.");
-      return;
-    }
     const data = {
-      user: user?._id,
+      ...(user?._id ? { user: user._id } : { deviceId }),
       product: id,
     };
 
