@@ -115,6 +115,18 @@ const AdminAccountSetting = () => {
             type={"number"}
           />
           <CustomInput
+            name={"deliveryApiKey"}
+            label={"Delivery API Key"}
+            required={false}
+            type={"password"}
+          />
+          <CustomInput
+            name={"deliverySecretKey"}
+            label={"Delivery Secret Key"}
+            required={false}
+            type={"password"}
+          />
+          <CustomInput
             name={"businessNumber"}
             label={"Business Number"}
             required={false}

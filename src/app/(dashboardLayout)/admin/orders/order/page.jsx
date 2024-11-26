@@ -31,6 +31,7 @@ import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 import { toast } from "sonner";
 import { IoIosRefresh } from "react-icons/io";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const Orders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -41,6 +42,11 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [trackingCode, setTrackingCode] = useState(null);
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+
+  const apiKey = globalData?.results?.deliveryApiKey;
+  const secretKey = globalData?.results?.deliverySecretKey;
 
   const { data: userOrders, isFetching } = useGetOrdersQuery({
     page: currentPage,
@@ -70,8 +76,6 @@ const Orders = () => {
   };
 
   const handleStatusCheck = async () => {
-    const apiKey = "vrmcyzdos4wvzwhhx5vap3v5tvkxmh3y";
-    const secretKey = "lfie0g8ovghga7y1kjuumk3r";
     const api = `https://portal.packzy.com/api/v1/status_by_trackingcode/${trackingCode}`;
     const response = await fetch(api, {
       method: "GET",
@@ -95,8 +99,6 @@ const Orders = () => {
   };
 
   const handleAutoDelivery = async (item) => {
-    const apiKey = "vrmcyzdos4wvzwhhx5vap3v5tvkxmh3y";
-    const secretKey = "lfie0g8ovghga7y1kjuumk3r";
     const api = "https://portal.packzy.com/api/v1/create_order";
 
     const toastId = toast.loading("Creating Order Consignment...");

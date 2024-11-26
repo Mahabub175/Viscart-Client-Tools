@@ -130,7 +130,11 @@ const SingleProductDetails = ({ params }) => {
               </div>
             </div>
           )}
-          <ProductCountCart item={selectedVariant || singleProduct} fullWidth />
+          <ProductCountCart
+            item={selectedVariant || singleProduct}
+            fullWidth
+            previousSelectedVariant={selectedVariant}
+          />
         </div>
       </div>
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl bg-white flex flex-col items-center justify-center">
