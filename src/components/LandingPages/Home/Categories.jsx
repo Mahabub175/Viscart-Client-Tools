@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { Tabs } from "antd";
@@ -28,6 +28,12 @@ const Categories = () => {
   const [activeCategory, setActiveCategory] = useState(
     activeCategories?.[0]?._id
   );
+
+  useEffect(() => {
+    if (activeCategories) {
+      setActiveCategory(activeCategories?.[0]?._id);
+    }
+  }, [activeCategories]);
 
   const filteredProducts = activeProducts?.filter(
     (product) => product?.category?._id === activeCategory

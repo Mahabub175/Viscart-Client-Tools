@@ -32,7 +32,7 @@ const ProductTab = () => {
   const filteredProducts = (tab) => {
     switch (tab) {
       case "Featured":
-        return activeProducts?.filter((product) => product?.featured);
+        return activeProducts?.filter((product) => product?.isFeatured);
       case "Best Selling":
         return activeProducts
           ?.sort(
