@@ -3,6 +3,7 @@
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const ProductCountCart = ({
   const [openVariantModal, setOpenVariantModal] = useState(false);
 
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
   const [addCart, { isLoading }] = useAddCartMutation();
 
   const handleCount = (action) => {
@@ -47,13 +49,9 @@ const ProductCountCart = ({
       setOpenVariantModal(true);
       return;
     }
-    if (!user) {
-      toast.error("Please login to add to cart.");
-      return;
-    }
 
     const data = {
-      user: user?._id,
+      ...(user?._id ? { user: user._id } : { deviceId }),
       product: item?._id,
       quantity: count,
       price: selectedVariant?.sellingPrice

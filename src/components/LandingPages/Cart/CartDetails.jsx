@@ -21,11 +21,13 @@ import { useAddOrderMutation } from "@/redux/services/order/orderApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 
 const CartDetails = () => {
   const router = useRouter();
   const user = useSelector(useCurrentUser);
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
+  const deviceId = useSelector(useDeviceId);
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
   const { data: userData } = useGetSingleUserQuery(user?._id);
   const [deleteCart] = useDeleteCartMutation();
   const [addOrder] = useAddOrderMutation();
@@ -60,14 +62,6 @@ const CartDetails = () => {
     setItemId(itemId);
     setDeleteModalOpen(true);
   };
-
-  // if (!user) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <h2 className="text-2xl font-bold">Please login to see your cart</h2>
-  //     </div>
-  //   );
-  // }
 
   const formatImagePath = (imagePath) => imagePath?.replace(/\//g, "\\");
 
