@@ -1,7 +1,7 @@
 "use client";
 
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
-import { useCurrentUser } from "@/redux/services/auth/authSlice";
+import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
   useDeleteCartMutation,
   useGetSingleCartByUserQuery,
@@ -10,27 +10,36 @@ import { base_url_image } from "@/utilities/configs/base_api";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import deleteImage from "@/assets/images/Trash-can.png";
 import CheckoutDetails from "./CheckoutDetails";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CheckoutInfo from "./CheckoutInfo";
-import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import {
+  useGetSingleUserQuery,
+  useLoginMutation,
+  useSignUpMutation,
+} from "@/redux/services/auth/authApi";
 import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues";
 import { useAddOrderMutation } from "@/redux/services/order/orderApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { generateRandomPassword } from "@/utilities/lib/generateRandomPassword";
 
 const CartDetails = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
   const { data: userData } = useGetSingleUserQuery(user?._id);
   const [deleteCart] = useDeleteCartMutation();
+
   const [addOrder] = useAddOrderMutation();
+  const [login] = useLoginMutation();
+  const [signUp] = useSignUpMutation();
 
   const [fields, setFields] = useState([]);
   const [itemId, setItemId] = useState(null);
@@ -66,48 +75,62 @@ const CartDetails = () => {
   const formatImagePath = (imagePath) => imagePath?.replace(/\//g, "\\");
 
   const onSubmit = async (values) => {
-    const toastId = toast.loading("Creating Order...");
+    // const toastId = toast.loading("Creating Order...");
 
-    try {
-      const submittedData = {
-        ...values,
-        user: user?._id,
-        products: cartData?.map((item) => ({
-          product: item?.product?._id,
-          quantity: item?.quantity,
-        })),
-        shippingFee,
-        discount,
-        deliveryOption,
-        code,
-        grandTotal,
-        subTotal,
-      };
+    const signUpData = {
+      name: values?.name,
+      number: values?.number,
+      password: generateRandomPassword(),
+    };
+    const res = await signUp(signUpData).unwrap();
 
-      if (values.paymentType === "cod") {
-        submittedData.paymentMethod = "cod";
-      }
+    console.log(res);
 
-      const data = new FormData();
-      appendToFormData(submittedData, data);
+    // const loginRes = await login(values).unwrap();
+    // if (res.success) {
+    //   dispatch(setUser({ user: res.data.user, token: res.data.token }));
+    // }
 
-      const res = await addOrder(data);
+    // try {
+    //   const submittedData = {
+    //     ...values,
+    //     user: user?._id,
+    //     products: cartData?.map((item) => ({
+    //       product: item?.product?._id,
+    //       quantity: item?.quantity,
+    //     })),
+    //     shippingFee,
+    //     discount,
+    //     deliveryOption,
+    //     code,
+    //     grandTotal,
+    //     subTotal,
+    //   };
 
-      if (res?.error) {
-        toast.error(res?.error?.data?.errorMessage, { id: toastId });
-      } else if (res?.data?.success) {
-        if (res?.data?.data?.gatewayUrl) {
-          window.location.href = res?.data?.data?.gatewayUrl;
-        }
-        toast.success(res.data.message, { id: toastId });
-        router.push("/success");
-      }
-    } catch (error) {
-      toast.error("Something went wrong while creating Order!", {
-        id: toastId,
-      });
-      console.error("Error creating Order:", error);
-    }
+    //   if (values.paymentType === "cod") {
+    //     submittedData.paymentMethod = "cod";
+    //   }
+
+    //   const data = new FormData();
+    //   appendToFormData(submittedData, data);
+
+    //   const res = await addOrder(data);
+
+    //   if (res?.error) {
+    //     toast.error(res?.error?.data?.errorMessage, { id: toastId });
+    //   } else if (res?.data?.success) {
+    //     if (res?.data?.data?.gatewayUrl) {
+    //       window.location.href = res?.data?.data?.gatewayUrl;
+    //     }
+    //     toast.success(res.data.message, { id: toastId });
+    //     router.push("/success");
+    //   }
+    // } catch (error) {
+    //   toast.error("Something went wrong while creating Order!", {
+    //     id: toastId,
+    //   });
+    //   console.error("Error creating Order:", error);
+    // }
   };
 
   return (
@@ -130,7 +153,7 @@ const CartDetails = () => {
                 {cartData?.map((item) => (
                   <div
                     key={item?._id}
-                    className="flex flex-col lg:flex-row items-center gap-4 justify-center first:mt-0 mt-10"
+                    className="flex flex-col lg:flex-row items-center gap-4 justify-center pb-5 mt-5 first:mt-0 border-b border-gray-300 last:border-b-0"
                   >
                     <div className="flex flex-[3] items-center gap-4">
                       <Image
