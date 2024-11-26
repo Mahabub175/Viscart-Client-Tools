@@ -15,6 +15,7 @@ const ProductCountCart = ({
   single,
   handleModalClose = () => {},
   fullWidth,
+  previousSelectedVariant,
 }) => {
   const router = useRouter();
   const [count, setCount] = useState(1);
@@ -37,13 +38,12 @@ const ProductCountCart = ({
 
   const [selectedVariant, setSelectedVariant] = useState(null);
 
-  console.log(selectedVariant);
   const handleVariantSelect = (variant) => {
     setSelectedVariant(variant);
   };
 
   const addToCart = async (type) => {
-    if (item?.variants?.length > 0 && !selectedVariant) {
+    if (item?.variants?.length > 0 && !previousSelectedVariant) {
       setOpenVariantModal(true);
       return;
     }
@@ -89,7 +89,7 @@ const ProductCountCart = ({
       className={`mt-5 lg:mt-10 ${
         single
           ? "gap-5 flex flex-col lg:flex-row items-center"
-          : "flex items-center justify-between gap-5"
+          : "flex flex-col lg:flex-row items-center justify-between gap-5"
       }`}
     >
       <div className="flex items-center gap-3 border border-primaryLight rounded-xl p-1.5">

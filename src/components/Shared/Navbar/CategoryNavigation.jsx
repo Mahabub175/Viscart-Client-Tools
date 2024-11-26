@@ -83,7 +83,7 @@ const CategoryNavigation = () => {
         <Link
           key={index}
           href={item.link}
-          className={`flex flex-col items-center font-bold duration-300 ${
+          className={`flex flex-col lg:items-center font-bold duration-300 ${
             pathname === item.link
               ? "text-primary hover:text-primary"
               : "text-black hover:text-primary"
@@ -96,8 +96,8 @@ const CategoryNavigation = () => {
   );
 
   return (
-    <div className="bg-primary lg:bg-white lg:text-black border-y mb-5">
-      <div className="my-container mx-auto flex flex-col lg:flex-row gap-10 lg:items-center">
+    <div className="bg-white lg:text-black lg:border-y mb-5">
+      <div className="my-container mx-auto flex flex-col lg:flex-row gap-10 items-start lg:items-center">
         <Dropdown
           overlay={
             <Menu>

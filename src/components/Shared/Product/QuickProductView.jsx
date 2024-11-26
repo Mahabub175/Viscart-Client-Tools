@@ -98,6 +98,7 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
           <ProductCountCart
             item={item}
             handleModalClose={handleModalClose}
+            previousSelectedVariant={selectedVariant}
             fullWidth
           />
         </div>

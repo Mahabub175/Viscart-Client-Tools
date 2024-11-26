@@ -4,34 +4,17 @@ import { paginationNumbers } from "@/assets/data/paginationData";
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
-import DetailsModal from "@/components/Reusable/Modal/DetailsModal";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
-import {
-  useGetOrdersByUserQuery,
-  useGetSingleOrderQuery,
-} from "@/redux/services/order/orderApi";
+import { useGetOrdersByUserQuery } from "@/redux/services/order/orderApi";
 import { useAddReviewMutation } from "@/redux/services/review/reviewApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
-import {
-  Button,
-  Form,
-  Modal,
-  Pagination,
-  Rate,
-  Space,
-  Table,
-  Tag,
-  Tooltip,
-} from "antd";
+import { Button, Form, Modal, Pagination, Rate, Table, Tag } from "antd";
 import { useState } from "react";
-import { TbListDetails } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const UserOrders = () => {
   const user = useSelector(useCurrentUser);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [itemId, setItemId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -41,10 +24,6 @@ const UserOrders = () => {
     page: currentPage,
     limit: pageSize,
     id: user?._id,
-  });
-
-  const { data: userOrder } = useGetSingleOrderQuery(itemId, {
-    skip: !itemId,
   });
 
   const handlePageChange = (page, size) => {
@@ -196,28 +175,6 @@ const UserOrders = () => {
         </Button>
       ),
     },
-    {
-      title: "Action",
-      key: "action",
-      align: "center",
-      render: (item) => {
-        return (
-          <Space size="middle">
-            <Tooltip placement="top" title={"Details"}>
-              <button
-                onClick={() => {
-                  setItemId(item.key);
-                  setDetailsModalOpen(true);
-                }}
-                className="bg-blue-600 p-2 rounded-xl text-white hover:scale-110 duration-300"
-              >
-                <TbListDetails />
-              </button>
-            </Tooltip>
-          </Space>
-        );
-      },
-    },
   ];
 
   const tableData = userOrders?.results?.map((item) => ({
@@ -287,14 +244,6 @@ const UserOrders = () => {
         showSizeChanger
         pageSizeOptions={paginationNumbers}
         simple
-      />
-
-      <DetailsModal
-        itemId={itemId}
-        modalOpen={detailsModalOpen}
-        setModalOpen={setDetailsModalOpen}
-        title={"Order"}
-        details={userOrder}
       />
 
       <Modal

@@ -17,7 +17,7 @@ const TrackOrder = () => {
           className="flex flex-col items-center lg:w-[500px] relative"
         >
           <Input
-            placeholder="Enter your order id"
+            placeholder="Enter your tracking code"
             type="text"
             size="large"
             className="rounded"
