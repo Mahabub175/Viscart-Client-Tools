@@ -17,6 +17,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import { MdDelete } from "react-icons/md";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -25,10 +26,11 @@ const CompareList = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
   const { data: globalData, isLoading: isGlobalDataLoading } =
     useGetAllGlobalSettingQuery();
   const { data: compareData, isLoading: isCompareDataLoading } =
-    useGetSingleCompareByUserQuery(user?._id);
+    useGetSingleCompareByUserQuery(user?._id || deviceId);
   const { data: productData, isLoading: isProductDataLoading } =
     useGetSingleProductQuery(productId, {
       skip: !productId,

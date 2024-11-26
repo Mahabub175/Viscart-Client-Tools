@@ -61,13 +61,13 @@ const CartDetails = () => {
     setDeleteModalOpen(true);
   };
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <h2 className="text-2xl font-bold">Please login to see your cart</h2>
-      </div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <h2 className="text-2xl font-bold">Please login to see your cart</h2>
+  //     </div>
+  //   );
+  // }
 
   const formatImagePath = (imagePath) => imagePath?.replace(/\//g, "\\");
 

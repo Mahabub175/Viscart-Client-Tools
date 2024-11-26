@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./api/baseApi";
 import authReducer from "./services/auth/authSlice";
 import themeReducer from "./services/theme/themeSlice";
+import deviceReducer from "./services/device/deviceSlice";
 import {
   persistStore,
   persistReducer,
@@ -24,13 +25,23 @@ const themePersistConfig = {
   storage,
 };
 
+const devicePersistConfig = {
+  key: "device",
+  storage,
+};
+
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedThemeReducer = persistReducer(themePersistConfig, themeReducer);
+const persistedDeviceReducer = persistReducer(
+  devicePersistConfig,
+  deviceReducer
+);
 
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     theme: persistedThemeReducer,
+    device: persistedDeviceReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
