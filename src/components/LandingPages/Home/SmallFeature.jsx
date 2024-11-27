@@ -4,7 +4,7 @@ import React from "react";
 
 const SmallFeature = () => {
   return (
-    <section className="py-10 my-container">
+    <section className="pb-10 my-container">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center items-center gap-10">
         {smallFeatureData?.map((item, i) => (
           <div

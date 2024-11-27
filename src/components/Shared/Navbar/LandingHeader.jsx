@@ -166,16 +166,8 @@ const LandingHeader = () => {
                     href={"/sign-in"}
                     className="flex items-center gap-2 text-primary"
                   >
-                    <Button type="default" className="!px-6 !py-4 !font-bold">
+                    <Button type="primary" className="font-bold mr-2">
                       Sign In
-                    </Button>
-                  </Link>
-                  <Link
-                    href={"/sign-up"}
-                    className="flex items-center gap-2 text-black "
-                  >
-                    <Button type="primary" className="!px-6 !py-4 !font-bold">
-                      Sign Up
                     </Button>
                   </Link>
                 </>
