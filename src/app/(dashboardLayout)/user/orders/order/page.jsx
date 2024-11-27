@@ -179,7 +179,7 @@ const UserOrders = () => {
 
   const tableData = userOrders?.results?.map((item) => ({
     key: item._id,
-    tranId: item.tranId,
+    tranId: item.tranId ?? "N/A",
     products: item?.products
       ?.map((product) => product.product.name)
       .join(" , "),

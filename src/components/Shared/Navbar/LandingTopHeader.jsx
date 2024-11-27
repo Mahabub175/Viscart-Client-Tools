@@ -2,6 +2,7 @@ import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
@@ -21,10 +22,15 @@ const LandingTopHeader = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
   const { data } = useGetSingleUserQuery(user?._id);
-  const { data: compareData } = useGetSingleCompareByUserQuery(user?._id);
-  const { data: wishListData } = useGetSingleWishlistByUserQuery(user?._id);
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
+  const { data: compareData } = useGetSingleCompareByUserQuery(
+    user?._id ?? deviceId
+  );
+  const { data: wishListData } = useGetSingleWishlistByUserQuery(
+    user?._id ?? deviceId
+  );
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
   const { data: products } = useGetAllProductsQuery();
   const { data: globalData } = useGetAllGlobalSettingQuery();
 

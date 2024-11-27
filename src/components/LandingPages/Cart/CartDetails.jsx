@@ -1,47 +1,49 @@
 "use client";
 
-import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
-import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
-import {
-  useDeleteCartMutation,
-  useGetSingleCartByUserQuery,
-} from "@/redux/services/cart/cartApi";
-import { base_url_image } from "@/utilities/configs/base_api";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import deleteImage from "@/assets/images/Trash-can.png";
-import CheckoutDetails from "./CheckoutDetails";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
-import CheckoutInfo from "./CheckoutInfo";
+import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import {
   useGetSingleUserQuery,
   useLoginMutation,
   useSignUpMutation,
 } from "@/redux/services/auth/authApi";
-import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues";
-import { useAddOrderMutation } from "@/redux/services/order/orderApi";
-import { appendToFormData } from "@/utilities/lib/appendToFormData";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
+import {
+  useDeleteCartMutation,
+  useGetSingleCartByUserQuery,
+} from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
-import { generateRandomPassword } from "@/utilities/lib/generateRandomPassword";
+import { useAddOrderMutation } from "@/redux/services/order/orderApi";
+import { base_url_image } from "@/utilities/configs/base_api";
+import { appendToFormData } from "@/utilities/lib/appendToFormData";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import CheckoutDetails from "./CheckoutDetails";
+import CheckoutInfo from "./CheckoutInfo";
 
 const CartDetails = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
+  const dispatch = useDispatch();
+
+  const [userId, setUserId] = useState(null);
+
+  const { data: userData } = useGetSingleUserQuery(user?._id ?? userId);
+
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
-  const { data: userData } = useGetSingleUserQuery(user?._id);
+
   const [deleteCart] = useDeleteCartMutation();
 
   const [addOrder] = useAddOrderMutation();
-  const [login] = useLoginMutation();
   const [signUp] = useSignUpMutation();
+  const [login] = useLoginMutation();
 
-  const [fields, setFields] = useState([]);
   const [itemId, setItemId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [counts, setCounts] = useState({});
@@ -53,9 +55,6 @@ const CartDetails = () => {
   const [grandTotal, setGrandTotal] = useState(0);
 
   useEffect(() => {
-    if (userData) {
-      setFields(transformDefaultValues(userData));
-    }
     if (cartData) {
       setSubTotal(cartData?.reduce((acc, item) => acc + item.price, 0));
       setCounts(
@@ -75,70 +74,94 @@ const CartDetails = () => {
   const formatImagePath = (imagePath) => imagePath?.replace(/\//g, "\\");
 
   const onSubmit = async (values) => {
-    // const toastId = toast.loading("Creating Order...");
+    const toastId = toast.loading("Creating Order...");
 
-    const signUpData = {
-      name: values?.name,
-      number: values?.number,
-      password: generateRandomPassword(),
-    };
-    const res = await signUp(signUpData).unwrap();
+    if (!user) {
+      const signUpData = {
+        name: values?.name,
+        number: values?.number,
+        password: values?.number,
+      };
 
-    console.log(res);
+      try {
+        const res = await signUp(signUpData).unwrap();
+        setUserId(res?.data?.number);
+        const loginData = {
+          emailNumber: values?.number,
+          password: values?.number,
+        };
+        const loginRes = await login(loginData).unwrap();
+        if (loginRes.success) {
+          dispatch(
+            setUser({ user: loginRes.data.user, token: loginRes.data.token })
+          );
+        }
+      } catch (error) {
+        if (error?.data?.errorMessage === "number already exists") {
+          setUserId(values?.number);
+        }
+      }
+    }
 
-    // const loginRes = await login(values).unwrap();
-    // if (res.success) {
-    //   dispatch(setUser({ user: res.data.user, token: res.data.token }));
-    // }
+    setTimeout(async () => {
+      try {
+        const submittedData = {
+          ...values,
+          user: userData?._id,
+          deviceId,
+          products: cartData?.map((item) => ({
+            product: item?.product?._id,
+            quantity: item?.quantity,
+          })),
+          shippingFee,
+          discount,
+          deliveryOption,
+          code,
+          grandTotal,
+          subTotal,
+        };
 
-    // try {
-    //   const submittedData = {
-    //     ...values,
-    //     user: user?._id,
-    //     products: cartData?.map((item) => ({
-    //       product: item?.product?._id,
-    //       quantity: item?.quantity,
-    //     })),
-    //     shippingFee,
-    //     discount,
-    //     deliveryOption,
-    //     code,
-    //     grandTotal,
-    //     subTotal,
-    //   };
+        if (values.paymentType === "cod") {
+          submittedData.paymentMethod = "cod";
+        }
 
-    //   if (values.paymentType === "cod") {
-    //     submittedData.paymentMethod = "cod";
-    //   }
+        const data = new FormData();
+        appendToFormData(submittedData, data);
 
-    //   const data = new FormData();
-    //   appendToFormData(submittedData, data);
+        try {
+          const res = await addOrder(data);
 
-    //   const res = await addOrder(data);
-
-    //   if (res?.error) {
-    //     toast.error(res?.error?.data?.errorMessage, { id: toastId });
-    //   } else if (res?.data?.success) {
-    //     if (res?.data?.data?.gatewayUrl) {
-    //       window.location.href = res?.data?.data?.gatewayUrl;
-    //     }
-    //     toast.success(res.data.message, { id: toastId });
-    //     router.push("/success");
-    //   }
-    // } catch (error) {
-    //   toast.error("Something went wrong while creating Order!", {
-    //     id: toastId,
-    //   });
-    //   console.error("Error creating Order:", error);
-    // }
+          if (res?.error) {
+            toast.error(res?.error?.data?.errorMessage, { id: toastId });
+          } else if (res?.data?.success) {
+            if (res?.data?.data?.gatewayUrl) {
+              window.location.href = res?.data?.data?.gatewayUrl;
+            }
+            toast.success(res.data.message, { id: toastId });
+            router.push("/success");
+            window.location.reload();
+          }
+        } catch (error) {
+          toast.error("Something went wrong while creating Order!", {
+            id: toastId,
+          });
+          console.error("Error creating Order:", error);
+        }
+      } catch (error) {
+        toast.error("Something went wrong while creating Order!", {
+          id: toastId,
+        });
+        console.error("Error preparing Order data:", error);
+      }
+    }, 2000);
   };
 
   return (
     <section className="container mx-auto px-5 py-10 relative">
       <h2 className="font-normal text-2xl">My Cart</h2>
       <div>
-        {cartData?.length === 0 ? (
-          <div className="flex items-center justify-center h-screen">
+        {cartData?.length === 0 || !cartData ? (
+          <div className="flex items-center justify-center bg-white shadow-xl rounded-xl p-10 my-20">
             <h2 className="text-2xl font-bold text-black/80">
               Please add a product to cart to see them here
             </h2>
@@ -215,7 +238,7 @@ const CartDetails = () => {
                 setGrandTotal={setGrandTotal}
               />
               <div className="lg:w-2/6 w-full border-2 border-primary rounded-lg p-5">
-                <CustomForm fields={fields} onSubmit={onSubmit}>
+                <CustomForm onSubmit={onSubmit}>
                   <CheckoutInfo />
                 </CustomForm>
               </div>
