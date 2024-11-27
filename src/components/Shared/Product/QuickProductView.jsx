@@ -54,7 +54,7 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <span className="font-bold">Select Variant:</span>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {item?.variants.map((variant) => (
                     <div
                       key={variant._id}
@@ -64,17 +64,23 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
                           ? "border-primary"
                           : "border-gray-300"
                       }`}
-                      title={variant?.attributeCombination[0]?.label}
+                      title={variant?.attributeCombination
+                        ?.map((attribute) => attribute?.label)
+                        .join(" : ")}
                       style={{
                         backgroundColor:
-                          variant?.attributeCombination[0]?.label,
+                          variant?.attributeCombination?.[0]?.label,
                       }}
                     >
-                      {variant?.attributeCombination[0]?.type === "other" && (
-                        <span className="text-black flex items-center justify-center mt-1 font-bold">
-                          {variant?.attributeCombination[0]?.label}
-                        </span>
-                      )}
+                      {variant?.attributeCombination?.map((attribute, idx) => (
+                        <div key={idx}>
+                          {attribute?.type === "other" && (
+                            <span className="text-black flex items-center justify-center mt-1 font-bold">
+                              {attribute?.label}
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
