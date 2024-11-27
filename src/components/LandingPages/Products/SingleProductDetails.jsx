@@ -12,6 +12,7 @@ import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import Image from "next/image";
+import { FaWhatsapp } from "react-icons/fa";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -103,8 +104,8 @@ const SingleProductDetails = ({ params }) => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <span className="font-bold">Select Variant:</span>
-                <div className="flex items-center gap-2">
-                  {singleProduct?.variants?.map((variant) => (
+                <div className="flex flex-wrap items-center gap-2">
+                  {singleProduct?.variants.map((variant) => (
                     <div
                       key={variant._id}
                       onClick={() => handleVariantSelect(variant)}
@@ -113,17 +114,23 @@ const SingleProductDetails = ({ params }) => {
                           ? "border-primary"
                           : "border-gray-300"
                       }`}
-                      title={variant?.attributeCombination[0]?.label}
+                      title={variant?.attributeCombination
+                        ?.map((attribute) => attribute?.name)
+                        .join(" : ")}
                       style={{
                         backgroundColor:
-                          variant?.attributeCombination[0]?.label,
+                          variant?.attributeCombination?.[0]?.label,
                       }}
                     >
-                      {variant?.attributeCombination[0]?.type === "other" && (
-                        <span className="text-black flex items-center justify-center mt-1 font-bold">
-                          {variant?.attributeCombination[0]?.label}
-                        </span>
-                      )}
+                      {variant?.attributeCombination?.map((attribute, idx) => (
+                        <div key={idx}>
+                          {attribute?.type === "other" && (
+                            <span className="text-black flex items-center justify-center mt-1 font-bold">
+                              {attribute?.label}
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
@@ -135,6 +142,13 @@ const SingleProductDetails = ({ params }) => {
             fullWidth
             previousSelectedVariant={selectedVariant}
           />
+          <div className="w-full bg-primary px-10 py-4 rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer">
+            <p>Click To Place a Order With Just a Phone Call</p>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <FaWhatsapp className="text-2xl" />
+              <p>01704032285</p>
+            </div>
+          </div>
         </div>
       </div>
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl bg-white flex flex-col items-center justify-center">
