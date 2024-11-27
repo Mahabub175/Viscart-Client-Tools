@@ -1,3 +1,4 @@
+import FileUploader from "@/components/Reusable/Form/FileUploader";
 import {
   findNonMatchingItems,
   formatProductData,
@@ -106,7 +107,11 @@ const ProductVariantOption = ({
       key: "image",
       align: "right",
       width: 150,
-      editable: true,
+      render: () => (
+        <>
+          <FileUploader small={true} name={`image`} />
+        </>
+      ),
     },
 
     {
