@@ -14,9 +14,11 @@ import { useSelector } from "react-redux";
 import deleteImage from "@/assets/images/Trash-can.png";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import { useRouter } from "next/navigation";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 
 const GlobalCart = () => {
   const router = useRouter();
+  const deviceId = useSelector(useDeviceId);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [itemId, setItemId] = useState(null);
@@ -25,7 +27,7 @@ const GlobalCart = () => {
   const [subTotal, setSubTotal] = useState(0);
 
   const user = useSelector(useCurrentUser);
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id);
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
   const [deleteCart] = useDeleteCartMutation();
 
   useEffect(() => {
@@ -85,7 +87,7 @@ const GlobalCart = () => {
               </button>
             </div>
             <div>
-              {cartData?.length === 0 ? (
+              {cartData?.length === 0 || !cartData ? (
                 <div className="flex items-center justify-center">
                   <h2 className="text-base text-center my-20 font-bold text-black/80">
                     Please add a product to cart to see them here

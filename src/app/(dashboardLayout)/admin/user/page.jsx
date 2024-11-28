@@ -211,8 +211,8 @@ const AdminDonation = () => {
 
   const tableData = users?.results?.map((item) => ({
     key: item._id,
-    name: item.name,
-    email: item?.email,
+    name: item.name ?? "N/A",
+    email: item?.email ?? "N/A",
     role: item?.role,
     createdAt: moment(item.createdAt).format("Do MMM, YYYY"),
     status: item?.status,
@@ -221,10 +221,11 @@ const AdminDonation = () => {
   return (
     <div className="px-5">
       <div className="flex justify-between">
+        <div></div>
         <Input
           suffix={<FaSearch />}
           placeholder="Search..."
-          className="py-1.5  lg:w-1/4"
+          className="py-1.5 lg:w-1/4"
           size="large"
           onChange={(e) => setSearch(e.target.value)}
         />

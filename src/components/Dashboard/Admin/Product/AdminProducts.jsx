@@ -155,7 +155,7 @@ const AdminProducts = () => {
       align: "center",
       render: (item) => (
         <Tag
-          color={item ? "green" : "red"}
+          color={item ? "green" : "blue"}
           className="capitalize font-semibold"
         >
           {item ? "Featured" : "Not Featured"}
@@ -169,7 +169,7 @@ const AdminProducts = () => {
       align: "center",
       render: (item) => (
         <Tag
-          color={item ? "green" : "red"}
+          color={item ? "green" : "blue"}
           className="capitalize font-semibold"
         >
           {item ? "Variant" : "Not Variant"}

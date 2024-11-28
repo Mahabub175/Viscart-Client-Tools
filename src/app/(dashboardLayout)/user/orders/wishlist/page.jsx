@@ -8,9 +8,10 @@ import {
   useGetSingleWishlistByUserQuery,
   useGetSingleWishlistQuery,
 } from "@/redux/services/wishlist/wishlistApi";
-import { Dropdown, Menu, Space, Table, Tag, Tooltip } from "antd";
+import { Dropdown, Input, Menu, Space, Table, Tag, Tooltip } from "antd";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 import { useSelector } from "react-redux";
@@ -20,6 +21,7 @@ const UserWishlist = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemId, setItemId] = useState(null);
+  const [search, setSearch] = useState("");
 
   const { data: wishlists, isFetching } = useGetSingleWishlistByUserQuery(
     user?._id
@@ -115,12 +117,31 @@ const UserWishlist = () => {
     status: item?.status,
   }));
 
+  const filteredTableData = tableData?.filter((item) => {
+    if (!search) return true;
+    const searchTerm = search.toLowerCase();
+
+    return Object.values(item).some((value) =>
+      value?.toString().toLowerCase().includes(searchTerm)
+    );
+  });
+
   return (
     <div className="px-5">
+      <div className="flex justify-between">
+        <div></div>
+        <Input
+          suffix={<FaSearch />}
+          placeholder="Search..."
+          className="py-1.5 lg:w-1/4"
+          size="large"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Table
         columns={columns}
         pagination={false}
-        dataSource={tableData}
+        dataSource={filteredTableData}
         className="mt-10"
         loading={isFetching}
       />

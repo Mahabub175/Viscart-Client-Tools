@@ -8,8 +8,9 @@ import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetOrdersByUserQuery } from "@/redux/services/order/orderApi";
 import { useAddReviewMutation } from "@/redux/services/review/reviewApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
-import { Button, Form, Modal, Pagination, Rate, Table, Tag } from "antd";
+import { Button, Form, Input, Modal, Pagination, Rate, Table, Tag } from "antd";
 import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ const UserOrders = () => {
   const [pageSize, setPageSize] = useState(10);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [singleOrder, setSingleOrder] = useState({});
+  const [search, setSearch] = useState("");
 
   const { data: userOrders, isFetching } = useGetOrdersByUserQuery({
     page: currentPage,
@@ -225,12 +227,31 @@ const UserOrders = () => {
     }
   };
 
+  const filteredTableData = tableData?.filter((item) => {
+    if (!search) return true;
+    const searchTerm = search.toLowerCase();
+
+    return Object.values(item).some((value) =>
+      value?.toString().toLowerCase().includes(searchTerm)
+    );
+  });
+
   return (
     <div className="px-5">
+      <div className="flex justify-between">
+        <div></div>
+        <Input
+          suffix={<FaSearch />}
+          placeholder="Search..."
+          className="py-1.5 lg:w-1/4"
+          size="large"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Table
         columns={columns}
         pagination={false}
-        dataSource={tableData}
+        dataSource={filteredTableData}
         className="mt-10"
         loading={isFetching}
       />

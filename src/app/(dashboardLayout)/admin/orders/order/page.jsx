@@ -16,6 +16,7 @@ import { generateInvoice } from "@/utilities/lib/generateInvoice";
 import {
   Button,
   Dropdown,
+  Input,
   Menu,
   Modal,
   Pagination,
@@ -32,6 +33,7 @@ import { TbListDetails } from "react-icons/tb";
 import { toast } from "sonner";
 import { IoIosRefresh } from "react-icons/io";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { FaSearch } from "react-icons/fa";
 
 const Orders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -42,6 +44,7 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [trackingCode, setTrackingCode] = useState(null);
+  const [search, setSearch] = useState("");
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -400,6 +403,15 @@ const Orders = () => {
     paymentMethod: item?.paymentMethod,
   }));
 
+  const filteredTableData = tableData?.filter((item) => {
+    if (!search) return true;
+    const searchTerm = search.toLowerCase();
+
+    return Object.values(item).some((value) =>
+      value?.toString().toLowerCase().includes(searchTerm)
+    );
+  });
+
   const handleOrderStatus = async (values) => {
     const toastId = toast.loading("Updating Order Status...");
     try {
@@ -429,10 +441,20 @@ const Orders = () => {
 
   return (
     <div className="px-5">
+      <div className="flex justify-between">
+        <div></div>
+        <Input
+          suffix={<FaSearch />}
+          placeholder="Search..."
+          className="py-1.5 lg:w-1/4"
+          size="large"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Table
         columns={columns}
         pagination={false}
-        dataSource={tableData}
+        dataSource={filteredTableData}
         className="mt-10"
         loading={isFetching}
       />
