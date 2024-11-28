@@ -12,7 +12,11 @@ import {
   MdOutlineMergeType,
   MdOutlineReviews,
 } from "react-icons/md";
-import { RiCoupon3Line, RiUserSettingsFill } from "react-icons/ri";
+import {
+  RiCoupon3Line,
+  RiUserSettingsFill,
+  RiMessage2Fill,
+} from "react-icons/ri";
 import { TbBrandAirtable, TbLayoutDashboardFilled } from "react-icons/tb";
 
 export const adminSidebarRoutes = [
@@ -89,5 +93,10 @@ export const adminSidebarRoutes = [
     name: "Global Setting",
     path: "global-setting",
     icon: IoSettingsSharp,
+  },
+  {
+    name: "Message Platform",
+    path: "message-platform",
+    icon: RiMessage2Fill,
   },
 ];
