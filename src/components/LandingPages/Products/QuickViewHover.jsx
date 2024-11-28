@@ -3,6 +3,7 @@
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCompareMutation } from "@/redux/services/compare/compareApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useAddWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
 import { Tooltip } from "antd";
 import Link from "next/link";
@@ -17,6 +18,7 @@ const QuickViewHover = ({ item }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
 
   const [addWishlist] = useAddWishlistMutation();
   const [addCompare] = useAddCompareMutation();
@@ -30,12 +32,8 @@ const QuickViewHover = ({ item }) => {
   };
 
   const addToWishlist = async (id) => {
-    if (!user) {
-      toast.error("Please login to add to wishlist.");
-      return;
-    }
     const data = {
-      user: user?._id,
+      ...(user?._id ? { user: user._id } : { deviceId }),
       product: id,
     };
 
@@ -56,12 +54,8 @@ const QuickViewHover = ({ item }) => {
   };
 
   const addToCompare = async (id) => {
-    if (!user) {
-      toast.error("Please login to add to Compare.");
-      return;
-    }
     const data = {
-      user: user?._id,
+      ...(user?._id ? { user: user._id } : { deviceId }),
       product: [id],
     };
 

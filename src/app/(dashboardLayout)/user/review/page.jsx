@@ -7,8 +7,9 @@ import {
   useDeleteReviewMutation,
   useGetSingleReviewByUserQuery,
 } from "@/redux/services/review/reviewApi";
-import { Pagination, Space, Table, Tag, Tooltip } from "antd";
+import { Input, Pagination, Space, Table, Tag, Tooltip } from "antd";
 import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useSelector } from "react-redux";
 
@@ -19,6 +20,7 @@ const AdminReview = () => {
   const [itemId, setItemId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState("");
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -103,12 +105,31 @@ const AdminReview = () => {
     status: item?.status,
   }));
 
+  const filteredTableData = tableData?.filter((item) => {
+    if (!search) return true;
+    const searchTerm = search.toLowerCase();
+
+    return Object.values(item).some((value) =>
+      value?.toString().toLowerCase().includes(searchTerm)
+    );
+  });
+
   return (
     <div className="px-5">
+      <div className="flex justify-between">
+        <div></div>
+        <Input
+          suffix={<FaSearch />}
+          placeholder="Search..."
+          className="py-1.5 lg:w-1/4"
+          size="large"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Table
         columns={columns}
         pagination={false}
-        dataSource={tableData}
+        dataSource={filteredTableData}
         className="mt-10"
         loading={isFetching}
       />

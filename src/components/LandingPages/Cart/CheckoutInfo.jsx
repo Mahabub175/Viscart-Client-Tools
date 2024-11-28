@@ -21,7 +21,6 @@ const CheckoutInfo = () => {
   return (
     <div>
       <CustomInput type="text" name="name" label="Name" required />
-      <CustomInput type="email" name="email" label="Email" required />
       <CustomInput type="number" name="number" label="Number" required />
       <CustomInput type="textarea" name="address" label="Address" required />
       <CustomSelect

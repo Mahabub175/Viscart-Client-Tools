@@ -12,7 +12,7 @@ import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import ProductForm from "./ProductForm";
-import { Checkbox, Form } from "antd";
+import { Form } from "antd";
 import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import { getUniqueAttributeIds } from "@/utilities/lib/variant";
 
@@ -37,6 +37,7 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
     const variantData = variantProductRef.current
       ? variantProductRef.current()
       : null;
+
     const toastId = toast.loading("Updating Product...");
     try {
       const submittedData = {
@@ -121,11 +122,6 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
 
         <Form.Item label={"Product Description"} name={"description"}>
           <CustomTextEditor value={content} onChange={setContent} />
-        </Form.Item>
-        <Form.Item name={"isFeatured"} valuePropName="checked">
-          <Checkbox className="font-semibold">
-            This Product Is Featured
-          </Checkbox>
         </Form.Item>
 
         <CustomSelect

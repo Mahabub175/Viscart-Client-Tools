@@ -83,10 +83,10 @@ const FeatureProduct = () => {
                   .map((slideProducts, idx) => (
                     <SwiperSlide key={idx}>
                       <div className="flex flex-col gap-5">
-                        {slideProducts.map((item) => (
+                        {slideProducts?.map((item) => (
                           <div
                             key={item._id}
-                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-5"
+                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-5 h-[180px]"
                           >
                             <Image
                               src={item?.mainImage}

@@ -16,6 +16,12 @@ const SignUpForm = () => {
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Signing Up...");
+    if (values.password !== values.confirmPassword) {
+      toast.error("Passwords do not match", {
+        id: toastId,
+      });
+      return;
+    }
     try {
       const res = await signUp(values).unwrap();
       if (res.success) {
@@ -37,12 +43,6 @@ const SignUpForm = () => {
         <div className="mt-4 mb-6">
           <CustomInput label={"Name"} name={"name"} type={"text"} />
           <CustomInput
-            label={"Email"}
-            name={"email"}
-            type={"email"}
-            required={true}
-          />
-          <CustomInput
             label={"Phone Number"}
             name={"number"}
             type={"number"}
@@ -51,6 +51,12 @@ const SignUpForm = () => {
           <CustomInput
             label={"Password"}
             name={"password"}
+            type={"password"}
+            required={true}
+          />
+          <CustomInput
+            label={"Confirm Password"}
+            name={"confirmPassword"}
             type={"password"}
             required={true}
           />

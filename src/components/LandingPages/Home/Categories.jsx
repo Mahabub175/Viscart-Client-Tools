@@ -42,7 +42,7 @@ const Categories = () => {
         <Tabs
           defaultActiveKey={activeCategories?.[0]?._id}
           size="large"
-          className="font-semibold max-w-[600px] px-5 lg:px-0"
+          className="font-semibold max-w-[380px] lg:max-w-[600px]"
           onChange={(key) => setActiveCategory(key)}
         >
           {activeCategories?.map((category) => (

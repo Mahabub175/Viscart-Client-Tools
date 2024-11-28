@@ -85,7 +85,7 @@ const AllProducts = () => {
     });
 
   return (
-    <section className="container mx-auto px-5 py-10 relative">
+    <section className="container mx-auto px-5 py-10 relative -mt-10 lg:-mt-0">
       <div className="bg-gray-200 flex items-center justify-between py-3 px-6 mb-6 rounded-xl">
         <p>
           There are{" "}

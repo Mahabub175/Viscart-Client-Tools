@@ -16,11 +16,15 @@ import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { Button } from "antd";
 import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 
 const Wishlist = () => {
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
 
-  const { data: wishlistData } = useGetSingleWishlistByUserQuery(user?._id);
+  const { data: wishlistData } = useGetSingleWishlistByUserQuery(
+    user?._id ?? deviceId
+  );
   const [deleteWishlist] = useDeleteWishlistMutation();
 
   const [itemId, setItemId] = useState(null);
@@ -40,16 +44,6 @@ const Wishlist = () => {
 
   const { data: productData } = useGetSingleProductQuery(productId);
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <h2 className="text-2xl font-bold">
-          Please login to see your wishlist
-        </h2>
-      </div>
-    );
-  }
-
   const formatImagePath = (imagePath) => {
     return imagePath?.replace(/\//g, "\\");
   };
@@ -63,8 +57,8 @@ const Wishlist = () => {
     <section className="container mx-auto px-5 py-10">
       <h2 className="font-normal text-2xl">My Wishlist</h2>
       <div>
-        {wishlistData?.length === 0 ? (
-          <div className="flex items-center justify-center h-screen">
+        {wishlistData?.length === 0 || !wishlistData ? (
+          <div className="flex items-center justify-center my-10 bg-white p-10 rounded-xl shadow-xl">
             <h2 className="text-2xl font-bold text-black/80">
               Please add a product to wishlist to see them here
             </h2>

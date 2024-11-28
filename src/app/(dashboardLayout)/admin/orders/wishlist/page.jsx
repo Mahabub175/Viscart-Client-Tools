@@ -8,9 +8,19 @@ import {
   useGetSingleWishlistQuery,
   useGetWishlistsQuery,
 } from "@/redux/services/wishlist/wishlistApi";
-import { Dropdown, Menu, Pagination, Space, Table, Tag, Tooltip } from "antd";
+import {
+  Dropdown,
+  Input,
+  Menu,
+  Pagination,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+} from "antd";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 
@@ -20,6 +30,7 @@ const Wishlist = () => {
   const [itemId, setItemId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState("");
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -123,17 +134,36 @@ const Wishlist = () => {
 
   const tableData = wishlists?.results?.map((item) => ({
     key: item._id,
-    user: item?.user?.name,
+    user: item?.user?.name ?? "N/A",
     product: item?.product?.name,
     status: item?.status,
   }));
 
+  const filteredTableData = tableData?.filter((item) => {
+    if (!search) return true;
+    const searchTerm = search.toLowerCase();
+
+    return Object.values(item).some((value) =>
+      value?.toString().toLowerCase().includes(searchTerm)
+    );
+  });
+
   return (
     <div className="px-5">
+      <div className="flex justify-between">
+        <div></div>
+        <Input
+          suffix={<FaSearch />}
+          placeholder="Search..."
+          className="py-1.5 lg:w-1/4"
+          size="large"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       <Table
         columns={columns}
         pagination={false}
-        dataSource={tableData}
+        dataSource={filteredTableData}
         className="mt-10"
         loading={isFetching}
       />

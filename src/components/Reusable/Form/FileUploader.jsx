@@ -11,7 +11,14 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const FileUploader = ({ name, label, required, multiple, defaultValue }) => {
+const FileUploader = ({
+  name,
+  label,
+  required,
+  multiple,
+  defaultValue,
+  small = false,
+}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [showUploader, setShowUploader] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -111,8 +118,12 @@ const FileUploader = ({ name, label, required, multiple, defaultValue }) => {
               <p className="ant-upload-drag-icon">
                 <UploadOutlined />
               </p>
-              <p className="ant-upload-text"></p>
-              Click or drag file to this area to upload
+              {!small && (
+                <>
+                  <p className="ant-upload-text"></p>
+                  Click or drag file to this area to upload
+                </>
+              )}
             </button>
           )}
         </Upload.Dragger>

@@ -1,3 +1,4 @@
+import FileUploader from "@/components/Reusable/Form/FileUploader";
 import {
   findNonMatchingItems,
   formatProductData,
@@ -5,7 +6,7 @@ import {
 import { Button, Form, Input, InputNumber, Table } from "antd";
 import { useCallback, useEffect, useState } from "react";
 
-// Editable Cell component
+// Editable Cell Component
 const EditableCell = ({
   editing,
   dataIndex,
@@ -37,7 +38,7 @@ const EditableCell = ({
   );
 };
 
-// Main component
+// Main Component
 const ProductVariantOption = ({
   combination,
   onCustomSubmit,
@@ -58,7 +59,7 @@ const ProductVariantOption = ({
       width: 330,
       editable: true,
       render: (name) => (
-        <span className="text-dark   text-xs md:text-sm">{name}</span>
+        <span className="text-dark text-xs md:text-sm">{name}</span>
       ),
     },
     {
@@ -106,9 +107,8 @@ const ProductVariantOption = ({
       key: "image",
       align: "right",
       width: 150,
-      editable: true,
+      render: () => <FileUploader small={true} name={`image`} />,
     },
-
     {
       title: "Action",
       dataIndex: "action",
@@ -116,28 +116,26 @@ const ProductVariantOption = ({
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        {
-          return editable ? (
-            <span className="flex items-center gap-2 justify-center font-bold">
-              <Button size="small" onClick={cancel}>
-                Cancel
-              </Button>
-              <Button
-                size="small"
-                type="primary"
-                onClick={() => save(record.key)}
-              >
-                Save
-              </Button>
-            </span>
-          ) : (
-            <span className="flex items-center justify-center">
-              <Button size="small" onClick={() => edit(record)}>
-                Edit
-              </Button>
-            </span>
-          );
-        }
+        return editable ? (
+          <span className="flex items-center gap-2 justify-center font-bold">
+            <Button size="small" onClick={cancel}>
+              Cancel
+            </Button>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => save(record.key)}
+            >
+              Save
+            </Button>
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">
+            <Button size="small" onClick={() => edit(record)}>
+              Edit
+            </Button>
+          </span>
+        );
       },
     },
   ];
@@ -162,79 +160,51 @@ const ProductVariantOption = ({
   });
 
   useEffect(() => {
-    if (!editData) {
-      const variantDataSource =
-        combination?.map((item) => {
-          return {
+    const mapCombinationToData = () => {
+      if (!editData) {
+        const variantDataSource =
+          combination?.map((item) => ({
             key: item.key,
             name: item.name,
             sku: item.sku,
-            stock: item.stock,
-            sellingPrice: item.sellingPrice,
-            buyingPrice: item.buyingPrice,
+            stock: item.stock || 0,
+            sellingPrice: item.sellingPrice || 0,
+            buyingPrice: item.buyingPrice || 0,
             image: item.image,
             attributeCombination: item.variant_attribute_ids,
-          };
-        }) ?? [];
-
-      setData(variantDataSource);
-
-      const initialSelectedKeys = variantDataSource.map((item) => item.key);
-      setIsSelected(initialSelectedKeys);
-      setSelectedRowData(variantDataSource);
-    } else {
-      const formattedData = formatProductData(
-        editData?.variants,
-        editData?.name,
-        editData?.sku
-      );
-
-      const variantDataSource =
-        combination?.map((item) => {
-          return {
+          })) ?? [];
+        setData(variantDataSource);
+      } else {
+        const formattedData = formatProductData(
+          editData?.variants,
+          editData?.name,
+          editData?.sku
+        );
+        const variantDataSource =
+          combination?.map((item) => ({
             key: item.key,
             name: item.name,
             sku: item.sku,
-            stock: item.stock,
-            price: item.price,
-            buyingPrice: item.buyingPrice,
+            stock: item.stock || 0,
+            sellingPrice: item.sellingPrice || 0,
+            buyingPrice: item.buyingPrice || 0,
+            image: item.image,
             attributeCombination: item.variant_attribute_ids,
-          };
-        }) ?? [];
-
-      const nonMatchingItems = findNonMatchingItems(
-        formattedData,
-        variantDataSource
-      );
-
-      let newData = [];
-      if (reset) {
-        newData = [...variantDataSource];
-      } else {
-        newData = [
+          })) ?? [];
+        const nonMatchingItems = findNonMatchingItems(
+          formattedData,
+          variantDataSource
+        );
+        const newData = [
           ...(Array.isArray(formattedData) ? formattedData : []),
           ...nonMatchingItems,
         ];
+        setData(newData);
       }
-
-      setData(newData);
-
-      if (reset) {
-        const initialSelectedKeys = variantDataSource?.map((item) => item.key);
-
-        setIsSelected(initialSelectedKeys);
-        setSelectedRowData(newData);
-      } else {
-        const initialSelectedKeys = formattedData?.map((item) => item.key);
-
-        setIsSelected(initialSelectedKeys);
-        setSelectedRowData(newData);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+    mapCombinationToData();
   }, [combination, editData, reset]);
 
-  // Editing handlers
   const edit = (record) => {
     variantForm.setFieldsValue({ ...record });
     setEditingKey(record.key);
@@ -246,49 +216,24 @@ const ProductVariantOption = ({
 
   const save = async (key) => {
     try {
-      variantForm.validateFields(["name", "sku"]).then(() => {
-        const row = variantForm.getFieldsValue();
-        const newData = [...data];
-        const index = newData.findIndex((item) => key === item.key);
-
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, { ...item, ...row });
-          setData(newData);
-          setSelectedRowData(newData);
-          setEditingKey("");
-        } else {
-          newData.push(row);
-          setData(newData);
-          setEditingKey("");
-        }
-      });
-    } catch (errInfo) {
-      console.error("Validate Failed:", errInfo);
+      const row = await variantForm.validateFields();
+      const newData = [...data];
+      const index = newData.findIndex((item) => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...row });
+        setData(newData);
+        setEditingKey("");
+      }
+    } catch (err) {
+      console.error("Error saving row:", err);
     }
   };
 
-  const [selectedRowData, setSelectedRowData] = useState([]);
-  const [isSelected, setIsSelected] = useState([]);
-
-  const rowSelection = {
-    selectedRowKeys: isSelected,
-    onChange: (selectedRowKeys, selectedRows) => {
-      setIsSelected(selectedRowKeys);
-      setSelectedRowData(selectedRows);
-    },
-    getCheckboxProps: (record) => ({
-      name: record.name,
-      sku: record.sku,
-      price: record.price,
-      buyingPrice: record.buyingPrice,
-    }),
-  };
-
-  const handleCustomSubmit = useCallback(() => {
-    return { selectedRowData };
-  }, [selectedRowData]);
-
+  const handleCustomSubmit = useCallback(
+    () => ({ selectedRowData: data }),
+    [data]
+  );
   onCustomSubmit(handleCustomSubmit);
 
   if (combination.length) {
@@ -303,14 +248,12 @@ const ProductVariantOption = ({
           dataSource={data}
           columns={mergedColumns}
           rowClassName="editable-row"
-          rowSelection={rowSelection}
-          scroll={{
-            x: "max-content",
-          }}
+          scroll={{ x: "max-content" }}
         />
       </Form>
     );
-  } else return null;
+  }
+  return null;
 };
 
 export default ProductVariantOption;

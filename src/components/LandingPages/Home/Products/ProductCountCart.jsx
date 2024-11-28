@@ -3,6 +3,7 @@
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const ProductCountCart = ({
   const [openVariantModal, setOpenVariantModal] = useState(false);
 
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
   const [addCart, { isLoading }] = useAddCartMutation();
 
   const handleCount = (action) => {
@@ -47,13 +49,9 @@ const ProductCountCart = ({
       setOpenVariantModal(true);
       return;
     }
-    if (!user) {
-      toast.error("Please login to add to cart.");
-      return;
-    }
 
     const data = {
-      user: user?._id,
+      ...(user?._id ? { user: user._id } : { deviceId }),
       product: item?._id,
       quantity: count,
       price: selectedVariant?.sellingPrice
@@ -92,35 +90,45 @@ const ProductCountCart = ({
           : "flex flex-col lg:flex-row items-center justify-between gap-5"
       }`}
     >
-      <div className="flex items-center gap-3 border border-primaryLight rounded-xl p-1.5">
-        <button
-          className="cursor-pointer bg-primaryLight p-2 rounded text-xl"
-          onClick={() => handleCount("decrement")}
-        >
-          <FaMinus />
-        </button>
-        <span className="text-base font-bold text-textColor">{count}</span>
-        <button
-          className="cursor-pointer bg-primaryLight p-2 rounded text-xl"
-          onClick={() => handleCount("increment")}
-        >
-          <FaPlus />
-        </button>
-      </div>
-      <SubmitButton
-        func={() => addToCart("cart")}
-        text={"Add"}
-        icon={<FaCartShopping />}
-        loading={isLoading}
-        fullWidth={fullWidth}
-      />
-      <SubmitButton
-        func={() => addToCart("buy")}
-        text={"Buy Now"}
-        icon={<FaCartShopping />}
-        loading={isLoading}
-        fullWidth={fullWidth}
-      />
+      {item?.stock > 0 ? (
+        <>
+          <div className="flex items-center gap-3 border border-primaryLight rounded-xl p-1.5">
+            <button
+              className="cursor-pointer bg-primaryLight p-2 rounded text-xl"
+              onClick={() => handleCount("decrement")}
+            >
+              <FaMinus />
+            </button>
+            <span className="text-base font-bold text-textColor">{count}</span>
+            <button
+              className="cursor-pointer bg-primaryLight p-2 rounded text-xl"
+              onClick={() => handleCount("increment")}
+            >
+              <FaPlus />
+            </button>
+          </div>
+          <SubmitButton
+            func={() => addToCart("cart")}
+            text={"Add"}
+            icon={<FaCartShopping />}
+            loading={isLoading}
+            fullWidth={fullWidth}
+          />
+          <SubmitButton
+            func={() => addToCart("buy")}
+            text={"Buy Now"}
+            icon={<FaCartShopping />}
+            loading={isLoading}
+            fullWidth={fullWidth}
+          />
+        </>
+      ) : (
+        <>
+          <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
+            Out Of Stock
+          </div>
+        </>
+      )}
       <Modal
         open={openVariantModal}
         onCancel={() => setOpenVariantModal(false)}

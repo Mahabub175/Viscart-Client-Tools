@@ -82,6 +82,7 @@ const ProductForm = ({ attachment, handleVariantProduct, data }) => {
         />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
+      <CustomInput label={"Product Video Link"} name={"video"} type={"text"} />
       <div className="two-grid">
         <CustomInput
           label={"Product Buying Price"}
@@ -101,12 +102,14 @@ const ProductForm = ({ attachment, handleVariantProduct, data }) => {
           type={"number"}
           required={false}
         />
-        <CustomInput
-          label={"Product Stock Amount"}
-          name={"stock"}
-          type={"number"}
-          required={true}
-        />
+        {!isVariant && (
+          <CustomInput
+            label={"Product Stock"}
+            name={"stock"}
+            type={"number"}
+            required={true}
+          />
+        )}
       </div>
 
       <FileUploader
