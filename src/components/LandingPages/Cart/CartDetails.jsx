@@ -139,7 +139,6 @@ const CartDetails = () => {
             }
             toast.success(res.data.message, { id: toastId });
             router.push("/success");
-            window.location.reload();
           }
         } catch (error) {
           toast.error("Something went wrong while creating Order!", {

@@ -10,6 +10,15 @@ const ProductCard = ({ item }) => {
 
   return (
     <div className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[300px] lg:h-[480px] mx-auto bg-white">
+      {item?.stock > 0 ? (
+        <div className="absolute top-2 right-2 p-2 bg-gradient-to-r from-green-500 to-green-700 text-white rounded font-bold text-xs z-10">
+          In Stock
+        </div>
+      ) : (
+        <div className="absolute top-2 right-2 p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
+          Out Of Stock
+        </div>
+      )}
       <div className="relative overflow-hidden rounded-t-xl">
         <Image
           src={item?.mainImage}

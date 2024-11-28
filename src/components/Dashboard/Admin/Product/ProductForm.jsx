@@ -102,12 +102,14 @@ const ProductForm = ({ attachment, handleVariantProduct, data }) => {
           type={"number"}
           required={false}
         />
-        <CustomInput
-          label={"Product Stock Amount"}
-          name={"stock"}
-          type={"number"}
-          required={true}
-        />
+        {!isVariant && (
+          <CustomInput
+            label={"Product Stock"}
+            name={"stock"}
+            type={"number"}
+            required={true}
+          />
+        )}
       </div>
 
       <FileUploader
