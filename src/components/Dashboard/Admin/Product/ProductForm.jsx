@@ -82,6 +82,7 @@ const ProductForm = ({ attachment, handleVariantProduct, data }) => {
         />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
+      <CustomInput label={"Product Video Link"} name={"video"} type={"text"} />
       <div className="two-grid">
         <CustomInput
           label={"Product Buying Price"}
