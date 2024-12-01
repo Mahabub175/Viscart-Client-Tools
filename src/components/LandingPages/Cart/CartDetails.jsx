@@ -112,6 +112,7 @@ const CartDetails = () => {
           products: cartData?.map((item) => ({
             product: item?.product?._id,
             quantity: item?.quantity,
+            sku: item?.sku,
           })),
           shippingFee,
           discount,

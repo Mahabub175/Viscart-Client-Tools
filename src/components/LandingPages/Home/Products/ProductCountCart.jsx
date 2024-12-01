@@ -45,7 +45,11 @@ const ProductCountCart = ({
   };
 
   const addToCart = async (type) => {
-    if (item?.variants?.length > 0 && !previousSelectedVariant) {
+    if (
+      item?.variants?.length > 0 &&
+      !previousSelectedVariant &&
+      !selectedVariant
+    ) {
       setOpenVariantModal(true);
       return;
     }
@@ -54,6 +58,7 @@ const ProductCountCart = ({
       ...(user?._id ? { user: user._id } : { deviceId }),
       product: item?._id,
       quantity: count,
+      sku: previousSelectedVariant?.sku ?? selectedVariant?.sku ?? item?.sku,
       price: selectedVariant?.sellingPrice
         ? selectedVariant?.sellingPrice
         : item?.offerPrice
@@ -137,30 +142,46 @@ const ProductCountCart = ({
       >
         <div className="flex flex-col gap-4 p-5">
           <div className="flex flex-col gap-2 justify-center items-center mb-4">
-            <span className="font-bold">Select Variant:</span>
             <div className="flex items-center gap-2">
-              {item?.variants?.map((variant) => (
-                <div
-                  key={variant._id}
-                  onClick={() => handleVariantSelect(variant)}
-                  className={`cursor-pointer size-10 rounded-full border-4 ${
-                    selectedVariant?._id === variant._id
-                      ? "border-primary"
-                      : "border-gray-300"
-                  }`}
-                  title={variant?.attributeCombination[0]?.label}
-                  style={{
-                    backgroundColor: variant?.attributeCombination[0]?.label,
-                  }}
-                >
-                  {" "}
-                  {variant?.attributeCombination[0]?.type === "other" && (
-                    <span className="text-black flex items-center justify-center mt-1 font-bold">
-                      {variant?.attributeCombination[0]?.label}
-                    </span>
-                  )}
+              {item?.variants?.length > 0 && (
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
+                    <span className="font-bold">Select Variant:</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {item?.variants.map((variant) => (
+                        <div
+                          key={variant._id}
+                          onClick={() => handleVariantSelect(variant)}
+                          className={`cursor-pointer size-10 rounded-full border-4 ${
+                            selectedVariant?._id === variant._id
+                              ? "border-primary"
+                              : "border-gray-300"
+                          }`}
+                          title={variant?.attributeCombination
+                            ?.map((attribute) => attribute?.label)
+                            .join(" : ")}
+                          style={{
+                            backgroundColor:
+                              variant?.attributeCombination?.[0]?.label,
+                          }}
+                        >
+                          {variant?.attributeCombination?.map(
+                            (attribute, idx) => (
+                              <div key={idx}>
+                                {attribute?.type === "other" && (
+                                  <span className="text-black flex items-center justify-center mt-1 font-bold">
+                                    {attribute?.label}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
           <SubmitButton
