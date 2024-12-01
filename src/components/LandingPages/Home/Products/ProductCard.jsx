@@ -4,9 +4,12 @@ import React from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
 import Link from "next/link";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { usePathname } from "next/navigation";
 
 const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
+  const pathname = usePathname();
 
   return (
     <div className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[300px] lg:h-[480px] mx-auto bg-white">
@@ -21,7 +24,11 @@ const ProductCard = ({ item }) => {
       )}
       <div className="relative overflow-hidden rounded-t-xl">
         <Image
-          src={item?.mainImage}
+          src={
+            pathname === "/products"
+              ? item?.mainImage
+              : formatImagePath(item?.mainImage)
+          }
           alt={item?.name}
           width={300}
           height={260}

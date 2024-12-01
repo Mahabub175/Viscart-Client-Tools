@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useRef } from "react";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const FeatureProduct = () => {
   const swiperRef = useRef(null);
@@ -89,7 +90,7 @@ const FeatureProduct = () => {
                             className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-5 h-[180px]"
                           >
                             <Image
-                              src={item?.mainImage}
+                              src={formatImagePath(item?.mainImage)}
                               alt={item?.name}
                               height={120}
                               width={120}

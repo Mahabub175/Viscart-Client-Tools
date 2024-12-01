@@ -1,13 +1,15 @@
 "use client";
 
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal, Rate } from "antd";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
   const [selectedVariant, setSelectedVariant] = useState(null);
-
+  const pathname = usePathname();
   const handleVariantSelect = (variant) => {
     setSelectedVariant(variant);
   };
@@ -16,6 +18,12 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
     ? selectedVariant?.sellingPrice
     : item?.sellingPrice;
 
+  const currentImage = selectedVariant?.image
+    ? formatImagePath(selectedVariant?.image)
+    : pathname === "/products"
+    ? item?.mainImage
+    : formatImagePath(item?.mainImage);
+
   return (
     <Modal
       open={isModalVisible}
@@ -23,12 +31,12 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
       footer={null}
       centered
       loading={!item}
-      width={800}
+      width={850}
     >
       <div className="flex flex-col items-center justify-center lg:flex-row gap-10 pt-5">
         <div className="w-full">
           <Image
-            src={item?.mainImage}
+            src={currentImage}
             alt={item?.name}
             width={300}
             height={300}
