@@ -183,9 +183,9 @@ const UserOrders = () => {
     key: item._id,
     tranId: item.tranId ?? "N/A",
     products: item?.products
-      ?.map((product) => product.product.name)
+      ?.map((product) => product?.productName)
       .join(" , "),
-    quantity: item?.products?.map((product) => product.quantity).join(" , "),
+    quantity: item?.products?.map((product) => product?.quantity).join(" , "),
     subTotal: item?.subTotal,
     shippingFee: item?.shippingFee,
     discount: item?.discount ?? 0,

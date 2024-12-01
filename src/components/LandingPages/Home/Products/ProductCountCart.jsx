@@ -45,7 +45,7 @@ const ProductCountCart = ({
   };
 
   const isOutOfStock =
-    item.stock <= 0 ||
+    item?.stock <= 0 ||
     previousSelectedVariant?.stock <= 0 ||
     selectedVariant?.stock <= 0;
 
