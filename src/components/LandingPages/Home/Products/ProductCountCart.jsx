@@ -44,6 +44,11 @@ const ProductCountCart = ({
     setSelectedVariant(variant);
   };
 
+  const isOutOfStock =
+    item.stock <= 0 ||
+    previousSelectedVariant?.stock <= 0 ||
+    selectedVariant?.stock <= 0;
+
   const addToCart = async (type) => {
     if (
       item?.variants?.length > 0 &&
@@ -87,6 +92,7 @@ const ProductCountCart = ({
       toast.error("Failed to add item to cart.", { id: toastId });
     }
   };
+
   return (
     <div
       className={`mt-5 lg:mt-10 ${
@@ -95,7 +101,7 @@ const ProductCountCart = ({
           : "flex flex-col lg:flex-row items-center justify-between gap-5"
       }`}
     >
-      {item?.stock > 0 ? (
+      {!isOutOfStock ? (
         <>
           <div className="flex items-center gap-3 border border-primaryLight rounded-xl p-1.5">
             <button
@@ -128,11 +134,9 @@ const ProductCountCart = ({
           />
         </>
       ) : (
-        <>
-          <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
-            Out Of Stock
-          </div>
-        </>
+        <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
+          Out Of Stock
+        </div>
       )}
       <Modal
         open={openVariantModal}
@@ -184,20 +188,31 @@ const ProductCountCart = ({
               )}
             </div>
           </div>
-          <SubmitButton
-            func={() => addToCart("cart")}
-            text={"Add"}
-            icon={<FaCartShopping />}
-            loading={isLoading}
-            fullWidth={fullWidth}
-          />
-          <SubmitButton
-            func={() => addToCart("buy")}
-            text={"Buy Now"}
-            icon={<FaCartShopping />}
-            loading={isLoading}
-            fullWidth={fullWidth}
-          />
+
+          {isOutOfStock ? (
+            <>
+              <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10 text-center">
+                Out Of Stock
+              </div>
+            </>
+          ) : (
+            <>
+              <SubmitButton
+                func={() => addToCart("cart")}
+                text={"Add"}
+                icon={<FaCartShopping />}
+                loading={isLoading}
+                fullWidth={fullWidth}
+              />
+              <SubmitButton
+                func={() => addToCart("buy")}
+                text={"Buy Now"}
+                icon={<FaCartShopping />}
+                loading={isLoading}
+                fullWidth={fullWidth}
+              />
+            </>
+          )}
         </div>
       </Modal>
     </div>

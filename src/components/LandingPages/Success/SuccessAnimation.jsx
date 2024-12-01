@@ -1,7 +1,7 @@
 "use client";
 
-import Lottie from "lottie-react";
 import animation from "@/assets/animation/thanks.json";
+import Lottie from "lottie-react";
 
 const SuccessAnimation = () => {
   return (
