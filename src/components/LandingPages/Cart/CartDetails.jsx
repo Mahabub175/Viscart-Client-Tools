@@ -113,6 +113,13 @@ const CartDetails = () => {
           deviceId,
           products: cartData?.map((item) => ({
             product: item?.productId,
+            productName:
+              item?.productName +
+              (item?.variant && item?.variant?.attributeCombination?.length > 0
+                ? ` (${item?.variant?.attributeCombination
+                    ?.map((combination) => combination?.name)
+                    .join(" ")})`
+                : ""),
             quantity: item?.quantity,
             sku: item?.sku,
           })),
