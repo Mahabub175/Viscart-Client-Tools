@@ -391,7 +391,7 @@ const Orders = () => {
     number: item?.number,
     address: item?.address,
     products: item?.products
-      ?.map((product) => product?.product?.name)
+      ?.map((product) => product?.productName)
       .join(" , "),
     quantity: item?.products?.map((product) => product?.quantity).join(" , "),
     subTotal: item?.subTotal,

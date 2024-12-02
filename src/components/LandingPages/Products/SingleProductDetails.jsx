@@ -13,12 +13,16 @@ import ProductCard from "../Home/Products/ProductCard";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import Image from "next/image";
 import { FaWhatsapp, FaPlay } from "react-icons/fa";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { usePathname } from "next/navigation";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: singleProduct } = useGetSingleProductBySlugQuery(
     params?.productId
   );
+
+  const pathname = usePathname();
 
   const businessWhatsapp = globalData?.results?.businessWhatsapp;
 
@@ -45,7 +49,12 @@ const SingleProductDetails = ({ params }) => {
     setSelectedVariant(variant);
   };
 
-  const currentImage = selectedVariant?.images?.[0] ?? singleProduct?.mainImage;
+  const currentImage = selectedVariant?.image
+    ? formatImagePath(selectedVariant?.image)
+    : pathname.includes("/products")
+    ? singleProduct?.mainImage
+    : formatImagePath(singleProduct?.mainImage);
+
   const currentPrice = selectedVariant
     ? selectedVariant.sellingPrice
     : singleProduct?.sellingPrice;
@@ -58,8 +67,7 @@ const SingleProductDetails = ({ params }) => {
             <Zoom>
               <Image
                 src={
-                  selectedVariant?.images?.[0] ??
-                  singleProduct?.mainImage ??
+                  currentImage ??
                   "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
                 }
                 alt="product image"

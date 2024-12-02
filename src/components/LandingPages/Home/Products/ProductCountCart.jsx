@@ -44,8 +44,17 @@ const ProductCountCart = ({
     setSelectedVariant(variant);
   };
 
+  const isOutOfStock =
+    item?.stock <= 0 ||
+    previousSelectedVariant?.stock <= 0 ||
+    selectedVariant?.stock <= 0;
+
   const addToCart = async (type) => {
-    if (item?.variants?.length > 0 && !previousSelectedVariant) {
+    if (
+      item?.variants?.length > 0 &&
+      !previousSelectedVariant &&
+      !selectedVariant
+    ) {
       setOpenVariantModal(true);
       return;
     }
@@ -54,6 +63,7 @@ const ProductCountCart = ({
       ...(user?._id ? { user: user._id } : { deviceId }),
       product: item?._id,
       quantity: count,
+      sku: previousSelectedVariant?.sku ?? selectedVariant?.sku ?? item?.sku,
       price: selectedVariant?.sellingPrice
         ? selectedVariant?.sellingPrice
         : item?.offerPrice
@@ -82,6 +92,7 @@ const ProductCountCart = ({
       toast.error("Failed to add item to cart.", { id: toastId });
     }
   };
+
   return (
     <div
       className={`mt-5 lg:mt-10 ${
@@ -90,7 +101,7 @@ const ProductCountCart = ({
           : "flex flex-col lg:flex-row items-center justify-between gap-5"
       }`}
     >
-      {item?.stock > 0 ? (
+      {!isOutOfStock ? (
         <>
           <div className="flex items-center gap-3 border border-primaryLight rounded-xl p-1.5">
             <button
@@ -123,11 +134,9 @@ const ProductCountCart = ({
           />
         </>
       ) : (
-        <>
-          <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
-            Out Of Stock
-          </div>
-        </>
+        <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
+          Out Of Stock
+        </div>
       )}
       <Modal
         open={openVariantModal}
@@ -137,46 +146,73 @@ const ProductCountCart = ({
       >
         <div className="flex flex-col gap-4 p-5">
           <div className="flex flex-col gap-2 justify-center items-center mb-4">
-            <span className="font-bold">Select Variant:</span>
             <div className="flex items-center gap-2">
-              {item?.variants?.map((variant) => (
-                <div
-                  key={variant._id}
-                  onClick={() => handleVariantSelect(variant)}
-                  className={`cursor-pointer size-10 rounded-full border-4 ${
-                    selectedVariant?._id === variant._id
-                      ? "border-primary"
-                      : "border-gray-300"
-                  }`}
-                  title={variant?.attributeCombination[0]?.label}
-                  style={{
-                    backgroundColor: variant?.attributeCombination[0]?.label,
-                  }}
-                >
-                  {" "}
-                  {variant?.attributeCombination[0]?.type === "other" && (
-                    <span className="text-black flex items-center justify-center mt-1 font-bold">
-                      {variant?.attributeCombination[0]?.label}
-                    </span>
-                  )}
+              {item?.variants?.length > 0 && (
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
+                    <span className="font-bold">Select Variant:</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {item?.variants.map((variant) => (
+                        <div
+                          key={variant._id}
+                          onClick={() => handleVariantSelect(variant)}
+                          className={`cursor-pointer size-10 rounded-full border-4 ${
+                            selectedVariant?._id === variant._id
+                              ? "border-primary"
+                              : "border-gray-300"
+                          }`}
+                          title={variant?.attributeCombination
+                            ?.map((attribute) => attribute?.label)
+                            .join(" : ")}
+                          style={{
+                            backgroundColor:
+                              variant?.attributeCombination?.[0]?.label,
+                          }}
+                        >
+                          {variant?.attributeCombination?.map(
+                            (attribute, idx) => (
+                              <div key={idx}>
+                                {attribute?.type === "other" && (
+                                  <span className="text-black flex items-center justify-center mt-1 font-bold">
+                                    {attribute?.label}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
-          <SubmitButton
-            func={() => addToCart("cart")}
-            text={"Add"}
-            icon={<FaCartShopping />}
-            loading={isLoading}
-            fullWidth={fullWidth}
-          />
-          <SubmitButton
-            func={() => addToCart("buy")}
-            text={"Buy Now"}
-            icon={<FaCartShopping />}
-            loading={isLoading}
-            fullWidth={fullWidth}
-          />
+
+          {isOutOfStock ? (
+            <>
+              <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10 text-center">
+                Out Of Stock
+              </div>
+            </>
+          ) : (
+            <>
+              <SubmitButton
+                func={() => addToCart("cart")}
+                text={"Add"}
+                icon={<FaCartShopping />}
+                loading={isLoading}
+                fullWidth={fullWidth}
+              />
+              <SubmitButton
+                func={() => addToCart("buy")}
+                text={"Buy Now"}
+                icon={<FaCartShopping />}
+                loading={isLoading}
+                fullWidth={fullWidth}
+              />
+            </>
+          )}
         </div>
       </Modal>
     </div>

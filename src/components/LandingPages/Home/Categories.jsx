@@ -25,13 +25,14 @@ const Categories = () => {
     (item) => item?.status !== "Inactive"
   );
 
-  const [activeCategory, setActiveCategory] = useState(
-    activeCategories?.[0]?._id
-  );
+  const [activeCategory, setActiveCategory] = useState("all-products");
 
-  const filteredProducts = activeProducts?.filter(
-    (product) => product?.category?._id === activeCategory
-  );
+  const filteredProducts =
+    activeCategory === "all-products"
+      ? activeProducts
+      : activeProducts?.filter(
+          (product) => product?.category?._id === activeCategory
+        );
 
   return (
     <section className="my-container">
@@ -40,11 +41,12 @@ const Categories = () => {
           All Categories
         </h2>
         <Tabs
-          defaultActiveKey={activeCategories?.[0]?._id}
+          defaultActiveKey="all-products"
           size="large"
           className="font-semibold max-w-[380px] lg:max-w-[600px]"
           onChange={(key) => setActiveCategory(key)}
         >
+          <Tabs.TabPane tab="All" key="all-products" />
           {activeCategories?.map((category) => (
             <Tabs.TabPane tab={category?.name} key={category?._id} />
           ))}

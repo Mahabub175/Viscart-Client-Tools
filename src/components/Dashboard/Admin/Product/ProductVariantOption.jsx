@@ -7,18 +7,26 @@ import { Button, Form, Input, InputNumber, Table, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
-// Editable Cell Component
 const EditableCell = ({
   editing,
   dataIndex,
   title,
   inputType,
   children,
+  record,
   ...restProps
 }) => {
   const inputNode =
     inputType === "number" ? (
-      <InputNumber controls={false} changeOnWheel={false} width={"full"} />
+      <InputNumber
+        controls={false}
+        changeOnWheel={false}
+        width={"full"}
+        value={record[dataIndex]}
+        onChange={(value) => {
+          record[dataIndex] = value;
+        }}
+      />
     ) : (
       <Input />
     );
@@ -39,7 +47,6 @@ const EditableCell = ({
   );
 };
 
-// Main Component
 const ProductVariantOption = ({
   combination,
   onCustomSubmit,
@@ -267,6 +274,9 @@ const ProductVariantOption = ({
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
+        if (typeof row.stock === "string" || row.stock === "") {
+          row.stock = parseFloat(row.stock) || 0;
+        }
         newData.splice(index, 1, { ...item, ...row });
         setData(newData);
         setEditingKey("");
