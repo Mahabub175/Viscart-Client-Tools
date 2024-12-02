@@ -1,17 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import logo from "@/assets/images/logo-white.png";
 import { Avatar, Button, Popover } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { toast } from "sonner";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
-
+  const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data } = useGetSingleUserQuery(user?._id);
 
   const handleLogout = () => {
@@ -66,7 +66,13 @@ const Profile = () => {
     <div className="flex justify-between items-center mt-2 pb-2">
       <div className="flex items-center -ml-10 lg:-ml-6">
         <Link href={"/"}>
-          <Image src={logo} alt="logo" className="w-full h-12" />
+          <Image
+            src={globalData?.results?.logo}
+            alt="logo"
+            height={40}
+            width={40}
+            className="w-full h-12"
+          />
         </Link>
       </div>
       <Popover
