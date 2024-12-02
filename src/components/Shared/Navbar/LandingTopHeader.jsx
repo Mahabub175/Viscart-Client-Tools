@@ -6,6 +6,7 @@ import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { UserOutlined } from "@ant-design/icons";
 import { AutoComplete, Avatar, Button, Popover } from "antd";
 import Image from "next/image";
@@ -62,7 +63,7 @@ const LandingTopHeader = () => {
             className="flex items-center gap-4 hover:text-primary pb-2 border-b border-b-gray-300"
           >
             <Image
-              src={product?.mainImage}
+              src={formatImagePath(product?.mainImage)}
               alt="product"
               width={30}
               height={30}

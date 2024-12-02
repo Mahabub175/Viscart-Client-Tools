@@ -46,6 +46,16 @@ const productApi = baseApi.injectEndpoints({
       },
       providesTags: ["product"],
     }),
+    getSingleProductBySku: build.query({
+      query: (sku) => ({
+        url: `/product/sku/${sku}/`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return response.data;
+      },
+      providesTags: ["product"],
+    }),
     getSingleProductBySlug: build.query({
       query: (slug) => ({
         url: `/product/slug/${slug}/`,
@@ -91,6 +101,7 @@ export const {
   useGetProductsQuery,
   useGetAllProductsQuery,
   useGetSingleProductQuery,
+  useGetSingleProductBySkuQuery,
   useGetSingleProductBySlugQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,

@@ -39,6 +39,9 @@ const WrappedAntDConfig = ({ children }) => {
     }
 
     if (data?.results) {
+      const websiteName = data.results.name;
+      document.title = websiteName;
+
       const { primaryColor, secondaryColor } = data.results;
 
       dispatch(setColors({ primaryColor, secondaryColor }));

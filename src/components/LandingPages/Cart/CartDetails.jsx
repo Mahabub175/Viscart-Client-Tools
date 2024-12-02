@@ -10,12 +10,12 @@ import {
 } from "@/redux/services/auth/authApi";
 import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
+  useDeleteBulkCartMutation,
   useDeleteCartMutation,
   useGetSingleCartByUserQuery,
 } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useAddOrderMutation } from "@/redux/services/order/orderApi";
-import { base_url_image } from "@/utilities/configs/base_api";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,12 +25,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const CartDetails = () => {
   const router = useRouter();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const dispatch = useDispatch();
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const [userId, setUserId] = useState(null);
 
@@ -39,6 +42,7 @@ const CartDetails = () => {
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
   const [deleteCart] = useDeleteCartMutation();
+  const [deleteBulkCart] = useDeleteBulkCartMutation();
 
   const [addOrder] = useAddOrderMutation();
   const [signUp] = useSignUpMutation();
@@ -70,8 +74,6 @@ const CartDetails = () => {
     setItemId(itemId);
     setDeleteModalOpen(true);
   };
-
-  const formatImagePath = (imagePath) => imagePath?.replace(/\//g, "\\");
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");
@@ -110,8 +112,16 @@ const CartDetails = () => {
           user: userData?._id,
           deviceId,
           products: cartData?.map((item) => ({
-            product: item?.product?._id,
+            product: item?.productId,
+            productName:
+              item?.productName +
+              (item?.variant && item?.variant?.attributeCombination?.length > 0
+                ? ` (${item?.variant?.attributeCombination
+                    ?.map((combination) => combination?.name)
+                    .join(" ")})`
+                : ""),
             quantity: item?.quantity,
+            sku: item?.sku,
           })),
           shippingFee,
           discount,
@@ -138,6 +148,8 @@ const CartDetails = () => {
               window.location.href = res?.data?.data?.gatewayUrl;
             }
             toast.success(res.data.message, { id: toastId });
+            const data = cartData?.map((item) => item._id);
+            await deleteBulkCart(data);
             router.push("/success");
           }
         } catch (error) {
@@ -179,10 +191,7 @@ const CartDetails = () => {
                   >
                     <div className="flex flex-[3] items-center gap-4">
                       <Image
-                        src={`${base_url_image}${
-                          formatImagePath(item?.product?.mainImage) ||
-                          "placeholder.jpg"
-                        }`}
+                        src={formatImagePath(item?.image)}
                         alt={item?.product?.name || "Product Image"}
                         width={128}
                         height={128}
@@ -190,10 +199,14 @@ const CartDetails = () => {
                       />
                       <div>
                         <Link
-                          href={`/products/${item?.product?.slug}`}
+                          href={`/products/${item?.slug}`}
                           className="text-base font-normal hover:underline"
                         >
-                          {item?.product?.name}
+                          {item?.productName}
+                          {item?.variant &&
+                            ` (${item?.variant?.attributeCombination
+                              ?.map((combination) => combination?.name)
+                              .join(" ")})`}
                         </Link>
                         <div className="mt-2 font-semibold">
                           Quantity: {counts[item._id]}
@@ -203,9 +216,9 @@ const CartDetails = () => {
 
                     <div className="flex flex-1 items-center gap-4">
                       <p className="text-primary text-2xl font-bold">
-                        $
-                        {(item?.product?.offerPrice ||
-                          item?.product?.sellingPrice) * counts[item._id]}
+                        {globalData?.results?.currency +
+                          " " +
+                          item?.price * counts[item._id]}
                       </p>
                     </div>
                     <div

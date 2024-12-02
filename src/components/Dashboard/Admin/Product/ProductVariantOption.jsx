@@ -1,23 +1,32 @@
-import FileUploader from "@/components/Reusable/Form/FileUploader";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   findNonMatchingItems,
   formatProductData,
 } from "@/utilities/lib/variant";
-import { Button, Form, Input, InputNumber, Table } from "antd";
+import { Button, Form, Input, InputNumber, Table, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 
-// Editable Cell Component
 const EditableCell = ({
   editing,
   dataIndex,
   title,
   inputType,
   children,
+  record,
   ...restProps
 }) => {
   const inputNode =
     inputType === "number" ? (
-      <InputNumber controls={false} changeOnWheel={false} width={"full"} />
+      <InputNumber
+        controls={false}
+        changeOnWheel={false}
+        width={"full"}
+        value={record[dataIndex]}
+        onChange={(value) => {
+          record[dataIndex] = value;
+        }}
+      />
     ) : (
       <Input />
     );
@@ -38,7 +47,6 @@ const EditableCell = ({
   );
 };
 
-// Main Component
 const ProductVariantOption = ({
   combination,
   onCustomSubmit,
@@ -50,6 +58,28 @@ const ProductVariantOption = ({
   const [editingKey, setEditingKey] = useState("");
 
   const isEditing = (record) => record.key === editingKey;
+
+  const handleFileUpload = (file, record) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileData = e.target.result;
+      setData((prevState) =>
+        prevState.map((item) =>
+          item.key === record.key
+            ? {
+                ...item,
+                image: file,
+                fileData,
+                preview: file.type.startsWith("image/")
+                  ? URL.createObjectURL(file)
+                  : null,
+              }
+            : item
+        )
+      );
+    };
+    reader.readAsDataURL(file);
+  };
 
   const columns = [
     {
@@ -102,12 +132,37 @@ const ProductVariantOption = ({
       ),
     },
     {
-      title: "Image",
-      dataIndex: "image",
-      key: "image",
-      align: "right",
-      width: 150,
-      render: () => <FileUploader small={true} name={`image`} />,
+      title: "Upload File",
+      key: "upload",
+      render: (_, record) => (
+        <div>
+          <Upload
+            beforeUpload={(file) => {
+              handleFileUpload(file, record);
+              return false;
+            }}
+            showUploadList={false}
+          >
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload>
+          {record.preview && (
+            <div style={{ marginTop: "10px" }}>
+              <Image
+                src={record.preview}
+                alt="preview"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
+          {!record.preview && record.image && (
+            <p style={{ marginTop: "10px", fontSize: "12px" }}>
+              {record.image.name}
+            </p>
+          )}
+        </div>
+      ),
     },
     {
       title: "Action",
@@ -170,7 +225,6 @@ const ProductVariantOption = ({
             stock: item.stock || 0,
             sellingPrice: item.sellingPrice || 0,
             buyingPrice: item.buyingPrice || 0,
-            image: item.image,
             attributeCombination: item.variant_attribute_ids,
           })) ?? [];
         setData(variantDataSource);
@@ -188,7 +242,6 @@ const ProductVariantOption = ({
             stock: item.stock || 0,
             sellingPrice: item.sellingPrice || 0,
             buyingPrice: item.buyingPrice || 0,
-            image: item.image,
             attributeCombination: item.variant_attribute_ids,
           })) ?? [];
         const nonMatchingItems = findNonMatchingItems(
@@ -221,6 +274,9 @@ const ProductVariantOption = ({
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
+        if (typeof row.stock === "string" || row.stock === "") {
+          row.stock = parseFloat(row.stock) || 0;
+        }
         newData.splice(index, 1, { ...item, ...row });
         setData(newData);
         setEditingKey("");
