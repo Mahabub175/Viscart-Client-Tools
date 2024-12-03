@@ -4,9 +4,8 @@ const nextConfig = {
     domains: [
       "localhost",
       "thumbs.dreamstime.com",
-      "viscart.api.vitasoftsolutions.com",
+      "viscartapi.devmahabub.com",
       "anayase.com",
-      "mahabubapi2.moonsgallerysystem.com",
       "shokhbazar.com",
       "viscartapi.vitasoftsolutions.com",
     ],

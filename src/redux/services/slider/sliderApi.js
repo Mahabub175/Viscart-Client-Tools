@@ -10,7 +10,7 @@ const sliderApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["Slider"],
+      invalidatesTags: ["slider"],
     }),
     getSliders: build.query({
       query: ({ page = 1, limit = 5, search }) => ({
