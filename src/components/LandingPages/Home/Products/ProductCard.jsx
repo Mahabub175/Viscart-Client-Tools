@@ -1,4 +1,4 @@
-import { Rate } from "antd";
+import { Rate, Tooltip } from "antd";
 import Image from "next/image";
 import React from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
@@ -48,10 +48,14 @@ const ProductCard = ({ item }) => {
           <h2 className="text-start font-normal text-textColor text-sm">
             {item?.category?.name}
           </h2>
+          <Tooltip placement="top" title={item?.name}>
+            <h2 className="text-lg text-start font-semibold mt-2 mb-6">
+              {item?.name.length > 50
+                ? item.name.slice(0, 50).concat("...")
+                : item.name}
+            </h2>
+          </Tooltip>
 
-          <h2 className="text-lg text-start font-semibold mt-2 mb-6">
-            {item?.name}
-          </h2>
           <div className="flex items-center mb-2 gap-4 font-bold">
             <Rate disabled value={item?.ratings?.average} allowHalf />(
             {item?.ratings?.count})

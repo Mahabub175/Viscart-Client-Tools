@@ -2,7 +2,7 @@
 
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
-import { Rate } from "antd";
+import { Rate, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
@@ -97,9 +97,13 @@ const FeatureProduct = () => {
                               className="rounded-xl"
                             />
                             <Link href={`/products/${item?.slug}`}>
-                              <h2 className="text-lg font-semibold mb-2">
-                                {item?.name}
-                              </h2>
+                              <Tooltip placement="top" title={item?.name}>
+                                <h2 className="text-lg text-start font-semibold mt-2 mb-6">
+                                  {item?.name.length > 50
+                                    ? item.name.slice(0, 50).concat("...")
+                                    : item.name}
+                                </h2>
+                              </Tooltip>
                               <div className="flex items-center mb-2 gap-4 font-bold">
                                 <Rate
                                   disabled
