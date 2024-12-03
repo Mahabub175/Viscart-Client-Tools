@@ -41,16 +41,19 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
     const toastId = toast.loading("Updating Product...");
     try {
       const submittedData = {
+        ...values,
         ...(variantData?.selectedRowData && {
           variants: variantData.selectedRowData,
         }),
         ...(content && { description: content }),
       };
 
-      if (values.mainImage && values.mainImage[0] && !values.mainImage[0].url) {
+      if (!values.mainImage[0]?.url) {
         submittedData.mainImage = await compressImage(
           values.mainImage[0].originFileObj
         );
+      } else {
+        delete submittedData.mainImage;
       }
 
       const updatedProductData = new FormData();
