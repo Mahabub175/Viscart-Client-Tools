@@ -8,6 +8,7 @@ const nextConfig = {
       "anayase.com",
       "mahabubapi2.moonsgallerysystem.com",
       "shokhbazar.com",
+      "viscartapi.vitasoftsolutions.com",
     ],
   },
 };
