@@ -20,7 +20,7 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
 
   const currentImage = selectedVariant?.image
     ? formatImagePath(selectedVariant?.image)
-    : pathname === "/products"
+    : ["/products", "/wishlist", "/compare"].includes(pathname)
     ? item?.mainImage
     : formatImagePath(item?.mainImage);
 

@@ -17,6 +17,7 @@ import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { Button } from "antd";
 import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const Wishlist = () => {
   const user = useSelector(useCurrentUser);
@@ -26,6 +27,8 @@ const Wishlist = () => {
     user?._id ?? deviceId
   );
   const [deleteWishlist] = useDeleteWishlistMutation();
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const [itemId, setItemId] = useState(null);
   const [productId, setProductId] = useState(null);
@@ -95,16 +98,22 @@ const Wishlist = () => {
                   <div className="flex items-center gap-4">
                     {item?.product?.offerPrice ? (
                       <p className="text-primary text-2xl font-bold">
-                        ${item?.product?.offerPrice}
+                        {globalData?.results?.currency +
+                          " " +
+                          item?.product?.offerPrice}
                       </p>
                     ) : (
                       <p className="text-primary text-2xl font-bold">
-                        ${item?.product?.sellingPrice}
+                        {globalData?.results?.currency +
+                          " " +
+                          item?.product?.sellingPrice}
                       </p>
                     )}
                     {item?.offerPrice && (
                       <p className="text-base font-bold line-through text-textColor">
-                        ${item?.product?.sellingPrice}
+                        {globalData?.results?.currency +
+                          " " +
+                          item?.product?.sellingPrice}
                       </p>
                     )}
                   </div>
