@@ -8,21 +8,45 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
-  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedAttributes, setSelectedAttributes] = useState({});
   const pathname = usePathname();
-  const handleVariantSelect = (variant) => {
-    setSelectedVariant(variant);
+
+  const handleAttributeSelect = (attributeName, option) => {
+    setSelectedAttributes((prev) => ({
+      ...prev,
+      [attributeName]: option,
+    }));
   };
 
-  const currentPrice = selectedVariant
-    ? selectedVariant?.sellingPrice
+  const currentVariant = item?.variants.find((variant) =>
+    variant.attributeCombination.every(
+      (attr) => selectedAttributes[attr.attribute.name] === attr.name
+    )
+  );
+
+  const currentPrice = currentVariant
+    ? currentVariant?.sellingPrice
     : item?.sellingPrice;
 
-  const currentImage = selectedVariant?.image
-    ? formatImagePath(selectedVariant?.image)
+  const currentImage = currentVariant?.image
+    ? formatImagePath(currentVariant?.image)
     : ["/products", "/wishlist", "/compare"].includes(pathname)
     ? item?.mainImage
     : formatImagePath(item?.mainImage);
+
+  const groupedAttributes = item?.variants?.reduce((acc, variant) => {
+    variant.attributeCombination.forEach((attr) => {
+      if (!acc[attr.attribute.name]) {
+        acc[attr.attribute.name] = [];
+      }
+      if (
+        !acc[attr.attribute.name].some((option) => option.name === attr.name)
+      ) {
+        acc[attr.attribute.name].push(attr);
+      }
+    });
+    return acc;
+  }, {});
 
   return (
     <Modal
@@ -43,13 +67,15 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
             className="w-full h-[300px] rounded-xl"
           />
         </div>
+
         <div className="w-full">
           <h2 className="text-xl font-semibold">{item?.name}</h2>
           <div className="flex items-center mt-4 gap-4 font-bold">
-            <Rate disabled value={item?.ratings?.average} allowHalf />(
+            <Rate disabled value={item?.ratings?.average} allowHalf /> (
             {item?.ratings?.count})
           </div>
           <p>{item?.details}</p>
+
           {item?.brand && (
             <p className="font-bold my-2 text-textColor">
               Brand: {item?.brand?.name}
@@ -58,43 +84,50 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
           <p className="font-bold my-2 text-textColor">
             Category: {item?.category?.name}
           </p>
-          {item?.variants?.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <span className="font-bold">Select Variant:</span>
-                <div className="flex flex-wrap items-center gap-2">
-                  {item?.variants.map((variant) => (
-                    <div
-                      key={variant._id}
-                      onClick={() => handleVariantSelect(variant)}
-                      className={`cursor-pointer size-10 rounded-full border-4 ${
-                        selectedVariant?._id === variant._id
-                          ? "border-primary"
-                          : "border-gray-300"
-                      }`}
-                      title={variant?.attributeCombination
-                        ?.map((attribute) => attribute?.label)
-                        .join(" : ")}
-                      style={{
-                        backgroundColor:
-                          variant?.attributeCombination?.[0]?.label,
-                      }}
-                    >
-                      {variant?.attributeCombination?.map((attribute, idx) => (
-                        <div key={idx}>
-                          {attribute?.type === "other" && (
-                            <span className="text-black flex items-center justify-center mt-1 font-bold">
-                              {attribute?.label}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+
+          {groupedAttributes &&
+            Object.entries(groupedAttributes).map(
+              ([attributeName, options]) => (
+                <div key={attributeName} className="flex flex-col gap-2 my-4">
+                  <span className="font-bold">{attributeName}:</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {options.map((option) => (
+                      <div
+                        key={option._id}
+                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg  ${
+                          selectedAttributes[attributeName] === option.name
+                            ? "border-primary bg-primary-light text-primary font-bold"
+                            : "border-gray-300"
+                        }`}
+                        style={
+                          attributeName === "Color"
+                            ? {
+                                backgroundColor: option.label,
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "50%",
+                                border:
+                                  selectedAttributes[attributeName] ===
+                                  option.name
+                                    ? "2px solid #000"
+                                    : "1px solid #ccc",
+                              }
+                            : {}
+                        }
+                        onClick={() =>
+                          handleAttributeSelect(attributeName, option.name)
+                        }
+                      >
+                        {attributeName.toLowerCase() !== "color" && (
+                          <span>{option.label}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )
+            )}
+
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
             Price:{" "}
             {item?.offerPrice ? (
@@ -108,11 +141,13 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
               </p>
             )}
           </div>
+
           <hr />
+
           <ProductCountCart
             item={item}
             handleModalClose={handleModalClose}
-            previousSelectedVariant={selectedVariant}
+            previousSelectedVariant={currentVariant}
             fullWidth
           />
         </div>
