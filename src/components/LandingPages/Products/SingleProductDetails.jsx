@@ -41,23 +41,46 @@ const SingleProductDetails = ({ params }) => {
     )
     ?.slice(0, 4);
 
-  const [selectedVariant, setSelectedVariant] = useState(null);
-
   const [videoModal, setVideoModal] = useState(false);
 
-  const handleVariantSelect = (variant) => {
-    setSelectedVariant(variant);
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+
+  const handleAttributeSelect = (attributeName, option) => {
+    setSelectedAttributes((prev) => ({
+      ...prev,
+      [attributeName]: option,
+    }));
   };
 
-  const currentImage = selectedVariant?.image
-    ? formatImagePath(selectedVariant?.image)
+  const currentVariant = singleProduct?.variants.find((variant) =>
+    variant.attributeCombination.every(
+      (attr) => selectedAttributes[attr.attribute.name] === attr.name
+    )
+  );
+
+  const currentPrice = currentVariant
+    ? currentVariant?.sellingPrice
+    : singleProduct?.sellingPrice;
+
+  const currentImage = currentVariant?.image
+    ? formatImagePath(currentVariant?.image)
     : pathname.includes("/products")
     ? singleProduct?.mainImage
     : formatImagePath(singleProduct?.mainImage);
 
-  const currentPrice = selectedVariant
-    ? selectedVariant.sellingPrice
-    : singleProduct?.sellingPrice;
+  const groupedAttributes = singleProduct?.variants?.reduce((acc, variant) => {
+    variant.attributeCombination.forEach((attr) => {
+      if (!acc[attr.attribute.name]) {
+        acc[attr.attribute.name] = [];
+      }
+      if (
+        !acc[attr.attribute.name].some((option) => option.name === attr.name)
+      ) {
+        acc[attr.attribute.name].push(attr);
+      }
+    });
+    return acc;
+  }, {});
 
   return (
     <section className="my-container py-10">
@@ -126,47 +149,52 @@ const SingleProductDetails = ({ params }) => {
               </p>
             )}
           </div>
-          {singleProduct?.variants?.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <span className="font-bold">Select Variant:</span>
-                <div className="flex flex-wrap items-center gap-2">
-                  {singleProduct?.variants.map((variant) => (
-                    <div
-                      key={variant._id}
-                      onClick={() => handleVariantSelect(variant)}
-                      className={`cursor-pointer size-10 rounded-full border-4 ${
-                        selectedVariant?._id === variant._id
-                          ? "border-primary"
-                          : "border-gray-300"
-                      }`}
-                      title={variant?.attributeCombination
-                        ?.map((attribute) => attribute?.name)
-                        .join(" : ")}
-                      style={{
-                        backgroundColor:
-                          variant?.attributeCombination?.[0]?.label,
-                      }}
-                    >
-                      {variant?.attributeCombination?.map((attribute, idx) => (
-                        <div key={idx}>
-                          {attribute?.type === "other" && (
-                            <span className="text-black flex items-center justify-center mt-1 font-bold">
-                              {attribute?.label}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+          {groupedAttributes &&
+            Object.entries(groupedAttributes).map(
+              ([attributeName, options]) => (
+                <div key={attributeName} className="flex flex-col gap-2">
+                  <span className="font-bold">{attributeName}:</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {options.map((option) => (
+                      <div
+                        key={option._id}
+                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg  ${
+                          selectedAttributes[attributeName] === option.name
+                            ? "border-primary bg-primary-light text-primary font-bold"
+                            : "border-gray-300"
+                        }`}
+                        style={
+                          attributeName === "Color"
+                            ? {
+                                backgroundColor: option.label,
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "50%",
+                                border:
+                                  selectedAttributes[attributeName] ===
+                                  option.name
+                                    ? "2px solid #000"
+                                    : "1px solid #ccc",
+                              }
+                            : {}
+                        }
+                        onClick={() =>
+                          handleAttributeSelect(attributeName, option.name)
+                        }
+                      >
+                        {attributeName.toLowerCase() !== "color" && (
+                          <span>{option.label}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )
+            )}
           <ProductCountCart
-            item={selectedVariant || singleProduct}
+            item={singleProduct}
+            previousSelectedVariant={currentVariant}
             fullWidth
-            previousSelectedVariant={selectedVariant}
           />
           <div
             className="w-full bg-primary px-10 py-2 text-sm rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer"
