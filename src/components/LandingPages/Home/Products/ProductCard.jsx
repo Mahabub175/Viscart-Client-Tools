@@ -60,7 +60,7 @@ const ProductCard = ({ item }) => {
             <Rate disabled value={item?.ratings?.average} allowHalf />(
             {item?.ratings?.count})
           </div>
-          <div className="flex items-center gap-4 justify-start">
+          <div className="flex items-center gap-4 justify-start absolute bottom-5">
             {item?.offerPrice && (
               <p className="text-base font-bold line-through text-red-500">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
