@@ -31,7 +31,7 @@ const BottomNavigation = () => {
 
   return (
     <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-300 shadow-md lg:hidden">
-      <div className="flex justify-around items-center py-2">
+      <div className="flex justify-around items-center py-1">
         {navItems.map((item) => (
           <Link
             key={item.name}

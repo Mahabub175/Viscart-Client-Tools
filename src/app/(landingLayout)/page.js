@@ -14,11 +14,11 @@ const page = async () => {
   return (
     <div className="overflow-x-hidden">
       <Banner />
-      <SmallFeature />
       <Categories />
       <ProductTab />
       <FeatureProduct />
       <Brands />
+      <SmallFeature />
     </div>
   );
 };
