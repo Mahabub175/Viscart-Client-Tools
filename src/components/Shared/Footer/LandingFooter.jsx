@@ -39,7 +39,7 @@ const LandingFooter = () => {
     }
   };
   return (
-    <section className="bg-white border-t mt-10">
+    <section className="bg-white border-t mt-10 mb-16 lg:mb-0">
       <footer className="my-container py-10">
         <div className="grid lg:grid-cols-5 items-start justify-center">
           <ContactInfo globalData={globalData} />

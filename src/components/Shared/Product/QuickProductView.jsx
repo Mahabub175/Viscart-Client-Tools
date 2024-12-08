@@ -1,6 +1,7 @@
 "use client";
 
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal, Rate } from "antd";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { useState } from "react";
 const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const pathname = usePathname();
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const handleAttributeSelect = (attributeName, option) => {
     setSelectedAttributes((prev) => ({
@@ -64,7 +66,7 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
             alt={item?.name}
             width={300}
             height={300}
-            className="w-full h-[300px] rounded-xl"
+            className="w-full h-[300px] object-contain rounded-xl"
           />
         </div>
 
@@ -131,13 +133,17 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
             Price:{" "}
             {item?.offerPrice ? (
-              <p className="text-primary text-xl">${item?.offerPrice}</p>
+              <p className="text-primary text-xl">
+                {globalData?.results?.currency + " " + item?.offerPrice}
+              </p>
             ) : (
-              <p className="text-primary text-xl">${currentPrice}</p>
+              <p className="text-primary text-xl">
+                {globalData?.results?.currency + " " + currentPrice}
+              </p>
             )}
             {item?.offerPrice && (
               <p className="text-base line-through text-red-500">
-                ${currentPrice}
+                {globalData?.results?.currency + " " + currentPrice}
               </p>
             )}
           </div>

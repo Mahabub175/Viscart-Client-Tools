@@ -68,8 +68,8 @@ const Categories = () => {
               1024: { slidesPerView: 4 },
             }}
             autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
+              delay: 5000,
+              disableOnInteraction: true,
             }}
             className="mySwiper my-10"
           >

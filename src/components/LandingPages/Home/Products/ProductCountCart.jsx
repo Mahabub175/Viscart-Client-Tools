@@ -4,6 +4,7 @@ import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,7 +22,7 @@ const ProductCountCart = ({
   const router = useRouter();
   const [count, setCount] = useState(1);
   const [openVariantModal, setOpenVariantModal] = useState(false);
-
+  const { data: globalData } = useGetAllGlobalSettingQuery();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const [addCart, { isLoading }] = useAddCartMutation();
@@ -218,13 +219,17 @@ const ProductCountCart = ({
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
             Price:{" "}
             {item?.offerPrice ? (
-              <p className="text-primary text-xl">${item?.offerPrice}</p>
+              <p className="text-primary text-xl">
+                {globalData?.results?.currency + " " + item?.offerPrice}
+              </p>
             ) : (
-              <p className="text-primary text-xl">${currentPrice}</p>
+              <p className="text-primary text-xl">
+                {globalData?.results?.currency + " " + currentPrice}
+              </p>
             )}
             {item?.offerPrice && (
               <p className="text-base line-through text-red-500">
-                ${currentPrice}
+                {globalData?.results?.currency + " " + currentPrice}
               </p>
             )}
           </div>
