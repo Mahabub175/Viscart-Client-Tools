@@ -26,6 +26,7 @@ const ProductCountCart = ({
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const [addCart, { isLoading }] = useAddCartMutation();
+  const [btnText, setBtnText] = useState("");
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -83,6 +84,7 @@ const ProductCountCart = ({
       !currentVariant
     ) {
       setOpenVariantModal(true);
+      setBtnText(type);
       toast.info("Please select a variant");
       return;
     }
@@ -242,20 +244,23 @@ const ProductCountCart = ({
             </>
           ) : (
             <>
-              <SubmitButton
-                func={() => addToCart("cart")}
-                text={"Add"}
-                icon={<FaCartShopping />}
-                loading={isLoading}
-                fullWidth={fullWidth}
-              />
-              <SubmitButton
-                func={() => addToCart("buy")}
-                text={"Buy Now"}
-                icon={<FaCartShopping />}
-                loading={isLoading}
-                fullWidth={fullWidth}
-              />
+              {btnText === "buy" ? (
+                <SubmitButton
+                  func={() => addToCart("buy")}
+                  text={"Buy Now"}
+                  icon={<FaCartShopping />}
+                  loading={isLoading}
+                  fullWidth={fullWidth}
+                />
+              ) : (
+                <SubmitButton
+                  func={() => addToCart("cart")}
+                  text={"Add"}
+                  icon={<FaCartShopping />}
+                  loading={isLoading}
+                  fullWidth={fullWidth}
+                />
+              )}
             </>
           )}
         </div>
