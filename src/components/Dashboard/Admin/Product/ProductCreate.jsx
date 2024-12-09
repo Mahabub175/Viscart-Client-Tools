@@ -41,6 +41,9 @@ const ProductCreate = ({ open, setOpen }) => {
           values.mainImage[0].originFileObj
         );
       }
+      if (submittedData?.video) {
+        submittedData.video = await submittedData.video[0].originFileObj;
+      }
 
       const data = new FormData();
 

@@ -15,6 +15,7 @@ import ProductForm from "./ProductForm";
 import { Form } from "antd";
 import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import { getUniqueAttributeIds } from "@/utilities/lib/variant";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const ProductEdit = ({ open, setOpen, itemId }) => {
   const [fields, setFields] = useState([]);
@@ -118,9 +119,10 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
     >
       <CustomForm onSubmit={onSubmit} fields={fields}>
         <ProductForm
-          attachment={productData?.mainImage}
+          attachment={formatImagePath(productData?.mainImage)}
           handleVariantProduct={handleVariantProduct}
           data={productData}
+          videoData={formatImagePath(productData?.video)}
         />
 
         <Form.Item label={"Product Description"} name={"description"}>

@@ -7,6 +7,7 @@ import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { toast } from "sonner";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import logo from "@/assets/images/logo-white.png";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const Profile = () => {
       <div className="flex items-center -ml-10 lg:-ml-6">
         <Link href={"/"}>
           <Image
-            src={globalData?.results?.logo}
+            src={globalData?.results?.logo ?? logo}
             alt="logo"
             height={40}
             width={40}

@@ -7,8 +7,9 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi"
 import { Checkbox, Form } from "antd";
 import { RiRefreshLine } from "react-icons/ri";
 import { VariantComponent } from "./VariantComponent";
+import VideoUploader from "@/components/Reusable/Form/VideoUploader";
 
-const ProductForm = ({ attachment, handleVariantProduct, data }) => {
+const ProductForm = ({ attachment, handleVariantProduct, data, videoData }) => {
   const form = Form.useFormInstance();
 
   const isVariant = Form.useWatch("isVariant", form);
@@ -82,7 +83,13 @@ const ProductForm = ({ attachment, handleVariantProduct, data }) => {
         />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
-      <CustomInput label={"Product Video Link"} name={"video"} type={"text"} />
+      {!videoData && (
+        <VideoUploader
+          name={"video"}
+          label={"Product Video"}
+          defaultValue={videoData}
+        />
+      )}
       <div className="two-grid">
         <CustomInput
           label={"Product Buying Price"}
