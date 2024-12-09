@@ -47,7 +47,7 @@ const Brands = () => {
           {activeBrands?.map((item) => {
             return (
               <SwiperSlide key={item?._id}>
-                <Link href={`/products/filtered?filter=${item?.name}`}>
+                <Link href={`/products?filter=${item?.name}`}>
                   <Image
                     src={
                       item?.attachment ??

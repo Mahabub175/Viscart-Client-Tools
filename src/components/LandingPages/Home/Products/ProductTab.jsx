@@ -64,7 +64,7 @@ const ProductTab = () => {
         <Tabs
           activeKey={activeTab}
           size="large"
-          className="font-semibold max-w-[380px] lg:max-w-[600px]"
+          className="font-semibold max-w-[370px] lg:max-w-[600px]"
           onChange={(key) => setActiveTab(key)}
         >
           {tabs?.map((item) => (
@@ -80,17 +80,17 @@ const ProductTab = () => {
               swiperRef.current = swiper;
             }}
             modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
+            spaceBetween={10}
             loop={true}
             slidesPerView={2}
             breakpoints={{
               640: { slidesPerView: 2 },
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 4 },
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 5 },
             }}
             autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
+              delay: 5000,
+              disableOnInteraction: true,
             }}
             className="mySwiper my-10"
           >

@@ -19,7 +19,7 @@ const Banner = () => {
   );
 
   return (
-    <section className="relative lg:container mx-auto px-5">
+    <section className="relative lg:container mx-auto">
       <Swiper
         onBeforeInit={(swiper) => {
           swiperRef.current = swiper;
@@ -34,7 +34,7 @@ const Banner = () => {
         {activeSliders?.map((item) => {
           return (
             <SwiperSlide key={item?._id}>
-              <Link href={`/products/filtered?filter=${item?.category?.name}`}>
+              <Link href={`/products?filter=${item?.category?.name}`}>
                 <Image
                   src={
                     item?.attachment ??
@@ -43,7 +43,7 @@ const Banner = () => {
                   alt={item?.name ?? "Demo"}
                   width={450}
                   height={450}
-                  className="h-[150px] lg:h-fit w-full rounded-xl"
+                  className="h-[200px] lg:h-fit w-full rounded-xl"
                 />
               </Link>
             </SwiperSlide>

@@ -1,9 +1,9 @@
 import AllProducts from "@/components/LandingPages/Products/AllProducts";
 
-const page = () => {
+const page = (param) => {
   return (
     <>
-      <AllProducts />
+      <AllProducts searchParams={param?.searchParams?.filter} />
     </>
   );
 };

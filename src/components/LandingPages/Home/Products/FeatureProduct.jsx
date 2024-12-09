@@ -93,20 +93,20 @@ const FeatureProduct = () => {
                         {slideProducts?.map((item) => (
                           <div
                             key={item._id}
-                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-5 h-[180px]"
+                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-3 h-[150px]"
                           >
                             <Image
                               src={formatImagePath(item?.mainImage)}
                               alt={item?.name}
-                              height={120}
-                              width={120}
+                              height={100}
+                              width={100}
                               className="rounded-xl"
                             />
                             <Link href={`/products/${item?.slug}`}>
                               <Tooltip placement="top" title={item?.name}>
-                                <h2 className="lg:text-lg text-start font-semibold mt-2 mb-6">
-                                  {item?.name.length > 50
-                                    ? item.name.slice(0, 50).concat("...")
+                                <h2 className="text-start font-semibold mt-2 mb-6">
+                                  {item?.name.length > 40
+                                    ? item.name.slice(0, 40).concat("...")
                                     : item.name}
                                 </h2>
                               </Tooltip>
@@ -117,12 +117,11 @@ const FeatureProduct = () => {
                                   value={item?.ratings?.average}
                                   allowHalf
                                 />
-                                ({item?.ratings?.count})
                               </div>
 
                               <div className="flex items-center gap-4 justify-start">
                                 {item?.offerPrice && (
-                                  <p className="text-base font-bold line-through text-red-500">
+                                  <p className="text-sm lg:text-base font-bold line-through text-red-500">
                                     {globalData?.results?.currency +
                                       " " +
                                       item?.sellingPrice}
