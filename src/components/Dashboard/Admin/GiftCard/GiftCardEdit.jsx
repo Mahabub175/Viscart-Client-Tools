@@ -31,11 +31,12 @@ const GiftCardEdit = ({ open, setOpen, itemId }) => {
         ...values,
         expiredDate: dayjs(values.expiredDate).format("YYYY-MM-DD"),
       };
-
-      if (!values.attachment[0].url) {
+      if (!values.attachment[0]?.url) {
         submittedData.attachment = await compressImage(
           values.attachment[0].originFileObj
         );
+      } else {
+        delete submittedData.attachment;
       }
 
       const updatedCategoryData = new FormData();

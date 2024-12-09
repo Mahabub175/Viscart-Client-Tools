@@ -3,7 +3,6 @@
 import deleteImage from "@/assets/images/Trash-can.png";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import {
-  useGetSingleUserQuery,
   useLoginMutation,
   useSignUpMutation,
 } from "@/redux/services/auth/authApi";
@@ -32,10 +31,6 @@ const CartDetails = () => {
   const dispatch = useDispatch();
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
-  const [userId, setUserId] = useState(null);
-
-  const { data: userData } = useGetSingleUserQuery(user?._id ?? userId);
-
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
   const [deleteCart] = useDeleteCartMutation();
@@ -63,7 +58,7 @@ const CartDetails = () => {
         )
       );
     }
-  }, [cartData, userData]);
+  }, [cartData, user]);
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
@@ -74,94 +69,104 @@ const CartDetails = () => {
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");
+    let signUpResponse;
 
-    if (!user) {
-      const signUpData = {
-        name: values?.name,
-        number: values?.number,
-        password: values?.number,
-      };
-
-      try {
-        const res = await signUp(signUpData).unwrap();
-        setUserId(res?.data?.number);
-        const loginData = {
-          emailNumber: values?.number,
+    try {
+      if (!user) {
+        const signUpData = {
+          name: values?.name,
+          number: values?.number,
           password: values?.number,
         };
-        const loginRes = await login(loginData).unwrap();
-        if (loginRes.success) {
-          dispatch(
-            setUser({ user: loginRes.data.user, token: loginRes.data.token })
-          );
-        }
-      } catch (error) {
-        if (error?.data?.errorMessage === "number already exists") {
-          setUserId(values?.number);
-        }
-      }
-    }
-
-    setTimeout(async () => {
-      try {
-        const submittedData = {
-          ...values,
-          user: userData?._id,
-          deviceId,
-          products: cartData?.map((item) => ({
-            product: item?.productId,
-            productName:
-              item?.productName +
-              (item?.variant && item?.variant?.attributeCombination?.length > 0
-                ? ` (${item?.variant?.attributeCombination
-                    ?.map((combination) => combination?.name)
-                    .join(" ")})`
-                : ""),
-            quantity: item?.quantity,
-            sku: item?.sku,
-          })),
-          shippingFee,
-          discount,
-          deliveryOption,
-          code,
-          grandTotal,
-          subTotal,
-        };
-
-        if (values.paymentType === "cod") {
-          submittedData.paymentMethod = "cod";
-        }
-
-        const data = new FormData();
-        appendToFormData(submittedData, data);
 
         try {
-          const res = await addOrder(data);
+          signUpResponse = await signUp(signUpData).unwrap();
 
-          if (res?.error) {
-            toast.error(res?.error?.data?.errorMessage, { id: toastId });
-          } else if (res?.data?.success) {
-            if (res?.data?.data?.gatewayUrl) {
-              window.location.href = res?.data?.data?.gatewayUrl;
+          const loginData = {
+            emailNumber: values?.number,
+            password: values?.number,
+          };
+
+          const loginResponse = await login(loginData).unwrap();
+          if (loginResponse.success) {
+            dispatch(
+              setUser({
+                user: loginResponse.data.user,
+                token: loginResponse.data.token,
+              })
+            );
+          }
+        } catch (error) {
+          if (error?.data?.errorMessage === "number already exists") {
+            toast.error("Number already exists");
+          }
+        }
+      }
+
+      setTimeout(async () => {
+        try {
+          const submittedData = {
+            ...values,
+            user: signUpResponse?.data?._id ?? user?._id,
+            deviceId,
+            products: cartData?.map((item) => ({
+              product: item?.productId,
+              productName:
+                item?.productName +
+                (item?.variant &&
+                item?.variant?.attributeCombination?.length > 0
+                  ? ` (${item?.variant?.attributeCombination
+                      ?.map((combination) => combination?.name)
+                      .join(" ")})`
+                  : ""),
+              quantity: item?.quantity,
+              sku: item?.sku,
+            })),
+            shippingFee,
+            discount,
+            deliveryOption,
+            code,
+            grandTotal,
+            subTotal,
+          };
+
+          if (values.paymentType === "cod") {
+            submittedData.paymentMethod = "cod";
+          }
+
+          const data = new FormData();
+          appendToFormData(submittedData, data);
+
+          try {
+            const res = await addOrder(data);
+
+            if (res?.error) {
+              toast.error(res?.error?.data?.errorMessage, { id: toastId });
+            } else if (res?.data?.success) {
+              if (res?.data?.data?.gatewayUrl) {
+                window.location.href = res?.data?.data?.gatewayUrl;
+              }
+              toast.success(res.data.message, { id: toastId });
+              const cartIds = cartData?.map((item) => item._id);
+              await deleteBulkCart(cartIds);
+              window.location.reload();
             }
-            toast.success(res.data.message, { id: toastId });
-            const data = cartData?.map((item) => item._id);
-            await deleteBulkCart(data);
-            window.location.reload();
+          } catch (error) {
+            toast.error("Something went wrong while creating Order!", {
+              id: toastId,
+            });
+            console.error("Error creating Order:", error);
           }
         } catch (error) {
           toast.error("Something went wrong while creating Order!", {
             id: toastId,
           });
-          console.error("Error creating Order:", error);
+          console.error("Error preparing Order data:", error);
         }
-      } catch (error) {
-        toast.error("Something went wrong while creating Order!", {
-          id: toastId,
-        });
-        console.error("Error preparing Order data:", error);
-      }
-    }, 2000);
+      }, 2000);
+    } catch (error) {
+      toast.error("Error in order creation process!");
+    }
   };
 
   return (
