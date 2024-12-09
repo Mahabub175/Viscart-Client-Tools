@@ -1,4 +1,4 @@
-import { Tooltip } from "antd";
+import { Rate, Tooltip } from "antd";
 import Image from "next/image";
 import React from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
@@ -12,7 +12,7 @@ const ProductCard = ({ item }) => {
   const pathname = usePathname();
 
   return (
-    <div className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[200px] h-[400px] lg:w-[300px] lg:h-[450px] mx-auto bg-white">
+    <div className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[200px] h-[400px] lg:w-[300px] lg:h-[480px] mx-auto bg-white">
       {item?.stock > 0 ? (
         <div className="absolute top-2 right-2 p-2 bg-gradient-to-r from-green-500 to-green-700 text-white rounded font-bold text-xs z-10">
           In Stock
@@ -55,6 +55,11 @@ const ProductCard = ({ item }) => {
                 : item.name}
             </h2>
           </Tooltip>
+
+          <div className="lg:flex items-center mb-2 gap-4 font-bold hidden">
+            <Rate disabled value={item?.ratings?.average} allowHalf />(
+            {item?.ratings?.count})
+          </div>
 
           <div className="flex items-center gap-4 justify-start absolute bottom-5">
             {item?.offerPrice && (

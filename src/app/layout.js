@@ -1,9 +1,9 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { Roboto } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import AntDProvider from "@/components/Shared/AntDProvider";
 
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
+const openSans = Open_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "Viscart",
@@ -13,7 +13,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={openSans.className}>
         <AntDProvider>
           <AntdRegistry>{children}</AntdRegistry>
         </AntDProvider>

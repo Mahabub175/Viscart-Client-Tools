@@ -104,13 +104,14 @@ const FeatureProduct = () => {
                             />
                             <Link href={`/products/${item?.slug}`}>
                               <Tooltip placement="top" title={item?.name}>
-                                <h2 className="text-lg text-start font-semibold mt-2 mb-6">
+                                <h2 className="lg:text-lg text-start font-semibold mt-2 mb-6">
                                   {item?.name.length > 50
                                     ? item.name.slice(0, 50).concat("...")
                                     : item.name}
                                 </h2>
                               </Tooltip>
-                              <div className="flex items-center mb-2 gap-4 font-bold">
+
+                              <div className="lg:flex items-center mb-2 gap-4 font-bold hidden">
                                 <Rate
                                   disabled
                                   value={item?.ratings?.average}
@@ -118,7 +119,8 @@ const FeatureProduct = () => {
                                 />
                                 ({item?.ratings?.count})
                               </div>
-                              <div className="flex items-center gap-4">
+
+                              <div className="flex items-center gap-4 justify-start">
                                 {item?.offerPrice && (
                                   <p className="text-base font-bold line-through text-red-500">
                                     {globalData?.results?.currency +
@@ -126,11 +128,19 @@ const FeatureProduct = () => {
                                       item?.sellingPrice}
                                   </p>
                                 )}
-                                <p className="text-primary text-2xl font-bold">
-                                  {globalData?.results?.currency +
-                                    " " +
-                                    (item?.offerPrice || item?.sellingPrice)}
-                                </p>
+                                {item?.offerPrice ? (
+                                  <p className="text-primary lg:text-2xl font-bold">
+                                    {globalData?.results?.currency +
+                                      " " +
+                                      item?.offerPrice}
+                                  </p>
+                                ) : (
+                                  <p className="text-primary lg:text-2xl font-bold">
+                                    {globalData?.results?.currency +
+                                      " " +
+                                      item?.sellingPrice}
+                                  </p>
+                                )}
                               </div>
                             </Link>
                           </div>
