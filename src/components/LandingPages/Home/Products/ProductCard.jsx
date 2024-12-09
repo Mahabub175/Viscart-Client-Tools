@@ -38,7 +38,7 @@ const ProductCard = ({ item }) => {
             autoPlay
             muted
             controls={false}
-            className="w-full h-[160px] lg:h-[220px] rounded-t-xl"
+            className="w-full h-[160px] lg:h-[220px] rounded-t-xl object-cover"
           >
             Your browser does not support the video tag.
           </video>
