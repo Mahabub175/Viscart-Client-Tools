@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: true,
+  compiler: {
+    reactRemoveProperties: true,
+    react: {
+      throwIfNamespace: false,
+    },
+  },
   images: {
     domains: [
       "localhost",

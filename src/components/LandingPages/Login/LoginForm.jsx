@@ -39,7 +39,7 @@ const LoginForm = () => {
     <div className="lg:w-[450px] mt-6">
       <CustomForm onSubmit={onSubmit}>
         <CustomInput
-          label={"Email / Phone Number"}
+          label={"Phone Number"}
           name={"emailNumber"}
           type={"text"}
           required={true}
