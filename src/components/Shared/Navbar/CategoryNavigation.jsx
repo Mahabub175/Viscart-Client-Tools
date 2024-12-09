@@ -6,7 +6,7 @@ import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { usePathname } from "next/navigation";
 
-const CategoryNavigation = () => {
+const CategoryNavigation = ({ onClose }) => {
   const pathname = usePathname();
 
   const { data: categories } = useGetAllCategoriesQuery();
@@ -83,6 +83,7 @@ const CategoryNavigation = () => {
         <Link
           key={index}
           href={item.link}
+          onClick={onClose}
           className={`flex flex-col lg:items-center font-bold duration-300 ${
             pathname === item.link
               ? "text-primary hover:text-primary"
