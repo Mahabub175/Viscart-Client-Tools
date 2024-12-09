@@ -40,7 +40,7 @@ const Banner = () => {
                     item?.attachment ??
                     "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
                   }
-                  alt={item.name}
+                  alt={item?.name ?? "Demo"}
                   width={450}
                   height={450}
                   className="h-[150px] lg:h-fit w-full rounded-xl"

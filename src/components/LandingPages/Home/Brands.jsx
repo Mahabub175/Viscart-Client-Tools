@@ -53,7 +53,7 @@ const Brands = () => {
                       item?.attachment ??
                       "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
                     }
-                    alt={item.name}
+                    alt={item?.name ?? "demo"}
                     width={240}
                     height={120}
                     className="border-2 border-transparent hover:border-primary duration-500 w-[240px] h-[120px] rounded-xl mx-auto"
