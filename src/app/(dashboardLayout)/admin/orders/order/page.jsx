@@ -20,7 +20,6 @@ import {
   Menu,
   Modal,
   Pagination,
-  Progress,
   Space,
   Table,
   Tag,
@@ -182,6 +181,7 @@ const Orders = () => {
       dataIndex: "products",
       key: "products",
       align: "center",
+      render: (item) => <div className="w-[300px]">{item}</div>,
     },
     {
       title: "Quantity",
@@ -304,21 +304,21 @@ const Orders = () => {
         );
       },
     },
-    {
-      title: "Fraud Detection",
-      dataIndex: "fraudDetection",
-      key: "fraudDetection",
-      align: "center",
-      render: () => (
-        <div
-          onClick={() => {
-            toast.info("Fraud Detection is not available in demo version.");
-          }}
-        >
-          <Progress type="circle" percent={0} size={40} />
-        </div>
-      ),
-    },
+    // {
+    //   title: "Fraud Detection",
+    //   dataIndex: "fraudDetection",
+    //   key: "fraudDetection",
+    //   align: "center",
+    //   render: () => (
+    //     <div
+    //       onClick={() => {
+    //         toast.info("Fraud Detection is not available in demo version.");
+    //       }}
+    //     >
+    //       <Progress type="circle" percent={0} size={40} />
+    //     </div>
+    //   ),
+    // },
     {
       title: "Auto Delivery",
       dataIndex: "autoDelivery",

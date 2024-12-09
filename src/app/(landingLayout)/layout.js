@@ -7,8 +7,8 @@ const LandingLayout = ({ children }) => {
   return (
     <>
       <LandingHeader />
-      {children}
       <GlobalCart />
+      {children}
       <BackToTop />
       <LandingFooter />
     </>

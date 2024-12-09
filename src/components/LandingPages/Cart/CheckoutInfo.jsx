@@ -52,7 +52,7 @@ const CheckoutInfo = () => {
         </div>
       )}
 
-      <SubmitButton fullWidth text="Checkout" />
+      <SubmitButton fullWidth text="Order Now" />
     </div>
   );
 };

@@ -18,6 +18,7 @@ import { FaCartArrowDown, FaCodeCompare } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import logo from "@/assets/images/logo-white.png";
 
 const LandingTopHeader = () => {
   const pathname = usePathname();
@@ -188,7 +189,7 @@ const LandingTopHeader = () => {
         ) : (
           <FaCartPlus />
         )}
-        <span>Cart</span>
+        <span>Checkout</span>
       </Link>
     </div>
   );
@@ -198,7 +199,7 @@ const LandingTopHeader = () => {
       <div className="flex flex-col md:flex-row items-center gap-10">
         <Link href={"/"}>
           <Image
-            src={globalData?.results?.logo}
+            src={globalData?.results?.logo ?? logo}
             alt="logo"
             width={80}
             height={50}

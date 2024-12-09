@@ -5,19 +5,18 @@ import {
   useDeleteWishlistMutation,
   useGetSingleWishlistByUserQuery,
 } from "@/redux/services/wishlist/wishlistApi";
-import { base_url_image } from "@/utilities/configs/base_api";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import deleteImage from "@/assets/images/Trash-can.png";
 import Image from "next/image";
 import { useState } from "react";
-import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { Button } from "antd";
 import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const Wishlist = () => {
   const user = useSelector(useCurrentUser);
@@ -30,9 +29,7 @@ const Wishlist = () => {
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
-  const [itemId, setItemId] = useState(null);
   const [productId, setProductId] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -47,13 +44,11 @@ const Wishlist = () => {
 
   const { data: productData } = useGetSingleProductQuery(productId);
 
-  const formatImagePath = (imagePath) => {
-    return imagePath?.replace(/\//g, "\\");
-  };
-
   const handleDelete = (itemId) => {
-    setItemId(itemId);
-    setDeleteModalOpen(true);
+    deleteWishlist(itemId);
+    if (wishlistData?.length === 1) {
+      window.location.reload();
+    }
   };
 
   return (
@@ -79,10 +74,10 @@ const Wishlist = () => {
                 >
                   <div className="flex flex-[2] items-center gap-4">
                     <Image
-                      src={`${base_url_image}${
+                      src={
                         formatImagePath(item?.product?.mainImage) ||
                         "placeholder.jpg"
-                      }`}
+                      }
                       alt={item?.product?.name || "Product Image"}
                       width={128}
                       height={128}
@@ -150,14 +145,6 @@ const Wishlist = () => {
         item={productData}
         isModalVisible={isModalVisible}
         handleModalClose={handleModalClose}
-      />
-
-      <DeleteModal
-        itemId={itemId}
-        modalOpen={deleteModalOpen}
-        setModalOpen={setDeleteModalOpen}
-        text={"wishlist product"}
-        func={deleteWishlist}
       />
     </section>
   );

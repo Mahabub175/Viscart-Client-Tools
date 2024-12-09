@@ -1,12 +1,13 @@
 import { FaLocationDot, FaPhone, FaClock } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import Image from "next/image";
+import logo from "@/assets/images/logo-white.png";
 
 const ContactInfo = ({ globalData }) => {
   return (
     <div className="col-span-2">
       <Image
-        src={globalData?.results?.logo}
+        src={globalData?.results?.logo ?? logo}
         alt="logo"
         height={200}
         width={200}

@@ -22,7 +22,7 @@ const CategoryNavigation = () => {
         <Menu>
           {category.subcategories.map((subCategory) => (
             <Menu.Item key={subCategory?._id} className="hover:text-white">
-              <Link href={`/products/filtered?filter=${subCategory?.name}`}>
+              <Link href={`/products?filter=${subCategory?.name}`}>
                 <div className="flex items-center justify-between">
                   {subCategory?.name}
                 </div>
@@ -43,7 +43,7 @@ const CategoryNavigation = () => {
             key={category?._id}
             title={
               <Link
-                href={`/products/filtered?filter=${category?.name}`}
+                href={`/products?filter=${category?.name}`}
                 className="flex items-center justify-between"
               >
                 <div className="flex items-center hover:text-white">
@@ -108,7 +108,7 @@ const CategoryNavigation = () => {
                     key={parentCategory?._id}
                     title={
                       <Link
-                        href={`/products/filtered?filter=${parentCategory?.name}`}
+                        href={`/products?filter=${parentCategory?.name}`}
                         className="flex items-center"
                       >
                         <div className="flex items-center justify-between">
