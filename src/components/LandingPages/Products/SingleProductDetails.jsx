@@ -245,15 +245,18 @@ const SingleProductDetails = ({ params }) => {
         width={800}
       >
         <div className="p-5">
-          <iframe
-            src={singleProduct?.video}
-            title={singleProduct?.name}
+          <video
+            src={formatImagePath(singleProduct?.video)}
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-            referrerPolicy="strict-origin-when-cross-origin"
+            allow="autoplay; encrypted-media"
             allowFullScreen
+            autoPlay
+            controls
             className="mx-auto lg:w-[680px] h-[400px]"
-          ></iframe>
+          >
+            {" "}
+            Your browser does not support the video tag.
+          </video>
         </div>
       </Modal>
     </section>
