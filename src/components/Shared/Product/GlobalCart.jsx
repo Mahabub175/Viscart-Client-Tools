@@ -15,6 +15,8 @@ import deleteImage from "@/assets/images/Trash-can.png";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import { useRouter } from "next/navigation";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { Tooltip } from "antd";
 
 const GlobalCart = () => {
   const router = useRouter();
@@ -25,6 +27,8 @@ const GlobalCart = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [counts, setCounts] = useState({});
   const [subTotal, setSubTotal] = useState(0);
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const user = useSelector(useCurrentUser);
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
@@ -65,9 +69,7 @@ const GlobalCart = () => {
         ></div>
       )}
 
-      <div
-        className={`fixed bottom-[30%] right-5 z-50 ${user ? "" : "hidden"}`}
-      >
+      <div className={`fixed bottom-[30%] right-5 z-50`}>
         <div
           onClick={toggleCart}
           className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl cursor-pointer animate-pulse"
@@ -76,7 +78,7 @@ const GlobalCart = () => {
         </div>
 
         {isCartOpen && (
-          <div className="absolute bottom-20 lg:bottom-0 right-0 lg:right-20 w-[350px] p-4 bg-white shadow-lg rounded-lg text-black z-50">
+          <div className="absolute bottom-16 lg:-bottom-40 right-0 lg:right-20 w-[350px] p-4 bg-white shadow-lg rounded-lg text-black z-50">
             <div className="flex justify-between mb-5">
               <h3 className="font-bold text-lg">Cart Details</h3>
               <button
@@ -98,12 +100,12 @@ const GlobalCart = () => {
                   <h2 className="font-normal text-xl mt-6">
                     {cartData?.length} Items
                   </h2>
-                  <div className="flex flex-col lg:flex-row items-start gap-4 justify-between my-10">
-                    <div className="border-2 border-primary rounded p-5 max-h-[300px] overflow-y-auto">
+                  <div className="flex flex-col lg:flex-row items-start gap-4 justify-between my-5 lg:my-10">
+                    <div className="border-2 border-primary rounded p-5 max-h-[320px] overflow-y-auto">
                       {cartData?.map((item) => (
                         <div
                           key={item?._id}
-                          className="flex flex-col lg:flex-row items-center gap-4 justify-center first:mt-0 mt-10"
+                          className="flex flex-row items-center gap-4 justify-center first:mt-0 mt-10"
                         >
                           <div className="flex flex-[3] items-center gap-4">
                             <div>
@@ -111,7 +113,18 @@ const GlobalCart = () => {
                                 href={`/products/${item?.product?.slug}`}
                                 className="text-base font-normal hover:underline"
                               >
-                                {item?.product?.name}
+                                <Tooltip
+                                  placement="top"
+                                  title={item?.productName}
+                                >
+                                  <h2 className="text-sm lg:text-base text-start">
+                                    {item?.productName.length > 40
+                                      ? item.productName
+                                          .slice(0, 40)
+                                          .concat("...")
+                                      : item.productName}
+                                  </h2>
+                                </Tooltip>
                               </Link>
                               <div className="mt-2 font-semibold">
                                 Quantity: {counts[item._id]}
@@ -119,11 +132,11 @@ const GlobalCart = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-1 items-center gap-4">
+                          <div className="flex items-center gap-4">
                             <p className="text-primary text-base font-bold">
-                              $
-                              {(item?.product?.offerPrice ||
-                                item?.product?.sellingPrice) * counts[item._id]}
+                              {globalData?.results?.currency +
+                                " " +
+                                item?.price * counts[item._id]}
                             </p>
                           </div>
                           <div

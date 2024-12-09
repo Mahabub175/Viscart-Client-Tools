@@ -189,7 +189,7 @@ const LandingTopHeader = () => {
         ) : (
           <FaCartPlus />
         )}
-        <span>Cart</span>
+        <span>Checkout</span>
       </Link>
     </div>
   );

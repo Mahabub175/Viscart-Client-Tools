@@ -2,7 +2,6 @@
 
 import deleteImage from "@/assets/images/Trash-can.png";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
-import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import {
   useGetSingleUserQuery,
   useLoginMutation,
@@ -19,7 +18,6 @@ import { useAddOrderMutation } from "@/redux/services/order/orderApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -29,7 +27,6 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const CartDetails = () => {
-  const router = useRouter();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const dispatch = useDispatch();
@@ -48,8 +45,6 @@ const CartDetails = () => {
   const [signUp] = useSignUpMutation();
   const [login] = useLoginMutation();
 
-  const [itemId, setItemId] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [counts, setCounts] = useState({});
   const [subTotal, setSubTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
@@ -71,8 +66,10 @@ const CartDetails = () => {
   }, [cartData, userData]);
 
   const handleDelete = (itemId) => {
-    setItemId(itemId);
-    setDeleteModalOpen(true);
+    deleteCart(itemId);
+    if (cartData?.length === 1) {
+      window.location.reload();
+    }
   };
 
   const onSubmit = async (values) => {
@@ -150,7 +147,7 @@ const CartDetails = () => {
             toast.success(res.data.message, { id: toastId });
             const data = cartData?.map((item) => item._id);
             await deleteBulkCart(data);
-            router.push("/success");
+            window.location.reload();
           }
         } catch (error) {
           toast.error("Something went wrong while creating Order!", {
@@ -168,8 +165,8 @@ const CartDetails = () => {
   };
 
   return (
-    <section className="container mx-auto px-5 py-10 relative">
-      <h2 className="font-normal text-2xl">My Cart</h2>
+    <section className="container mx-auto px-5 lg:py-10 relative">
+      <h2 className="font-normal text-2xl">Order List</h2>
       <div>
         {cartData?.length === 0 || !cartData ? (
           <div className="flex items-center justify-center bg-white shadow-xl rounded-xl p-10 my-20">
@@ -258,14 +255,6 @@ const CartDetails = () => {
           </div>
         )}
       </div>
-
-      <DeleteModal
-        itemId={itemId}
-        modalOpen={deleteModalOpen}
-        setModalOpen={setDeleteModalOpen}
-        text={"cart product"}
-        func={deleteCart}
-      />
     </section>
   );
 };
