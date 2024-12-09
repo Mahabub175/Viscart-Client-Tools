@@ -102,13 +102,13 @@ const ProductTab = () => {
           </Swiper>
           <div className="flex items-center justify-center gap-5">
             <button
-              className="absolute top-[45%] left-5 lg:top-[3%] lg:left-[93%] lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[45%] left-5 lg:top-[3%] lg:left-[93%] lg:z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slidePrev()}
             >
               <FaAngleLeft className="text-xl" />
             </button>
             <button
-              className="absolute top-[45%] right-5 lg:top-[3%] lg:right-8 lg:z-50 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[45%] right-5 lg:top-[3%] lg:right-8 lg:z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slideNext()}
             >
               <FaAngleRight className="text-xl" />
