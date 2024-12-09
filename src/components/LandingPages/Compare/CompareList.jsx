@@ -51,7 +51,6 @@ const CompareList = () => {
     deleteCompare(itemId);
     window.location.reload();
   };
-
   return (
     <section className="my-container lg:my-20 bg-white p-5 rounded-xl">
       {compareData?.length === 0 || !compareData ? (
@@ -108,11 +107,8 @@ const CompareList = () => {
                 <div key={item?._id}>
                   <div className="flex flex-col items-center gap-4 border rounded-xl p-5">
                     <Image
-                      src={
-                        formatImagePath(item?.product?.mainImage) ||
-                        "placeholder.jpg"
-                      }
-                      alt={item?.product?.name || "Product Image"}
+                      src={formatImagePath(item?.mainImage)}
+                      alt={item?.name || "Product Image"}
                       width={128}
                       height={128}
                       className="w-32 h-32 rounded-xl border-2 border-primary"

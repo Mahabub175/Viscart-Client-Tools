@@ -32,11 +32,12 @@ const CouponEdit = ({ open, setOpen, itemId }) => {
         expiredDate: dayjs(values.expiredDate).format("YYYY-MM-DD"),
         user: values?.user ? values.user : undefined,
       };
-
-      if (!values.attachment[0].url) {
+      if (!values.attachment[0]?.url) {
         submittedData.attachment = await compressImage(
           values.attachment[0].originFileObj
         );
+      } else {
+        delete submittedData.attachment;
       }
 
       const updatedCategoryData = new FormData();
