@@ -1,15 +1,15 @@
 "use client";
 
-import SuccessSvg from "@/assets/images/svg/SuccessSvg";
+import SignUpSvg from "@/assets/images/svg/SignUpSvg";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
-const SuccessAnimation = () => {
+const LoginImage = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   return (
     <div>
-      <SuccessSvg primaryColor={globalData?.results?.primaryColor} />
+      <SignUpSvg primaryColor={globalData?.results?.primaryColor} />
     </div>
   );
 };
 
-export default SuccessAnimation;
+export default LoginImage;
