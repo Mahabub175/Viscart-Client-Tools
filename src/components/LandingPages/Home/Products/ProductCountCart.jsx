@@ -5,6 +5,7 @@ import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +19,8 @@ const ProductCountCart = ({
   handleModalClose = () => {},
   fullWidth,
   previousSelectedVariant,
+  isWishlist,
+  wishlistId,
 }) => {
   const router = useRouter();
   const [count, setCount] = useState(1);
@@ -27,6 +30,7 @@ const ProductCountCart = ({
   const deviceId = useSelector(useDeviceId);
   const [addCart, { isLoading }] = useAddCartMutation();
   const [btnText, setBtnText] = useState("");
+  const [deleteWishlist] = useDeleteWishlistMutation();
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -107,6 +111,9 @@ const ProductCountCart = ({
       const res = await addCart(data);
       if (res?.data?.success) {
         toast.success(res.data.message, { id: toastId });
+        if (isWishlist) {
+          deleteWishlist(wishlistId);
+        }
         handleModalClose();
         setCount(1);
         setOpenVariantModal(false);

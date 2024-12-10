@@ -50,8 +50,9 @@ const CartDetails = () => {
 
   useEffect(() => {
     if (cartData) {
-      setSubTotal(cartData?.reduce((acc, item) => acc + item.price, 0));
-
+      setSubTotal(
+        cartData?.reduce((acc, item) => acc + item.price * item.quantity, 0)
+      );
       setCounts(
         cartData?.reduce(
           (acc, item) => ({ ...acc, [item._id]: Number(item.quantity) || 1 }),
@@ -63,10 +64,10 @@ const CartDetails = () => {
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
-    if (cartData?.length === 1) {
-      window.location.reload();
-    }
   };
+  if (cartData?.length === 1) {
+    window.location.reload();
+  }
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");

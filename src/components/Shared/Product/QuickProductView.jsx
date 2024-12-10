@@ -8,7 +8,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
+const QuickProductView = ({
+  item,
+  isModalVisible,
+  handleModalClose,
+  isWishlist,
+  wishlistId,
+}) => {
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const pathname = usePathname();
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -155,6 +161,8 @@ const QuickProductView = ({ item, isModalVisible, handleModalClose }) => {
             handleModalClose={handleModalClose}
             previousSelectedVariant={currentVariant}
             fullWidth
+            isWishlist={isWishlist}
+            wishlistId={wishlistId}
           />
         </div>
       </div>
