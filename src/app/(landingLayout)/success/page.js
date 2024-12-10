@@ -4,13 +4,15 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-[50vh] lg:h-[90vh] text-center">
       <SuccessAnimation />
       <h1 className="text-xl font-semibold">
         Your order was a success. It is being processed right now.
       </h1>
       <Link href={"/products"} className="mt-10">
-        <Button type="primary">Continue Shopping</Button>
+        <Button type="primary" className="py-5 px-10 rounded font-bold">
+          Continue Shopping
+        </Button>
       </Link>
     </div>
   );

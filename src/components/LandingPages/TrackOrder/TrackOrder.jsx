@@ -10,7 +10,7 @@ const TrackOrder = () => {
   };
 
   return (
-    <section className="my-container flex justify-center items-center h-screen">
+    <section className="my-container flex justify-center items-center h-[50vh]">
       <div>
         <Form
           onFinish={onSubmit}
