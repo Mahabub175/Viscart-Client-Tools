@@ -13,15 +13,13 @@ import {
   useGetSingleCartByUserQuery,
   useUpdateCartMutation,
 } from "@/redux/services/cart/cartApi";
-import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import deleteImage from "@/assets/images/Trash-can.png";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { toast } from "sonner";
 
 const GlobalCart = () => {
   const router = useRouter();
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [itemId, setItemId] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
 
@@ -76,8 +74,8 @@ const GlobalCart = () => {
     }
   };
   const handleDelete = (itemId) => {
-    setItemId(itemId);
-    setDeleteModalOpen(true);
+    deleteCart(itemId);
+    toast.success("Product removed from cart");
   };
 
   const toggleCart = () => {
@@ -211,13 +209,6 @@ const GlobalCart = () => {
           </div>
         )}
       </div>
-      <DeleteModal
-        itemId={itemId}
-        modalOpen={deleteModalOpen}
-        setModalOpen={setDeleteModalOpen}
-        text={"cart product"}
-        func={deleteCart}
-      />
     </>
   );
 };

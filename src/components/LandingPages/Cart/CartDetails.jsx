@@ -24,14 +24,18 @@ import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { useRouter } from "next/navigation";
 
 const CartDetails = () => {
+  const router = useRouter();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const dispatch = useDispatch();
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
+  const { data: cartData, isError } = useGetSingleCartByUserQuery(
+    user?._id ?? deviceId
+  );
 
   const [deleteCart] = useDeleteCartMutation();
   const [deleteBulkCart] = useDeleteBulkCartMutation();
@@ -64,10 +68,8 @@ const CartDetails = () => {
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
+    toast.success("Product removed from cart");
   };
-  if (cartData?.length === 1) {
-    window.location.reload();
-  }
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");
@@ -151,7 +153,7 @@ const CartDetails = () => {
               toast.success(res.data.message, { id: toastId });
               const cartIds = cartData?.map((item) => item._id);
               await deleteBulkCart(cartIds);
-              window.location.reload();
+              router.push("/success");
             }
           } catch (error) {
             toast.error("Something went wrong while creating Order!", {
@@ -175,7 +177,7 @@ const CartDetails = () => {
     <section className="container mx-auto px-5 lg:py-10 relative">
       <h2 className="font-normal text-2xl">Order List</h2>
       <div>
-        {cartData?.length === 0 || !cartData ? (
+        {cartData?.length === 0 || !cartData || isError ? (
           <div className="flex items-center justify-center bg-white shadow-xl rounded-xl p-10 my-20">
             <h2 className="text-2xl font-bold text-black/80">
               Please add a product to cart to see them here

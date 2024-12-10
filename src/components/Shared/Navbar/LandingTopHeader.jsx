@@ -26,13 +26,13 @@ const LandingTopHeader = () => {
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const { data } = useGetSingleUserQuery(user?._id);
-  const { data: compareData } = useGetSingleCompareByUserQuery(
+  const { data: compareData, isError: isCompareError } =
+    useGetSingleCompareByUserQuery(user?._id ?? deviceId);
+  const { data: wishListData, isError: isWishlistError } =
+    useGetSingleWishlistByUserQuery(user?._id ?? deviceId);
+  const { data: cartData, isError: isCartError } = useGetSingleCartByUserQuery(
     user?._id ?? deviceId
   );
-  const { data: wishListData } = useGetSingleWishlistByUserQuery(
-    user?._id ?? deviceId
-  );
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
   const { data: products } = useGetAllProductsQuery();
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -139,7 +139,7 @@ const LandingTopHeader = () => {
             : "text-black hover:text-primary"
         }`}
       >
-        {compareData?.[0]?.product?.length > 0 ? (
+        {compareData?.[0]?.product?.length > 0 && !isCompareError ? (
           <span className="relative">
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
               {compareData?.[0]?.product?.length}
@@ -159,7 +159,7 @@ const LandingTopHeader = () => {
             : "text-black hover:text-primary"
         }`}
       >
-        {wishListData?.length > 0 ? (
+        {wishListData?.length > 0 && !isWishlistError ? (
           <span className="relative">
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
               {wishListData?.length}
@@ -179,7 +179,7 @@ const LandingTopHeader = () => {
             : "text-black hover:text-primary"
         }`}
       >
-        {cartData?.length > 0 ? (
+        {cartData?.length > 0 && !isCartError ? (
           <span className="relative">
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
               {cartData?.length}
