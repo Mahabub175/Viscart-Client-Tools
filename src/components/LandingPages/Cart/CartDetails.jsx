@@ -64,10 +64,10 @@ const CartDetails = () => {
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
-    if (cartData?.length === 1) {
-      window.location.reload();
-    }
   };
+  if (cartData?.length === 1) {
+    window.location.reload();
+  }
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");

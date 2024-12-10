@@ -30,11 +30,13 @@ const Wishlist = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const [productId, setProductId] = useState(null);
+  const [wishlistId, setWishlistId] = useState(null);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const showModal = (id) => {
+  const showModal = (id, wishlistId) => {
     setProductId(id);
+    setWishlistId(wishlistId);
     setIsModalVisible(true);
   };
 
@@ -42,14 +44,16 @@ const Wishlist = () => {
     setIsModalVisible(false);
   };
 
-  const { data: productData } = useGetSingleProductQuery(productId);
+  const { data: productData } = useGetSingleProductQuery(productId, {
+    skip: !productId,
+  });
 
   const handleDelete = (itemId) => {
     deleteWishlist(itemId);
-    if (wishlistData?.length === 1) {
-      window.location.reload();
-    }
   };
+  if (wishlistData?.length === 1) {
+    window.location.reload();
+  }
 
   return (
     <section className="container mx-auto px-5 py-10">
@@ -130,7 +134,7 @@ const Wishlist = () => {
                     size="large"
                     type="primary"
                     icon={<FaCartShopping />}
-                    onClick={() => showModal(item?.product?._id)}
+                    onClick={() => showModal(item?.product?._id, item?._id)}
                     className={`bg-primary hover:bg-secondary font-bold px-10 `}
                   >
                     Add To Cart
@@ -145,6 +149,8 @@ const Wishlist = () => {
         item={productData}
         isModalVisible={isModalVisible}
         handleModalClose={handleModalClose}
+        isWishlist={true}
+        wishlistId={wishlistId}
       />
     </section>
   );

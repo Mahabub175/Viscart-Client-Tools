@@ -27,7 +27,9 @@ const GlobalCart = () => {
 
   const user = useSelector((state) => state.auth.user);
   const deviceId = useSelector((state) => state?.device?.deviceId);
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
+  const { data: cartData, isError } = useGetSingleCartByUserQuery(
+    user?._id ?? deviceId
+  );
   const [deleteCart] = useDeleteCartMutation();
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const [updateCart] = useUpdateCartMutation();
@@ -116,7 +118,7 @@ const GlobalCart = () => {
               </button>
             </div>
             <div>
-              {cartItems.length === 0 ? (
+              {cartItems.length === 0 || isError ? (
                 <div className="flex items-center justify-center">
                   <h2 className="text-base text-center my-20 font-bold text-black/80">
                     Please add a product to cart to see them here
