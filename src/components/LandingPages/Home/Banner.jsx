@@ -52,13 +52,13 @@ const Banner = () => {
       </Swiper>
       <div className="flex items-center justify-between gap-5 mt-10">
         <button
-          className="z-50 lg:w-10 lg:h-10 flex items-center justify-center rounded-xl bg-white text-black border hover:bg-primary hover:text-white duration-300 absolute top-[35%] lg:top-[40%] left-5 lg:left-10"
+          className="z-10 lg:w-10 lg:h-10 flex items-center justify-center rounded-xl bg-white text-black border hover:bg-primary hover:text-white duration-300 absolute top-[35%] lg:top-[40%] left-5 lg:left-10"
           onClick={() => swiperRef.current.slidePrev()}
         >
           <FaAngleLeft className="text-xl" />
         </button>
         <button
-          className="z-50 lg:w-10 lg:h-10 flex items-center justify-center rounded-xl bg-white text-black border hover:bg-primary hover:text-white duration-300 absolute top-[35%] lg:top-[40%] right-5 lg:right-10"
+          className="z-10 lg:w-10 lg:h-10 flex items-center justify-center rounded-xl bg-white text-black border hover:bg-primary hover:text-white duration-300 absolute top-[35%] lg:top-[40%] right-5 lg:right-10"
           onClick={() => swiperRef.current.slideNext()}
         >
           <FaAngleRight className="text-xl" />
