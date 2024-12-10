@@ -7,9 +7,18 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi"
 import { Checkbox, Form } from "antd";
 import { RiRefreshLine } from "react-icons/ri";
 import { VariantComponent } from "./VariantComponent";
-import VideoUploader from "@/components/Reusable/Form/VideoUploader";
+import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
+import CustomVideoUploader from "@/components/Reusable/Form/VideoUploader";
 
-const ProductForm = ({ attachment, handleVariantProduct, data, videoData }) => {
+const ProductForm = ({
+  attachment,
+  handleVariantProduct,
+  data,
+  videoData,
+  onChange,
+  content,
+  setContent,
+}) => {
   const form = Form.useFormInstance();
 
   const isVariant = Form.useWatch("isVariant", form);
@@ -83,13 +92,7 @@ const ProductForm = ({ attachment, handleVariantProduct, data, videoData }) => {
         />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
-      {!videoData && (
-        <VideoUploader
-          name={"video"}
-          label={"Product Video"}
-          defaultValue={videoData}
-        />
-      )}
+
       <div className="two-grid">
         <CustomInput
           label={"Product Buying Price"}
@@ -118,13 +121,23 @@ const ProductForm = ({ attachment, handleVariantProduct, data, videoData }) => {
           />
         )}
       </div>
-
+      <CustomVideoUploader
+        name="video"
+        label="Product Video"
+        required={true}
+        onChange={onChange}
+        defaultValue={videoData}
+      />
       <FileUploader
         defaultValue={attachment}
         label="Product Main Image"
         name="mainImage"
         required={true}
       />
+
+      <Form.Item label={"Product Description"} name={"description"} required>
+        <CustomTextEditor value={content} onChange={setContent} />
+      </Form.Item>
 
       <Form.Item name={"isVariant"} valuePropName="checked">
         <Checkbox className="font-semibold">

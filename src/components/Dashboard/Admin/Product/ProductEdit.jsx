@@ -12,20 +12,23 @@ import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import ProductForm from "./ProductForm";
-import { Form } from "antd";
-import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import { getUniqueAttributeIds } from "@/utilities/lib/variant";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const ProductEdit = ({ open, setOpen, itemId }) => {
   const [fields, setFields] = useState([]);
   const [content, setContent] = useState("");
+  const [video, setVideo] = useState(null);
 
   const variantProductRef = useRef(null);
 
   const handleVariantProduct = useCallback((submitFunction) => {
     variantProductRef.current = submitFunction;
   }, []);
+
+  const onChange = (fileList) => {
+    setVideo(fileList);
+  };
 
   const { data: productData, isFetching: isProductFetching } =
     useGetSingleProductQuery(itemId, {
@@ -47,6 +50,7 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
           variants: variantData.selectedRowData,
         }),
         ...(content && { description: content }),
+        ...(video && { video: video?.[0]?.originFileObj }),
       };
 
       if (!values.mainImage[0]?.url) {
@@ -123,11 +127,10 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
           handleVariantProduct={handleVariantProduct}
           data={productData}
           videoData={formatImagePath(productData?.video)}
+          content={content}
+          setContent={setContent}
+          onChange={onChange}
         />
-
-        <Form.Item label={"Product Description"} name={"description"}>
-          <CustomTextEditor value={content} onChange={setContent} />
-        </Form.Item>
 
         <CustomSelect
           name={"status"}

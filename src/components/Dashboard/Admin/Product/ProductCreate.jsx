@@ -7,18 +7,21 @@ import { compressImage } from "@/utilities/lib/compressImage";
 import { toast } from "sonner";
 import ProductForm from "./ProductForm";
 import { useCallback, useRef, useState } from "react";
-import { Form } from "antd";
-import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 
 const ProductCreate = ({ open, setOpen }) => {
   const [addProduct, { isLoading }] = useAddProductMutation();
   const [content, setContent] = useState("");
+  const [video, setVideo] = useState(null);
 
   const variantProductRef = useRef(null);
 
   const handleVariantProduct = useCallback((submitFunction) => {
     variantProductRef.current = submitFunction;
   }, []);
+
+  const onChange = (fileList) => {
+    setVideo(fileList);
+  };
 
   const onSubmit = async (values) => {
     const variantData = variantProductRef.current
@@ -41,8 +44,8 @@ const ProductCreate = ({ open, setOpen }) => {
           values.mainImage[0].originFileObj
         );
       }
-      if (submittedData?.video) {
-        submittedData.video = await submittedData.video[0].originFileObj;
+      if (video) {
+        submittedData.video = await video?.[0]?.originFileObj;
       }
 
       const data = new FormData();
@@ -55,6 +58,7 @@ const ProductCreate = ({ open, setOpen }) => {
       if (res.data.success) {
         toast.success(res.data.message, { id: toastId });
         setOpen(false);
+        setContent("");
       }
     } catch (error) {
       console.error("Error creating Product:", error);
@@ -64,10 +68,13 @@ const ProductCreate = ({ open, setOpen }) => {
   return (
     <CustomDrawer open={open} setOpen={setOpen} title="Create Product">
       <CustomForm onSubmit={onSubmit}>
-        <ProductForm handleVariantProduct={handleVariantProduct} />
-        <Form.Item label={"Product Description"} name={"description"} required>
-          <CustomTextEditor value={content} onChange={setContent} />
-        </Form.Item>
+        <ProductForm
+          handleVariantProduct={handleVariantProduct}
+          content={content}
+          setContent={setContent}
+          onChange={onChange}
+        />
+
         <FormButton setOpen={setOpen} loading={isLoading} />
       </CustomForm>
     </CustomDrawer>
