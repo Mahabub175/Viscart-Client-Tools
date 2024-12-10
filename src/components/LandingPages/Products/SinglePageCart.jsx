@@ -2,21 +2,18 @@
 
 import { useState } from "react";
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
-import {
-  useGetAllProductsQuery,
-  useGetSingleProductBySlugQuery,
-} from "@/redux/services/product/productApi";
+import { useGetSingleProductBySlugQuery } from "@/redux/services/product/productApi";
 import { Modal, Rate } from "antd";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import ProductCard from "../Home/Products/ProductCard";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import Image from "next/image";
 import { FaWhatsapp, FaPlay } from "react-icons/fa";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { usePathname } from "next/navigation";
+import SingleProductCart from "./SingleProductCart";
 
-const SingleProductDetails = ({ params }) => {
+const SinglePageCart = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: singleProduct } = useGetSingleProductBySlugQuery(
     params?.productId
@@ -29,17 +26,6 @@ const SingleProductDetails = ({ params }) => {
   const handleWhatsappClick = () => {
     window.open(`https://wa.me/${businessWhatsapp}`, "_blank");
   };
-
-  const { data: productData } = useGetAllProductsQuery();
-
-  const activeProducts = productData?.results
-    ?.filter(
-      (item) =>
-        item?.status !== "Inactive" &&
-        item?.name !== singleProduct?.name &&
-        item?.category?.name === singleProduct?.category?.name
-    )
-    ?.slice(0, 4);
 
   const [videoModal, setVideoModal] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState({});
@@ -95,9 +81,8 @@ const SingleProductDetails = ({ params }) => {
   const variantImages = singleProduct?.variants
     ?.filter((variant) => variant.image)
     ?.map((variant) => formatImagePath(variant.image));
-
   return (
-    <section className="my-container py-10">
+    <section className="my-container">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="bg-primaryLight p-10 rounded-xl relative">
           {currentImage ? (
@@ -249,26 +234,7 @@ const SingleProductDetails = ({ params }) => {
         <div
           dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
         ></div>
-      </div>
-      <div className="my-container mt-20">
-        {activeProducts && activeProducts.length > 0 ? (
-          <>
-            <h2 className="text-3xl font-bold mb-5 border-b pb-2">
-              Similar Products
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-              {activeProducts.map((product) => (
-                <ProductCard key={product._id} item={product} />
-              ))}
-            </div>
-          </>
-        ) : (
-          <div>
-            <p className="text-center">
-              No similar products available right now
-            </p>
-          </div>
-        )}
+        <SingleProductCart item={singleProduct} />
       </div>
 
       <Modal
@@ -297,4 +263,4 @@ const SingleProductDetails = ({ params }) => {
   );
 };
 
-export default SingleProductDetails;
+export default SinglePageCart;

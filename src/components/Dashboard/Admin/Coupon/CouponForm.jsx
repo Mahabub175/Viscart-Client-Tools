@@ -40,7 +40,6 @@ const CouponForm = ({ attachment, edit }) => {
         <CustomButtonInput
           label="Coupon Code"
           type={"text"}
-          required={false}
           name={"code"}
           placeholder={"Generate Coupon Code"}
           onClick={generate}
