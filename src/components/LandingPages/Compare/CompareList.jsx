@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { toast } from "sonner";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -26,8 +27,11 @@ const CompareList = () => {
   const deviceId = useSelector(useDeviceId);
   const { data: globalData, isLoading: isGlobalDataLoading } =
     useGetAllGlobalSettingQuery();
-  const { data: compareData, isLoading: isCompareDataLoading } =
-    useGetSingleCompareByUserQuery(user?._id ?? deviceId);
+  const {
+    data: compareData,
+    isLoading: isCompareDataLoading,
+    isError,
+  } = useGetSingleCompareByUserQuery(user?._id ?? deviceId);
   const { data: productData, isLoading: isProductDataLoading } =
     useGetSingleProductQuery(productId, {
       skip: !productId,
@@ -49,11 +53,12 @@ const CompareList = () => {
 
   const handleDelete = (itemId) => {
     deleteCompare(itemId);
-    window.location.reload();
+    toast.success("Product deleted from compare list");
   };
+
   return (
     <section className="my-container lg:my-20 bg-white p-5 rounded-xl">
-      {compareData?.length === 0 || !compareData ? (
+      {compareData?.length === 0 || !compareData || isError ? (
         <div className="flex items-center justify-center my-10">
           <h2 className="text-2xl font-bold text-black/80">
             Please add a product to compare to see them here
