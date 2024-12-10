@@ -1,85 +1,93 @@
-import React, { useState } from "react";
-import { Form, Upload, Button, Modal } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Upload, Button } from "antd";
+import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const VideoUploader = ({ name, label, rules }) => {
+const CustomVideoUploader = ({ name, label, defaultValue, onChange }) => {
   const [fileList, setFileList] = useState([]);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewVideo, setPreviewVideo] = useState(null);
 
-  const handleChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  useEffect(() => {
+    if (defaultValue) {
+      setPreviewVideo(defaultValue);
+      setFileList([
+        {
+          uid: "-1",
+          name: "video",
+          status: "done",
+          url: defaultValue,
+        },
+      ]);
+    }
+  }, [defaultValue]);
 
-    if (newFileList.length && newFileList[0].originFileObj) {
-      const url = URL.createObjectURL(newFileList[0].originFileObj);
-      setPreviewUrl(url);
-    } else {
-      setPreviewUrl("");
+  const handleRemove = () => {
+    setFileList([]);
+    setPreviewVideo(null);
+    if (onChange) {
+      onChange(null);
     }
   };
 
-  const handlePreview = () => {
-    setPreviewVisible(true);
-  };
+  const handleFileChange = (info) => {
+    let newFileList = [...info.fileList];
+    newFileList = newFileList.slice(-1);
+    setFileList(newFileList);
 
-  const handleCancel = () => {
-    setPreviewVisible(false);
+    if (onChange) {
+      onChange(newFileList);
+    }
   };
 
   return (
-    <>
-      <Form.Item
-        name={name}
-        label={label}
-        valuePropName="fileList"
-        getValueFromEvent={(e) => {
-          if (Array.isArray(e)) {
-            return e;
-          }
-          return e?.fileList;
-        }}
-        rules={rules}
-      >
-        <Upload
-          listType="picture"
-          accept="video/*"
-          onChange={handleChange}
-          beforeUpload={(file) => {
-            const isVideo = file.type.startsWith("video/");
-            if (!isVideo) {
-              alert("You can only upload video files!");
-            }
-            return isVideo || Upload.LIST_IGNORE;
+    <div className="mb-4">
+      {label && <label className="font-bold mb-2">{label}</label>}
+      {previewVideo ? (
+        <div
+          style={{
+            marginBottom: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-          fileList={fileList}
         >
-          <Button icon={<UploadOutlined />}>Upload Video</Button>
-        </Upload>
-      </Form.Item>
-
-      {previewUrl && (
-        <div className="mt-4">
-          <Button type="link" onClick={handlePreview}>
-            Preview Video
+          <video
+            src={previewVideo}
+            controls
+            style={{ width: "100%", maxHeight: "300px", marginBottom: "10px" }}
+          />
+          <Button
+            type="dashed"
+            className="bg-red-500 text-white"
+            icon={<DeleteOutlined />}
+            onClick={handleRemove}
+          >
+            Remove Video
           </Button>
         </div>
+      ) : (
+        <Upload.Dragger
+          listType="text"
+          name={name}
+          accept="video/*"
+          fileList={fileList}
+          beforeUpload={(file) => {
+            setFileList([file]);
+            if (onChange) {
+              onChange([file]);
+            }
+            return false;
+          }}
+          onChange={handleFileChange}
+          onRemove={handleRemove}
+        >
+          <p className="ant-upload-drag-icon">
+            <UploadOutlined />
+          </p>
+          <p>Click or drag video to upload</p>
+        </Upload.Dragger>
       )}
-
-      <Modal
-        open={previewVisible}
-        title="Video Preview"
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <video
-          src={previewUrl}
-          controls
-          className="w-full"
-          style={{ maxHeight: "400px" }}
-        />
-      </Modal>
-    </>
+    </div>
   );
 };
 
-export default VideoUploader;
+export default CustomVideoUploader;

@@ -1,7 +1,6 @@
 import React from "react";
 
 const LoginSvg = ({ primaryColor }) => {
-  console.log(primaryColor);
   return (
     <>
       <svg
