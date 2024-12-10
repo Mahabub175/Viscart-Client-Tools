@@ -39,7 +39,7 @@ const ProductCountCart = ({
       if (count > 1) {
         setCount((prev) => prev - 1);
       } else {
-        toast.error("Count cannot be less than one");
+        toast.info("Count cannot be less than one");
       }
     }
   };

@@ -22,6 +22,7 @@ import {
   Tag,
   Tooltip,
 } from "antd";
+import Link from "next/link";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
@@ -103,6 +104,11 @@ const AdminProducts = () => {
       dataIndex: "name",
       key: "name",
       align: "start",
+      render: (item, record) => (
+        <Link href={`/products/cart/${record?.slug}`} target="_blank">
+          {item}
+        </Link>
+      ),
     },
     {
       title: "Brand Name",
@@ -247,6 +253,7 @@ const AdminProducts = () => {
     key: item._id,
     name: item?.name,
     sku: item?.sku,
+    slug: item?.slug,
     brand: item?.brand?.name,
     category: item?.category?.name,
     buyingPrice: item?.buyingPrice,

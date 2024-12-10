@@ -42,14 +42,22 @@ const SingleProductDetails = ({ params }) => {
     ?.slice(0, 4);
 
   const [videoModal, setVideoModal] = useState(false);
-
   const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleAttributeSelect = (attributeName, option) => {
     setSelectedAttributes((prev) => ({
       ...prev,
       [attributeName]: option,
     }));
+    const variant = singleProduct?.variants.find((v) =>
+      v.attributeCombination.every(
+        (attr) => selectedAttributes[attr.attribute.name] === attr.name
+      )
+    );
+    if (variant?.image) {
+      setSelectedImage(formatImagePath(variant.image));
+    }
   };
 
   const currentVariant = singleProduct?.variants.find((variant) =>
@@ -62,8 +70,10 @@ const SingleProductDetails = ({ params }) => {
     ? currentVariant?.sellingPrice
     : singleProduct?.sellingPrice;
 
-  const currentImage = currentVariant?.image
-    ? formatImagePath(currentVariant?.image)
+  const currentImage = selectedImage
+    ? selectedImage
+    : currentVariant?.image
+    ? formatImagePath(currentVariant.image)
     : pathname.includes("/products")
     ? singleProduct?.mainImage
     : formatImagePath(singleProduct?.mainImage);
@@ -82,6 +92,10 @@ const SingleProductDetails = ({ params }) => {
     return acc;
   }, {});
 
+  const variantImages = singleProduct?.variants
+    ?.filter((variant) => variant.image)
+    ?.map((variant) => formatImagePath(variant.image));
+
   return (
     <section className="my-container py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
@@ -89,10 +103,7 @@ const SingleProductDetails = ({ params }) => {
           {currentImage ? (
             <Zoom>
               <Image
-                src={
-                  currentImage ??
-                  "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
-                }
+                src={currentImage}
                 alt="product image"
                 height={400}
                 width={400}
@@ -109,6 +120,29 @@ const SingleProductDetails = ({ params }) => {
               >
                 <FaPlay className="text-xl" />
               </button>
+            </div>
+          )}
+          {variantImages?.length > 0 && (
+            <div className="flex justify-center gap-2 mt-5">
+              {variantImages.map((image, index) => (
+                <div
+                  key={index}
+                  onClick={() => setSelectedImage(image)}
+                  className={`cursor-pointer border-2 rounded-xl ${
+                    selectedImage === image
+                      ? "border-primary"
+                      : "border-gray-300"
+                  }`}
+                >
+                  <Image
+                    src={image}
+                    alt={`variant image ${index}`}
+                    height={80}
+                    width={80}
+                    className="object-cover rounded-xl"
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -222,7 +256,7 @@ const SingleProductDetails = ({ params }) => {
             <h2 className="text-3xl font-bold mb-5 border-b pb-2">
               Similar Products
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
               {activeProducts.map((product) => (
                 <ProductCard key={product._id} item={product} />
               ))}

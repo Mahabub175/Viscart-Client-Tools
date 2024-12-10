@@ -242,19 +242,22 @@ const CartDetails = () => {
                   </div>
                 ))}
               </div>
-              <CheckoutDetails
-                subTotal={subTotal}
-                grandTotal={grandTotal}
-                code={code}
-                setCode={setCode}
-                setDeliveryOption={setDeliveryOption}
-                deliveryOption={deliveryOption}
-                setDiscount={setDiscount}
-                discount={discount}
-                shippingFee={shippingFee}
-                setShippingFee={setShippingFee}
-                setGrandTotal={setGrandTotal}
-              />
+              <div className="lg:w-4/12 w-full">
+                <CheckoutDetails
+                  subTotal={subTotal}
+                  grandTotal={grandTotal}
+                  code={code}
+                  setCode={setCode}
+                  setDeliveryOption={setDeliveryOption}
+                  deliveryOption={deliveryOption}
+                  setDiscount={setDiscount}
+                  discount={discount}
+                  shippingFee={shippingFee}
+                  setShippingFee={setShippingFee}
+                  setGrandTotal={setGrandTotal}
+                />
+              </div>
+
               <div className="lg:w-2/6 w-full border-2 border-primary rounded-lg p-5">
                 <CustomForm onSubmit={onSubmit}>
                   <CheckoutInfo />
