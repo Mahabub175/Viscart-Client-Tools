@@ -127,7 +127,7 @@ const GlobalCart = () => {
                   <h2 className="font-normal text-xl mt-6 mb-8">
                     {cartItems.length} Items
                   </h2>
-                  <div className="border-2 border-primary rounded p-5 max-h-[320px] overflow-y-auto">
+                  <div className="border-2 border-primary rounded p-2 max-h-[320px] overflow-y-auto">
                     {cartItems.map((item) => (
                       <div
                         key={item._id}
@@ -177,7 +177,7 @@ const GlobalCart = () => {
                             </div>
                           </div>
                         </div>
-                        <p className="text-primary text-base font-bold">
+                        <p className="text-primary flex flex-1 text-base font-bold">
                           {globalData?.results?.currency +
                             " " +
                             item.price * item.localQuantity}
@@ -193,7 +193,7 @@ const GlobalCart = () => {
                       </div>
                     ))}
                     <hr className="border-primary mt-4" />
-                    <div className="text-right font-bold text-primary mt-2">
+                    <div className="text-center ml-10 font-bold text-primary mt-2">
                       Subtotal: {globalData?.results?.currency + " " + subTotal}
                     </div>
                   </div>
