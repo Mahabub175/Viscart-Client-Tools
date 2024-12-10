@@ -107,7 +107,7 @@ const CheckoutDetails = ({
   }, [subTotal, shippingFee, discountAmount, setGrandTotal]);
 
   return (
-    <div className="lg:w-4/12 w-full">
+    <>
       <div className="space-y-2 p-5 border-2 border-primary rounded-lg mb-4">
         <p className="font-semibold">Discount Option</p>
         <Radio.Group
@@ -162,7 +162,7 @@ const CheckoutDetails = ({
           <p>{globalData?.results?.currency + " " + grandTotal || 0}</p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
