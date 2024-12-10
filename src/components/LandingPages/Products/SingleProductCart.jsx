@@ -142,7 +142,7 @@ const SingleProductCart = ({ item, count, productId, productName }) => {
   };
 
   return (
-    <div className="flex gap-5">
+    <div className="flex flex-col lg:flow-row gap-5">
       <div className="w-full">
         <CheckoutDetails
           subTotal={subTotal}
