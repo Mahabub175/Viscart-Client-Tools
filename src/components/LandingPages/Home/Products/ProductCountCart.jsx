@@ -8,7 +8,7 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ const ProductCountCart = ({
   previousSelectedVariant,
   isWishlist,
   wishlistId,
+  selectedPreviousAttributes,
 }) => {
   const router = useRouter();
   const [count, setCount] = useState(1);
@@ -45,6 +46,23 @@ const ProductCountCart = ({
   };
   const [selectedAttributes, setSelectedAttributes] = useState({});
 
+  const groupedAttributes = item?.variants?.reduce((acc, variant) => {
+    variant.attributeCombination.forEach((attribute) => {
+      const attributeName = attribute.attribute.name;
+      if (!acc[attributeName]) {
+        acc[attributeName] = [];
+      }
+      if (!acc[attributeName].some((opt) => opt.name === attribute.name)) {
+        acc[attributeName].push({
+          name: attribute.name,
+          label: attribute.label || attribute.name,
+          _id: attribute._id,
+        });
+      }
+    });
+    return acc;
+  }, {});
+
   const handleAttributeSelect = (attributeName, option) => {
     setSelectedAttributes((prev) => ({
       ...prev,
@@ -52,25 +70,51 @@ const ProductCountCart = ({
     }));
   };
 
-  const currentVariant = item?.variants.find((variant) =>
-    variant.attributeCombination.every(
-      (attr) => selectedAttributes[attr.attribute.name] === attr.name
-    )
+  const [currentVariant, setCurrentVariant] = useState(
+    previousSelectedVariant ||
+      item?.variants.find((variant) =>
+        Object.entries(selectedAttributes).every(
+          ([attrName, selectedValue]) => {
+            return variant.attributeCombination.some(
+              (attr) =>
+                attr.attribute.name === attrName && attr.name === selectedValue
+            );
+          }
+        )
+      )
   );
 
-  const groupedAttributes = item?.variants?.reduce((acc, variant) => {
-    variant.attributeCombination.forEach((attr) => {
-      if (!acc[attr.attribute.name]) {
-        acc[attr.attribute.name] = [];
-      }
-      if (
-        !acc[attr.attribute.name].some((option) => option.name === attr.name)
-      ) {
-        acc[attr.attribute.name].push(attr);
-      }
-    });
-    return acc;
-  }, {});
+  useEffect(() => {
+    if (Object.keys(selectedAttributes).length === 0) {
+      setCurrentVariant(null);
+    } else {
+      const updatedVariant = item?.variants.find((variant) =>
+        Object.entries(selectedAttributes).every(
+          ([attrName, selectedValue]) => {
+            return variant.attributeCombination.some(
+              (attr) =>
+                attr.attribute.name === attrName && attr.name === selectedValue
+            );
+          }
+        )
+      );
+      setCurrentVariant(updatedVariant);
+    }
+  }, [selectedAttributes, item?.variants]);
+
+  useEffect(() => {
+    if (selectedPreviousAttributes) {
+      setSelectedAttributes(selectedPreviousAttributes);
+    }
+    if (previousSelectedVariant) {
+      setCurrentVariant(previousSelectedVariant);
+    }
+  }, [selectedPreviousAttributes, previousSelectedVariant]);
+
+  const allAttributesSelected =
+    currentVariant &&
+    Object.keys(groupedAttributes).length ===
+      Object.keys(selectedAttributes).length;
 
   const isOutOfStock =
     item?.stock <= 0 ||
@@ -82,14 +126,10 @@ const ProductCountCart = ({
     : item?.sellingPrice;
 
   const addToCart = async (type) => {
-    if (
-      item?.variants?.length > 0 &&
-      !previousSelectedVariant &&
-      !currentVariant
-    ) {
+    if (item?.variants?.length > 0 && !allAttributesSelected) {
       setOpenVariantModal(true);
       setBtnText(type);
-      toast.info("Please select a variant");
+      toast.info("Please select a variant combination");
       return;
     }
 
@@ -97,7 +137,7 @@ const ProductCountCart = ({
       ...(user?._id ? { user: user._id } : { deviceId }),
       product: item?._id,
       quantity: count,
-      sku: previousSelectedVariant?.sku ?? currentVariant?.sku ?? item?.sku,
+      sku: currentVariant?.sku ?? item?.sku,
       price: currentVariant?.sellingPrice
         ? currentVariant?.sellingPrice
         : item?.offerPrice
@@ -117,6 +157,7 @@ const ProductCountCart = ({
         handleModalClose();
         setCount(1);
         setOpenVariantModal(false);
+        setCurrentVariant(previousSelectedVariant);
         if (type === "buy") {
           router.push("/cart");
         }
@@ -191,7 +232,7 @@ const ProductCountCart = ({
                     {options.map((option) => (
                       <div
                         key={option._id}
-                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg  ${
+                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg ${
                           selectedAttributes[attributeName] === option.name
                             ? "border-primary bg-primary-light text-primary font-bold"
                             : "border-gray-300"

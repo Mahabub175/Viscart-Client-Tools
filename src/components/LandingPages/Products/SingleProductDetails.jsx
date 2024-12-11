@@ -10,7 +10,7 @@ import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal, Rate } from "antd";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlay, FaWhatsapp } from "react-icons/fa";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -43,28 +43,50 @@ const SingleProductDetails = ({ params }) => {
 
   const [videoModal, setVideoModal] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [currentVariant, setCurrentVariant] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const groupedAttributes = singleProduct?.variants?.reduce((acc, variant) => {
+    variant.attributeCombination.forEach((attribute) => {
+      const attributeName = attribute.attribute.name;
+      if (!acc[attributeName]) {
+        acc[attributeName] = [];
+      }
+      if (!acc[attributeName].some((opt) => opt.name === attribute.name)) {
+        acc[attributeName].push({
+          name: attribute.name,
+          label: attribute.label || attribute.name,
+          _id: attribute._id,
+        });
+      }
+    });
+    return acc;
+  }, {});
 
   const handleAttributeSelect = (attributeName, option) => {
     setSelectedAttributes((prev) => ({
       ...prev,
       [attributeName]: option,
     }));
-    const variant = singleProduct?.variants.find((v) =>
-      v.attributeCombination.every(
-        (attr) => selectedAttributes[attr.attribute.name] === attr.name
-      )
-    );
-    if (variant?.image) {
-      setSelectedImage(formatImagePath(variant.image));
-    }
   };
 
-  const currentVariant = singleProduct?.variants.find((variant) =>
-    variant.attributeCombination.every(
-      (attr) => selectedAttributes[attr.attribute.name] === attr.name
-    )
-  );
+  useEffect(() => {
+    if (Object.keys(selectedAttributes).length === 0) {
+      setCurrentVariant(null);
+    } else {
+      const updatedVariant = singleProduct?.variants.find((variant) =>
+        Object.entries(selectedAttributes).every(
+          ([attrName, selectedValue]) => {
+            return variant.attributeCombination.some(
+              (attr) =>
+                attr.attribute.name === attrName && attr.name === selectedValue
+            );
+          }
+        )
+      );
+      setCurrentVariant(updatedVariant);
+    }
+  }, [selectedAttributes, singleProduct?.variants]);
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice
@@ -77,20 +99,6 @@ const SingleProductDetails = ({ params }) => {
     : pathname.includes("/products")
     ? singleProduct?.mainImage
     : formatImagePath(singleProduct?.mainImage);
-
-  const groupedAttributes = singleProduct?.variants?.reduce((acc, variant) => {
-    variant.attributeCombination.forEach((attr) => {
-      if (!acc[attr.attribute.name]) {
-        acc[attr.attribute.name] = [];
-      }
-      if (
-        !acc[attr.attribute.name].some((option) => option.name === attr.name)
-      ) {
-        acc[attr.attribute.name].push(attr);
-      }
-    });
-    return acc;
-  }, {});
 
   const variantImages = singleProduct?.variants
     ?.filter((variant) => variant.image)
@@ -228,7 +236,9 @@ const SingleProductDetails = ({ params }) => {
           <ProductCountCart
             item={singleProduct}
             previousSelectedVariant={currentVariant}
+            setPreviousSelectedVariant={setCurrentVariant}
             fullWidth
+            selectedPreviousAttributes={selectedAttributes}
           />
           <div
             className="w-full bg-primary px-10 py-2 text-sm rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer"
