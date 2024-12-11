@@ -98,7 +98,6 @@ const ProductForm = ({
           label={"Product Buying Price"}
           name={"buyingPrice"}
           type={"number"}
-          required={true}
         />
         <CustomInput
           label={"Product Selling Price"}

@@ -33,8 +33,8 @@ const TableHeader = ({
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-6">
+      <div className="flex flex-col lg:flex-row items-center justify-between">
+        <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-6">
           <div
             className="flex gap-3 items-center mt-6 lg:mt-0 justify-center"
             onClick={() => setOpen(true)}
@@ -60,7 +60,7 @@ const TableHeader = ({
           </div>
         </div>
 
-        <div className="relative w-1/4">
+        <div className="relative lg:w-1/4 mt-5 lg:mt-0">
           <div className="flex">
             <Input
               suffix={<FaSearch />}

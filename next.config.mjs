@@ -8,6 +8,7 @@ const nextConfig = {
       "anayase.com",
       "shokhbazar.com",
       "viscartapi.vitasoftsolutions.com",
+      "viscartdemoapi.vitasoftsolutions.com",
       "photohouseapi.photohousemagazine.com",
     ],
   },
