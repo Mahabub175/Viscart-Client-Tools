@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { generateRandomCode } from "./generateRandomCode";
 
-export function formatProductData(data, productName, sku) {
+export function formatProductData(data, sku) {
   return data?.map((item) => {
     const key = item?.attributeCombination?.map((item) => item?.name);
     const name = key || item.name;
@@ -22,7 +22,7 @@ export function formatProductData(data, productName, sku) {
       stock: item.stock || 0,
       sellingPrice: item.sellingPrice,
       buyingPrice: item.buyingPrice,
-      variant_attribute_ids,
+      attributeCombination: variant_attribute_ids,
     };
   });
 }
@@ -132,9 +132,9 @@ export const generateCombinationsFromVariantAttributes = (
   const options = dataSource?.flatMap((item) => item?.options);
 
   const filterOptions = (options, filter) =>
-    options?.filter((option) => {
-      return filter?.[option?.attribute]?.includes(option?.name);
-    });
+    options?.filter((option) =>
+      filter?.[option?.attribute]?.includes(option?.name)
+    );
 
   const orderedAttributesOptions = filterOptions(
     options,
@@ -145,36 +145,34 @@ export const generateCombinationsFromVariantAttributes = (
 
   const combine = (index, current) => {
     if (index === orderedAttributeIds?.length) {
-      const combinationName = current?.join(" ");
+      const attributeCombination = current?.map((c) => c?._id || null);
+      const key = current?.map((c) => c?.name).join("-");
+      const uniqueKey = `${key}-${generateRandomCode(6)}`;
 
-      const variantAttributeIds = current?.map(
-        (name) =>
-          orderedAttributesOptions?.find((option) => option?.name === name)?._id
-      );
-      const key = variantAttributeIds
-        ?.map((id, index) => `${orderedAttributeIds?.[index]}${id}`)
-        ?.join("-");
+      const name = key;
 
       combinations.push({
-        key,
-        name: combinationName,
+        key: uniqueKey,
+        name,
         sku: generateRandomCode(6),
         stock: 0,
         buyingPrice: buyingPrice,
         sellingPrice: sellingPrice,
-        variant_attribute_ids: variantAttributeIds,
+        attributeCombination,
       });
       return;
     }
 
     const key = orderedAttributeIds?.[index];
-    const values = variantAttributesName?.[key];
+    const attributeOptions = orderedAttributesOptions?.filter(
+      (option) => option?.attribute === key
+    );
 
-    if (values && values?.length > 0) {
-      for (const value of values) {
-        current?.push(value);
+    if (attributeOptions?.length > 0) {
+      for (const option of attributeOptions) {
+        current.push(option);
         combine(index + 1, current);
-        current?.pop();
+        current.pop();
       }
     } else {
       combine(index + 1, current);

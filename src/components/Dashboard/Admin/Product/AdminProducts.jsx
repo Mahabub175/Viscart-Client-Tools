@@ -267,7 +267,7 @@ const AdminProducts = () => {
   }));
 
   return (
-    <div className="px-5">
+    <div className="lg:px-5">
       <TableHeader
         setOpen={setOpen}
         title={"Product"}

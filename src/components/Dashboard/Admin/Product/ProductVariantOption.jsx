@@ -56,6 +56,7 @@ const ProductVariantOption = ({
   const [variantForm] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const isEditing = (record) => record.key === editingKey;
 
@@ -228,6 +229,7 @@ const ProductVariantOption = ({
             attributeCombination: item.variant_attribute_ids,
           })) ?? [];
         setData(variantDataSource);
+        setSelectedRowKeys(variantDataSource.map((item) => item.key)); // Select all rows by default
       } else {
         const formattedData = formatProductData(
           editData?.variants,
@@ -253,6 +255,7 @@ const ProductVariantOption = ({
           ...nonMatchingItems,
         ];
         setData(newData);
+        setSelectedRowKeys(newData.map((item) => item.key)); // Select all rows by default
       }
     };
     mapCombinationToData();
@@ -287,10 +290,19 @@ const ProductVariantOption = ({
   };
 
   const handleCustomSubmit = useCallback(
-    () => ({ selectedRowData: data }),
-    [data]
+    () => ({
+      selectedRowData: data.filter((item) =>
+        selectedRowKeys.includes(item.key)
+      ),
+    }),
+    [data, selectedRowKeys]
   );
   onCustomSubmit(handleCustomSubmit);
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys) => setSelectedRowKeys(newSelectedRowKeys),
+  };
 
   if (combination.length) {
     return (
@@ -305,6 +317,7 @@ const ProductVariantOption = ({
           columns={mergedColumns}
           rowClassName="editable-row"
           scroll={{ x: "max-content" }}
+          rowSelection={rowSelection}
         />
       </Form>
     );
