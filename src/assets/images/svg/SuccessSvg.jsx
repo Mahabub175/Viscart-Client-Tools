@@ -1,12 +1,12 @@
-const SuccessSvg = ({ primaryColor }) => {
+const SuccessSvg = ({ primaryColor, size = 500 }) => {
   return (
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="500"
+        width={size}
         zoomAndPan="magnify"
         viewBox="0 0 1500 1499.999933"
-        height="500"
+        height={size}
         preserveAspectRatio="xMidYMid meet"
         version="1.0"
       >

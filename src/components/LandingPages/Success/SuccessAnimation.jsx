@@ -7,7 +7,15 @@ const SuccessAnimation = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   return (
     <div>
-      <SuccessSvg primaryColor={globalData?.results?.primaryColor} />
+      <div className="hidden md:block">
+        <SuccessSvg primaryColor={globalData?.results?.primaryColor} />
+      </div>
+      <div className="md:hidden">
+        <SuccessSvg
+          primaryColor={globalData?.results?.primaryColor}
+          size={370}
+        />
+      </div>
     </div>
   );
 };

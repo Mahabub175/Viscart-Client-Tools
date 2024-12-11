@@ -6,7 +6,7 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 const LoginImage = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   return (
-    <div>
+    <div className="hidden md:block">
       <LoginSvg primaryColor={globalData?.results?.primaryColor} />
     </div>
   );

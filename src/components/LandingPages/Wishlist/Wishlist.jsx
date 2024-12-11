@@ -53,12 +53,12 @@ const Wishlist = () => {
   };
 
   return (
-    <section className="container mx-auto px-5 py-10">
+    <section className="container mx-auto px-5 lg:py-10">
       <h2 className="font-normal text-2xl">My Wishlist</h2>
       <div>
         {wishlistData?.length === 0 || !wishlistData || isError ? (
           <div className="flex items-center justify-center my-10 bg-white p-10 rounded-xl shadow-xl">
-            <h2 className="text-2xl font-bold text-black/80">
+            <h2 className="lg:text-2xl font-bold text-black/80  text-center text-xl">
               Please add a product to wishlist to see them here
             </h2>
           </div>

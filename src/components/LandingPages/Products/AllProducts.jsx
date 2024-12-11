@@ -118,10 +118,11 @@ const AllProducts = ({ searchParams }) => {
 
   return (
     <section className="container mx-auto lg:px-5 py-10 relative -mt-10 lg:-mt-0">
-      <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-6 mb-6 rounded-xl">
+      <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
         <p className="text-sm lg:text-base">
-          There are{" "}
-          <span className="font-semibold">{filteredProducts?.length}</span>{" "}
+          <span className="font-semibold text-lg">
+            {filteredProducts?.length}
+          </span>{" "}
           products showing.
         </p>
         <div className="flex items-center lg:w-1/4">

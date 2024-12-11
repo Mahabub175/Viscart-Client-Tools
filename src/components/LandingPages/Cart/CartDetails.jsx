@@ -178,8 +178,8 @@ const CartDetails = () => {
       <h2 className="font-normal text-2xl">Order List</h2>
       <div>
         {cartData?.length === 0 || !cartData || isError ? (
-          <div className="flex items-center justify-center bg-white shadow-xl rounded-xl p-10 my-20">
-            <h2 className="text-2xl font-bold text-black/80">
+          <div className="flex items-center justify-center bg-white shadow-xl rounded-xl p-10 my-10">
+            <h2 className="lg:text-2xl font-bold text-black/80 text-center text-xl">
               Please add a product to cart to see them here
             </h2>
           </div>
