@@ -101,7 +101,16 @@ const GlobalCart = () => {
           onClick={toggleCart}
           className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl cursor-pointer animate-pulse"
         >
-          <FaCartPlus />
+          {cartData?.length > 0 && !isError ? (
+            <span className="relative">
+              <span className="absolute -top-2 -right-2 bg-white text-primary rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                {cartData?.length}
+              </span>
+              <FaCartPlus />
+            </span>
+          ) : (
+            <FaCartPlus />
+          )}
         </div>
 
         {isCartOpen && (
@@ -136,10 +145,14 @@ const GlobalCart = () => {
                         <div className="flex-1">
                           <Link href={`/products/${item?.slug}`}>
                             <Tooltip title={item.productName}>
-                              <h2 className="text-sm lg:text-base font-semibold">
+                              <h2 className="text-sm font-semibold">
                                 {item.productName.length > 40
                                   ? `${item.productName.slice(0, 40)}...`
-                                  : item.productName}
+                                  : item.productName}{" "}
+                                {item?.variant &&
+                                  ` (${item?.variant?.attributeCombination
+                                    ?.map((combination) => combination?.name)
+                                    .join(" ")})`}
                               </h2>
                             </Tooltip>
                           </Link>
@@ -201,7 +214,7 @@ const GlobalCart = () => {
               )}
             </div>
             <button
-              className="mt-4 w-full py-2 bg-primary text-white rounded-md"
+              className="mt-4 w-full py-2 bg-primary text-white rounded-md font-bold"
               onClick={handleRouting}
             >
               Checkout

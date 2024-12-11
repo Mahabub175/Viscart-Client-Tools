@@ -1,12 +1,10 @@
-"use client";
-
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal, Rate } from "antd";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const QuickProductView = ({
   item,
@@ -16,8 +14,26 @@ const QuickProductView = ({
   wishlistId,
 }) => {
   const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [currentVariant, setCurrentVariant] = useState(null);
   const pathname = usePathname();
   const { data: globalData } = useGetAllGlobalSettingQuery();
+
+  const groupedAttributes = item?.variants?.reduce((acc, variant) => {
+    variant.attributeCombination.forEach((attribute) => {
+      const attributeName = attribute.attribute.name;
+      if (!acc[attributeName]) {
+        acc[attributeName] = [];
+      }
+      if (!acc[attributeName].some((opt) => opt.name === attribute.name)) {
+        acc[attributeName].push({
+          name: attribute.name,
+          label: attribute.label || attribute.name,
+          _id: attribute._id,
+        });
+      }
+    });
+    return acc;
+  }, {});
 
   const handleAttributeSelect = (attributeName, option) => {
     setSelectedAttributes((prev) => ({
@@ -26,11 +42,23 @@ const QuickProductView = ({
     }));
   };
 
-  const currentVariant = item?.variants.find((variant) =>
-    variant.attributeCombination.every(
-      (attr) => selectedAttributes[attr.attribute.name] === attr.name
-    )
-  );
+  useEffect(() => {
+    if (Object.keys(selectedAttributes).length === 0) {
+      setCurrentVariant(null);
+    } else {
+      const updatedVariant = item?.variants.find((variant) =>
+        Object.entries(selectedAttributes).every(
+          ([attrName, selectedValue]) => {
+            return variant.attributeCombination.some(
+              (attr) =>
+                attr.attribute.name === attrName && attr.name === selectedValue
+            );
+          }
+        )
+      );
+      setCurrentVariant(updatedVariant);
+    }
+  }, [selectedAttributes, item?.variants]);
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice
@@ -41,20 +69,6 @@ const QuickProductView = ({
     : ["/products", "/wishlist", "/compare"].includes(pathname)
     ? item?.mainImage
     : formatImagePath(item?.mainImage);
-
-  const groupedAttributes = item?.variants?.reduce((acc, variant) => {
-    variant.attributeCombination.forEach((attr) => {
-      if (!acc[attr.attribute.name]) {
-        acc[attr.attribute.name] = [];
-      }
-      if (
-        !acc[attr.attribute.name].some((option) => option.name === attr.name)
-      ) {
-        acc[attr.attribute.name].push(attr);
-      }
-    });
-    return acc;
-  }, {});
 
   return (
     <Modal
@@ -102,7 +116,7 @@ const QuickProductView = ({
                     {options.map((option) => (
                       <div
                         key={option._id}
-                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg  ${
+                        className={`cursor-pointer px-4 py-2 border-2 rounded-lg ${
                           selectedAttributes[attributeName] === option.name
                             ? "border-primary bg-primary-light text-primary font-bold"
                             : "border-gray-300"
@@ -137,21 +151,10 @@ const QuickProductView = ({
             )}
 
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
-            Price:{" "}
-            {item?.offerPrice ? (
-              <p className="text-primary text-xl">
-                {globalData?.results?.currency + " " + item?.offerPrice}
-              </p>
-            ) : (
-              <p className="text-primary text-xl">
-                {globalData?.results?.currency + " " + currentPrice}
-              </p>
-            )}
-            {item?.offerPrice && (
-              <p className="text-base line-through text-red-500">
-                {globalData?.results?.currency + " " + currentPrice}
-              </p>
-            )}
+            Price:
+            <p className="text-primary text-xl">
+              {globalData?.results?.currency + " " + currentPrice}
+            </p>
           </div>
 
           <hr />
@@ -160,9 +163,11 @@ const QuickProductView = ({
             item={item}
             handleModalClose={handleModalClose}
             previousSelectedVariant={currentVariant}
+            setPreviousSelectedVariant={setCurrentVariant}
             fullWidth
             isWishlist={isWishlist}
             wishlistId={wishlistId}
+            selectedPreviousAttributes={selectedAttributes}
           />
         </div>
       </div>
