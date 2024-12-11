@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef } from "react";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
@@ -17,13 +16,17 @@ const Categories = () => {
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: productData } = useGetAllProductsQuery();
 
-  const activeCategories = categories?.results?.filter(
-    (item) => item?.status !== "Inactive"
-  );
-
   const activeProducts = productData?.results?.filter(
     (item) => item?.status !== "Inactive"
   );
+
+  const activeCategories = categories?.results
+    ?.filter((category) => category?.status !== "Inactive")
+    ?.filter((category) =>
+      activeProducts?.some(
+        (product) => product?.category?._id === category?._id
+      )
+    );
 
   const [activeCategory, setActiveCategory] = useState("all-products");
 
@@ -38,7 +41,7 @@ const Categories = () => {
     <section className="container mx-auto lg:px-5">
       <div className="flex flex-col lg:flex-row items-center justify-between border-b">
         <h2 className="text-2xl lg:text-3xl font-semibold text-center mb-5">
-          All Categories
+          Top Categories
         </h2>
         <Tabs
           defaultActiveKey="all-products"

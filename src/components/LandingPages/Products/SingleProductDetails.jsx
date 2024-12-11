@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import ProductCountCart from "@/components/LandingPages/Home/Products/ProductCountCart";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import {
   useGetAllProductsQuery,
   useGetSingleProductBySlugQuery,
 } from "@/redux/services/product/productApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal, Rate } from "antd";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { FaPlay, FaWhatsapp } from "react-icons/fa";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import Image from "next/image";
-import { FaWhatsapp, FaPlay } from "react-icons/fa";
-import { formatImagePath } from "@/utilities/lib/formatImagePath";
-import { usePathname } from "next/navigation";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -39,7 +39,7 @@ const SingleProductDetails = ({ params }) => {
         item?.name !== singleProduct?.name &&
         item?.category?.name === singleProduct?.category?.name
     )
-    ?.slice(0, 4);
+    ?.slice(0, 8);
 
   const [videoModal, setVideoModal] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState({});
@@ -97,7 +97,7 @@ const SingleProductDetails = ({ params }) => {
     ?.map((variant) => formatImagePath(variant.image));
 
   return (
-    <section className="my-container py-10">
+    <section className="container mx-auto px-2 lg:px-5 lg:py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="bg-primaryLight p-10 rounded-xl relative">
           {currentImage ? (
@@ -250,7 +250,7 @@ const SingleProductDetails = ({ params }) => {
           dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
         ></div>
       </div>
-      <div className="my-container mt-20">
+      <div className="mt-20">
         {activeProducts && activeProducts.length > 0 ? (
           <>
             <h2 className="text-3xl font-bold mb-5 border-b pb-2">

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-[50vh] lg:h-[80vh] text-center">
+    <div className="flex flex-col items-center justify-center h-[70vh] lg:h-[80vh] text-center">
       <SuccessAnimation />
       <h1 className="text-xl font-semibold">
         Your order was a success. It is being processed right now.

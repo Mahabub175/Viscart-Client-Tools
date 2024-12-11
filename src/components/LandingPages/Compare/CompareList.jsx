@@ -60,7 +60,7 @@ const CompareList = () => {
     <section className="my-container lg:my-20 bg-white p-5 rounded-xl">
       {compareData?.length === 0 || !compareData || isError ? (
         <div className="flex items-center justify-center my-10">
-          <h2 className="text-2xl font-bold text-black/80">
+          <h2 className="lg;text-2xl font-bold text-black/80 text-center text-xl">
             Please add a product to compare to see them here
           </h2>
         </div>
