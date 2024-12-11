@@ -68,7 +68,7 @@ const CategoryNavigation = ({ onClose }) => {
           link: "/",
         },
         {
-          name: "Products",
+          name: "Baby Products",
           link: "/products",
         },
         {

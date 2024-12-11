@@ -1,3 +1,4 @@
+import logo from "@/assets/images/logo-white.png";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
@@ -13,12 +14,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaCartPlus, FaSearch } from "react-icons/fa";
-import { FaCartArrowDown, FaCodeCompare } from "react-icons/fa6";
+import { FaCartPlus, FaHeart, FaSearch } from "react-icons/fa";
+import { FaCodeCompare } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-import logo from "@/assets/images/logo-white.png";
 
 const LandingTopHeader = () => {
   const pathname = usePathname();
@@ -164,10 +164,10 @@ const LandingTopHeader = () => {
             <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
               {wishListData?.length}
             </span>
-            <FaCartArrowDown />
+            <FaHeart />
           </span>
         ) : (
-          <FaCartArrowDown />
+          <FaHeart />
         )}
         <span>Wishlist</span>
       </Link>
