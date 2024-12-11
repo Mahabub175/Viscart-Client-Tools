@@ -97,7 +97,6 @@ const CategoryForm = ({ attachment }) => {
         defaultValue={attachment}
         label="Category Image"
         name="attachment"
-        required={true}
       />
     </>
   );
