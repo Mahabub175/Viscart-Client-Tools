@@ -227,7 +227,7 @@ const ProductVariantOption = ({
               stock: item.stock || 0,
               sellingPrice: item.sellingPrice || 0,
               buyingPrice: item.buyingPrice || 0,
-              attributeCombination: item.variant_attribute_ids,
+              attributeCombination: item.attributeCombination || [],
             })) ?? [];
         setData(variantDataSource);
         setSelectedRowKeys(variantDataSource.map((item) => item.key));
@@ -247,7 +247,7 @@ const ProductVariantOption = ({
               stock: item.stock || 0,
               sellingPrice: item.sellingPrice || 0,
               buyingPrice: item.buyingPrice || 0,
-              attributeCombination: item.variant_attribute_ids,
+              attributeCombination: item.attributeCombination || [],
             })) ?? [];
         const nonMatchingItems = findNonMatchingItems(
           formattedData,
@@ -280,10 +280,11 @@ const ProductVariantOption = ({
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
-        if (typeof row.stock === "string" || row.stock === "") {
-          row.stock = parseFloat(row.stock) || 0;
-        }
-        newData.splice(index, 1, { ...item, ...row });
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+          attributeCombination: item.attributeCombination,
+        });
         setData(newData);
         setEditingKey("");
       }
