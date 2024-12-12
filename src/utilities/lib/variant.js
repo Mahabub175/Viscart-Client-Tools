@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { formatImagePath } from "./formatImagePath";
 import { generateRandomCode } from "./generateRandomCode";
 
 export function formatProductData(data, sku) {
@@ -19,6 +20,7 @@ export function formatProductData(data, sku) {
       id: item._id,
       name,
       sku: skuValue,
+      image: formatImagePath(item?.image),
       stock: item.stock || 0,
       sellingPrice: item.sellingPrice,
       buyingPrice: item.buyingPrice,

@@ -81,7 +81,6 @@ const ProductVariantOption = ({
     };
     reader.readAsDataURL(file);
   };
-
   const columns = [
     {
       title: "Name",
@@ -146,17 +145,17 @@ const ProductVariantOption = ({
           >
             <Button icon={<UploadOutlined />}>Upload</Button>
           </Upload>
-          {record.preview && (
+          {record.preview || record.image ? (
             <div style={{ marginTop: "10px" }}>
               <Image
-                src={record.preview}
+                src={record.preview || record.image}
                 alt="preview"
                 style={{ width: "100px", height: "100px", objectFit: "cover" }}
                 width={100}
                 height={100}
               />
             </div>
-          )}
+          ) : null}
           {!record.preview && record.image && (
             <p style={{ marginTop: "10px", fontSize: "12px" }}>
               {record.image.name}
@@ -219,17 +218,19 @@ const ProductVariantOption = ({
     const mapCombinationToData = () => {
       if (!editData) {
         const variantDataSource =
-          combination?.map((item) => ({
-            key: item.key,
-            name: item.name,
-            sku: item.sku,
-            stock: item.stock || 0,
-            sellingPrice: item.sellingPrice || 0,
-            buyingPrice: item.buyingPrice || 0,
-            attributeCombination: item.variant_attribute_ids,
-          })) ?? [];
+          combination
+            ?.filter((item) => item.name)
+            .map((item) => ({
+              key: item.key,
+              name: item.name,
+              sku: item.sku,
+              stock: item.stock || 0,
+              sellingPrice: item.sellingPrice || 0,
+              buyingPrice: item.buyingPrice || 0,
+              attributeCombination: item.variant_attribute_ids,
+            })) ?? [];
         setData(variantDataSource);
-        setSelectedRowKeys(variantDataSource.map((item) => item.key)); // Select all rows by default
+        setSelectedRowKeys(variantDataSource.map((item) => item.key));
       } else {
         const formattedData = formatProductData(
           editData?.variants,
@@ -237,15 +238,17 @@ const ProductVariantOption = ({
           editData?.sku
         );
         const variantDataSource =
-          combination?.map((item) => ({
-            key: item.key,
-            name: item.name,
-            sku: item.sku,
-            stock: item.stock || 0,
-            sellingPrice: item.sellingPrice || 0,
-            buyingPrice: item.buyingPrice || 0,
-            attributeCombination: item.variant_attribute_ids,
-          })) ?? [];
+          combination
+            ?.filter((item) => item.name)
+            .map((item) => ({
+              key: item.key,
+              name: item.name,
+              sku: item.sku,
+              stock: item.stock || 0,
+              sellingPrice: item.sellingPrice || 0,
+              buyingPrice: item.buyingPrice || 0,
+              attributeCombination: item.variant_attribute_ids,
+            })) ?? [];
         const nonMatchingItems = findNonMatchingItems(
           formattedData,
           variantDataSource
@@ -255,7 +258,7 @@ const ProductVariantOption = ({
           ...nonMatchingItems,
         ];
         setData(newData);
-        setSelectedRowKeys(newData.map((item) => item.key)); // Select all rows by default
+        setSelectedRowKeys(newData.map((item) => item.key));
       }
     };
     mapCombinationToData();

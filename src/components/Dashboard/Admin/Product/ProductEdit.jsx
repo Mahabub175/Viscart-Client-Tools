@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import ProductForm from "./ProductForm";
 import { getUniqueAttributeIds } from "@/utilities/lib/variant";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { base_url_image } from "@/utilities/configs/base_api";
 
 const ProductEdit = ({ open, setOpen, itemId }) => {
   const [fields, setFields] = useState([]);
@@ -47,7 +48,18 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
       const submittedData = {
         ...values,
         ...(variantData?.selectedRowData && {
-          variants: variantData.selectedRowData,
+          variants: variantData.selectedRowData.map((variant) => {
+            const { image, ...rest } = variant;
+
+            const cleanedImage =
+              typeof image === "string" && image.startsWith(base_url_image)
+                ? image.replace(base_url_image, "")
+                : image;
+
+            return cleanedImage
+              ? { ...rest, image: cleanedImage }
+              : { ...rest };
+          }),
         }),
         ...(content && { description: content }),
         ...(video && { video: video?.[0]?.originFileObj }),
