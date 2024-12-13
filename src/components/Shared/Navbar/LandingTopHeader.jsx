@@ -9,7 +9,7 @@ import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { UserOutlined } from "@ant-design/icons";
-import { AutoComplete, Avatar, Button, Popover } from "antd";
+import { AutoComplete, Avatar, Button, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -238,7 +238,15 @@ const LandingTopHeader = () => {
                 ) : (
                   <Avatar className="" size={40} icon={<UserOutlined />} />
                 )}
-                <h2 className="font-semibold">{data?.name ?? "User"}</h2>
+                <Tooltip placement="top" title={data?.name || "User"}>
+                  <h2 className="font-semibold">
+                    {data?.name
+                      ? data.name.length > 6
+                        ? data.name.slice(0, 6).concat("...")
+                        : data.name
+                      : "User"}
+                  </h2>
+                </Tooltip>
                 <IoMdArrowDropdown />
               </Popover>
             </div>

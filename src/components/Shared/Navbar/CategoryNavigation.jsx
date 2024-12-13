@@ -98,7 +98,7 @@ const CategoryNavigation = ({ onClose }) => {
 
   return (
     <div className="bg-white lg:text-black lg:border-y mb-5">
-      <div className="my-container mx-auto flex flex-col lg:flex-row gap-10 items-start lg:items-center">
+      <div className="my-container mx-auto flex flex-col md:flex-row gap-10 items-start md:items-center">
         <Dropdown
           overlay={
             <Menu>
