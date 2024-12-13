@@ -8,6 +8,7 @@ const ContactInfo = ({ globalData }) => {
     <div className="col-span-2">
       <Image
         src={globalData?.results?.logo ?? logo}
+        priority
         alt="logo"
         height={200}
         width={200}

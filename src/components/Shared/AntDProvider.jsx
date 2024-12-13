@@ -10,6 +10,7 @@ import { getColors, setColors } from "@/redux/services/theme/themeSlice";
 import { logout, useCurrentToken } from "@/redux/services/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { Toaster } from "sonner";
+import { usePathname } from "next/navigation";
 
 const AntDProvider = ({ children }) => {
   return (
@@ -22,6 +23,7 @@ const AntDProvider = ({ children }) => {
 };
 
 const WrappedAntDConfig = ({ children }) => {
+  const router = usePathname();
   const dispatch = useDispatch();
   const token = useSelector(useCurrentToken);
   const { data } = useGetAllGlobalSettingQuery();
@@ -39,7 +41,8 @@ const WrappedAntDConfig = ({ children }) => {
     }
 
     if (data?.results) {
-      const websiteName = data.results.name;
+      const websiteName = data?.results?.name || "Viscart";
+
       document.title = websiteName;
 
       const { primaryColor, secondaryColor } = data.results;
@@ -56,6 +59,11 @@ const WrappedAntDConfig = ({ children }) => {
       );
     }
   }, [data, dispatch, token]);
+
+  useEffect(() => {
+    const websiteName = data?.results?.name || "Viscart";
+    document.title = websiteName;
+  }, [data, router]);
 
   return (
     <ConfigProvider

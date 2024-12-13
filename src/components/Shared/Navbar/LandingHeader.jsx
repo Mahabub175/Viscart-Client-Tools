@@ -125,6 +125,7 @@ const LandingHeader = () => {
             <Link href={"/"}>
               <Image
                 src={globalData?.results?.logo}
+                priority
                 alt="logo"
                 width={80}
                 height={50}

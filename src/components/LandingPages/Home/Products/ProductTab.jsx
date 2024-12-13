@@ -81,7 +81,7 @@ const ProductTab = () => {
             }}
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={10}
-            loop={true}
+            loop={filteredProducts(activeTab)?.length ? true : false}
             slidesPerView={2}
             breakpoints={{
               640: { slidesPerView: 2 },
