@@ -18,7 +18,7 @@ const AllOffers = () => {
             <div className="capitalize text-center text-3xl text-primary font-semibold">
               {"Offer Products"}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-10 mt-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-5 lg:gap-10 mt-10">
               {filteredProducts?.map((product) => (
                 <ProductCard key={product?._id} item={product} />
               ))}
