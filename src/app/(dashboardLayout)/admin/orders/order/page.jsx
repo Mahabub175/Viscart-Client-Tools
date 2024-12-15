@@ -155,6 +155,7 @@ const Orders = () => {
       dataIndex: "orderId",
       key: "orderId",
       align: "center",
+      render: (item) => <div className="w-[80px]">{item}</div>,
     },
     {
       title: "Transaction ID",

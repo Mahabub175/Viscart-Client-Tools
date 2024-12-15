@@ -106,7 +106,7 @@ const SingleProductDetails = ({ params }) => {
     ?.map((variant) => formatImagePath(variant.image));
 
   return (
-    <section className="container mx-auto lg:px-5 lg:py-10">
+    <section className="container mx-auto px-2 lg:px-5 lg:py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="bg-primaryLight p-10 rounded-xl relative">
           {currentImage ? (
@@ -228,10 +228,10 @@ const SingleProductDetails = ({ params }) => {
       <div className="mt-20">
         {activeProducts && activeProducts.length > 0 ? (
           <>
-            <h2 className="text-3xl font-bold mb-5 border-b pb-2">
+            <h2 className="text-xl lg:text-3xl font-bold mb-5 border-b pb-2 px-2">
               Similar Products
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-5 lg:gap-5">
               {activeProducts.map((product) => (
                 <ProductCard key={product._id} item={product} />
               ))}
