@@ -30,10 +30,16 @@ const BrandEdit = ({ open, setOpen, itemId }) => {
         ...values,
       };
 
-      if (!values.attachment[0].url) {
+      if (
+        values?.attachment &&
+        Array.isArray(values.attachment) &&
+        !values.attachment[0]?.url
+      ) {
         submittedData.attachment = await compressImage(
           values.attachment[0].originFileObj
         );
+      } else {
+        delete submittedData.attachment;
       }
 
       const updatedBrandData = new FormData();

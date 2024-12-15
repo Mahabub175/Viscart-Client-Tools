@@ -1,14 +1,13 @@
 "use client";
 
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
+import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
-import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Modal } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaCartShopping } from "react-icons/fa6";
@@ -225,70 +224,12 @@ const ProductCountCart = ({
         centered
       >
         <div className="flex flex-col gap-4 p-5">
-          {groupedAttributes &&
-            Object.entries(groupedAttributes).map(
-              ([attributeName, options]) => (
-                <div key={attributeName} className="flex flex-col gap-2">
-                  <span className="font-bold">{attributeName}:</span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {options.map((option) => {
-                      const variantWithImage = item?.variants.find((variant) =>
-                        variant.attributeCombination.some(
-                          (attr) =>
-                            attr.attribute.name === attributeName &&
-                            attr.name === option.name
-                        )
-                      );
-
-                      return (
-                        <div
-                          key={option._id}
-                          title={option.name}
-                          className={`cursor-pointer p-1 border-2 rounded-full ${
-                            selectedAttributes[attributeName] === option.name
-                              ? "border-primary"
-                              : "border-gray-300"
-                          }`}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderColor:
-                              selectedAttributes[attributeName] === option.name
-                                ? option.label
-                                : "transparent",
-                            transition: "all 0.3s ease",
-                          }}
-                          onClick={() =>
-                            handleAttributeSelect(attributeName, option.name)
-                          }
-                        >
-                          {variantWithImage?.image ? (
-                            <Image
-                              src={formatImagePath(variantWithImage.image)}
-                              alt={option.name}
-                              width={40}
-                              height={40}
-                              className="rounded-full object-cover w-full h-full"
-                            />
-                          ) : attributeName.toLowerCase() === "color" ? (
-                            <span
-                              className="w-full h-full rounded-full"
-                              style={{
-                                backgroundColor: option.label,
-                              }}
-                            ></span>
-                          ) : (
-                            <span className="text-sm font-medium">
-                              {option.label}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )
-            )}
+          <AttributeOptionSelector
+            groupedAttributes={groupedAttributes}
+            selectedAttributes={selectedAttributes}
+            handleAttributeSelect={handleAttributeSelect}
+            item={item}
+          />
 
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
             Price:{" "}

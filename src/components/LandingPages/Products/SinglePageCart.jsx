@@ -12,6 +12,7 @@ import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { usePathname } from "next/navigation";
 import SingleProductCart from "./SingleProductCart";
 import { toast } from "sonner";
+import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
 
 const SinglePageCart = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -196,72 +197,13 @@ const SinglePageCart = ({ params }) => {
                 </p>
               )}
             </div>
-            {groupedAttributes &&
-              Object.entries(groupedAttributes).map(
-                ([attributeName, options]) => (
-                  <div key={attributeName} className="flex flex-col gap-2 my-4">
-                    <span className="font-bold">{attributeName}:</span>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {options.map((option) => {
-                        const variantWithImage = singleProduct?.variants.find(
-                          (variant) =>
-                            variant.attributeCombination.some(
-                              (attr) =>
-                                attr.attribute.name === attributeName &&
-                                attr.name === option.name
-                            )
-                        );
 
-                        return (
-                          <div
-                            key={option._id}
-                            title={option.name}
-                            className={`cursor-pointer p-1 border-2 rounded-full ${
-                              selectedAttributes[attributeName] === option.name
-                                ? "border-primary"
-                                : "border-gray-300"
-                            }`}
-                            style={{
-                              width: "50px",
-                              height: "50px",
-                              borderColor:
-                                selectedAttributes[attributeName] ===
-                                option.name
-                                  ? option.label
-                                  : "transparent",
-                              transition: "all 0.3s ease",
-                            }}
-                            onClick={() =>
-                              handleAttributeSelect(attributeName, option.name)
-                            }
-                          >
-                            {variantWithImage?.image ? (
-                              <Image
-                                src={formatImagePath(variantWithImage.image)}
-                                alt={option.name}
-                                width={40}
-                                height={40}
-                                className="rounded-full object-cover w-full h-full"
-                              />
-                            ) : attributeName.toLowerCase() === "color" ? (
-                              <span
-                                className="w-full h-full rounded-full"
-                                style={{
-                                  backgroundColor: option.label,
-                                }}
-                              ></span>
-                            ) : (
-                              <span className="text-sm font-medium">
-                                {option.label}
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )
-              )}
+            <AttributeOptionSelector
+              groupedAttributes={groupedAttributes}
+              selectedAttributes={selectedAttributes}
+              handleAttributeSelect={handleAttributeSelect}
+              item={singleProduct}
+            />
 
             {!isOutOfStock ? (
               <>
