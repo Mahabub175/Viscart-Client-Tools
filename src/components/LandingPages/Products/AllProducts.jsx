@@ -117,9 +117,9 @@ const AllProducts = ({ searchParams }) => {
   };
 
   return (
-    <section className="container mx-auto lg:px-5 py-10 relative -mt-10 lg:-mt-0">
+    <section className="container mx-auto px-2 lg:px-5 py-10 relative -mt-10 lg:-mt-0">
       <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
-        <p className="text-sm lg:text-base">
+        <p className="text-xs md:text-base">
           <span className="font-semibold text-lg">
             {filteredProducts?.length}
           </span>{" "}
@@ -195,7 +195,7 @@ const AllProducts = ({ searchParams }) => {
         <div className="w-full">
           <div>
             {filteredProducts?.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-10">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-10">
                 {filteredProducts?.map((product) => (
                   <ProductCard key={product?._id} item={product} />
                 ))}

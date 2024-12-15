@@ -61,14 +61,14 @@ const CategoryNavigation = ({ onClose }) => {
   };
 
   const routes = (
-    <div className="flex flex-col md:flex-row md:items-center gap-10">
+    <div className="flex flex-col text-sm lg:text-base md:flex-row md:items-center gap-10">
       {[
         {
           name: "Home",
           link: "/",
         },
         {
-          name: "Products",
+          name: "Baby Products",
           link: "/products",
         },
         {
@@ -98,7 +98,7 @@ const CategoryNavigation = ({ onClose }) => {
 
   return (
     <div className="bg-white lg:text-black lg:border-y mb-5">
-      <div className="my-container mx-auto flex flex-col md:flex-row gap-10 items-start md:items-center">
+      <div className="container lg:px-5 mx-auto flex flex-col md:flex-row gap-10 items-start md:items-center">
         <Dropdown
           overlay={
             <Menu>

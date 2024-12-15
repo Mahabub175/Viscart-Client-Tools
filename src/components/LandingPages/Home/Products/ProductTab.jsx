@@ -59,12 +59,12 @@ const ProductTab = () => {
   };
 
   return (
-    <section className="container mx-auto lg:px-5 relative">
+    <section className="container mx-auto px-2 lg:px-5 relative">
       <div className="flex flex-col lg:flex-row items-center justify-between border-b">
         <Tabs
           activeKey={activeTab}
           size="large"
-          className="font-semibold max-w-[370px] lg:max-w-[600px]"
+          className="font-semibold max-w-[350px] lg:max-w-[600px]"
           onChange={(key) => setActiveTab(key)}
         >
           {tabs?.map((item) => (
@@ -84,15 +84,15 @@ const ProductTab = () => {
             loop={filteredProducts(activeTab)?.length ? true : false}
             slidesPerView={2}
             breakpoints={{
-              640: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
+              480: { slidesPerView: 2 },
+              600: { slidesPerView: 3 },
               1024: { slidesPerView: 5 },
             }}
             autoplay={{
               delay: 5000,
               disableOnInteraction: true,
             }}
-            className="mySwiper my-10"
+            className="mySwiper my-10 rounded-xl"
           >
             {filteredProducts(activeTab).map((product) => (
               <SwiperSlide key={product?._id}>

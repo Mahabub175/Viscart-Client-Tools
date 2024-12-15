@@ -1,7 +1,7 @@
 "use client";
 
 import { MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Drawer, Popover, Tooltip } from "antd";
+import { AutoComplete, Avatar, Button, Drawer, Popover, Tooltip } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LandingTopHeader from "./LandingTopHeader";
@@ -17,6 +17,9 @@ import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { FaSearch } from "react-icons/fa";
+import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const LandingHeader = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -27,6 +30,10 @@ const LandingHeader = () => {
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const { data } = useGetSingleUserQuery(user?._id);
+
+  const { data: products } = useGetAllProductsQuery();
+
+  const [options, setOptions] = useState([]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -108,6 +115,49 @@ const LandingHeader = () => {
     </div>
   );
 
+  const handleSearch = (value) => {
+    if (!value) {
+      setOptions([]);
+      return;
+    }
+
+    const filteredOptions = products?.results?.filter(
+      (product) =>
+        product.name.toLowerCase().includes(value.toLowerCase()) ||
+        product.category.name?.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setOptions(
+      filteredOptions?.map((product) => ({
+        value: product.name,
+        label: (
+          <Link
+            href={`/products/${product?.slug}`}
+            className="flex items-center gap-4 hover:text-primary pb-2 border-b border-b-gray-300"
+          >
+            <Image
+              src={formatImagePath(product?.mainImage)}
+              alt="product"
+              width={30}
+              height={30}
+              className="object-cover"
+            />
+            <div className="ml-2">
+              <p className="text-lg font-medium">{product?.name}</p>
+              <p>
+                Price: $
+                {product?.offerPrice
+                  ? product?.offerPrice
+                  : product?.sellingPrice}
+              </p>
+              <p>Category: {product?.category?.name}</p>
+            </div>
+          </Link>
+        ),
+      })) || []
+    );
+  };
+
   return (
     <nav className="mb-5 relative">
       {isMobile ? (
@@ -127,7 +177,7 @@ const LandingHeader = () => {
                 src={globalData?.results?.logo}
                 priority
                 alt="logo"
-                width={80}
+                width={50}
                 height={50}
               />
             </Link>
@@ -204,6 +254,17 @@ const LandingHeader = () => {
                   <GiCancel className="text-xl text-gray-700" />
                 </button>
               </div>
+              <div className="relative mb-8">
+                <AutoComplete
+                  options={options}
+                  onSearch={handleSearch}
+                  placeholder="Search for Products..."
+                  size="large"
+                  className="w-full"
+                />
+                <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-primary text-xl" />
+              </div>
+
               <CategoryNavigation onClose={onClose} />
             </Drawer>
             <BottomNavigation />
