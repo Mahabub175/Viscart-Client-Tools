@@ -151,6 +151,12 @@ const Orders = () => {
 
   const columns = [
     {
+      title: "Order ID",
+      dataIndex: "orderId",
+      key: "orderId",
+      align: "center",
+    },
+    {
       title: "Transaction ID",
       dataIndex: "tranId",
       key: "tranId",
@@ -383,6 +389,7 @@ const Orders = () => {
 
   const tableData = userOrders?.results?.map((item) => ({
     key: item._id,
+    orderId: item.orderId,
     tranId: item.tranId ?? "N/A",
     invoice: item.invoice ?? "N/A",
     trackingCode: item.trackingCode,
