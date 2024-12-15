@@ -12,14 +12,13 @@ const AllOffers = () => {
 
   return (
     <section>
-      {" "}
-      <div className="lg:my-10 py-10 relative my-container bg-white shadow-xl p-5 rounded-xl">
+      <div className="lg:my-10 py-10 relative container lg:px-5 mx-auto bg-white shadow-xl rounded-xl">
         {filteredProducts?.length ? (
           <>
             <div className="capitalize text-center text-3xl text-primary font-semibold">
               {"Offer Products"}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10 mt-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-10 mt-10">
               {filteredProducts?.map((product) => (
                 <ProductCard key={product?._id} item={product} />
               ))}

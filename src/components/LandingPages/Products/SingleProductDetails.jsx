@@ -106,7 +106,7 @@ const SingleProductDetails = ({ params }) => {
     ?.map((variant) => formatImagePath(variant.image));
 
   return (
-    <section className="container mx-auto px-2 lg:px-5 lg:py-10">
+    <section className="container mx-auto lg:px-5 lg:py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="bg-primaryLight p-10 rounded-xl relative">
           {currentImage ? (
