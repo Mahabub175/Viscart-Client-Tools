@@ -1,8 +1,7 @@
-"use client";
-
 import { Modal, Spin, Descriptions, Tag, Image } from "antd";
 import moment from "moment";
 import { SubmitButton } from "../Button/CustomButton";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 
 const formatLabel = (label) => {
   const withSpaces = label.replace(/_/g, " ");
@@ -19,7 +18,7 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     setModalOpen(false);
   };
 
-  const excludedKeys = details ? ["__v", "updatedAt", "_id"] : [];
+  const excludedKeys = details ? ["__v", "updatedAt", "_id", "variants"] : [];
 
   const formatStatus = (value) => (
     <Tag color={value ? "green" : "red"} className="capitalize">
@@ -81,10 +80,6 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
       );
     }
 
-    if (typeof value === "string" && value.startsWith("http")) {
-      return <Image src={value} alt={key} style={{ maxWidth: 200 }} />;
-    }
-
     return value;
   };
 
@@ -142,6 +137,16 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
               urlKeys.map(([key, value]) => (
                 <Descriptions.Item key={key} label={formatLabel(key)}>
                   <Image src={value} alt={key} style={{ maxWidth: 200 }} />
+                </Descriptions.Item>
+              ))}
+            {details.images.length > 0 &&
+              details.images.map((image, index) => (
+                <Descriptions.Item key={index} label={`Images ${index + 1}`}>
+                  <Image
+                    src={formatImagePath(image)}
+                    alt={index}
+                    style={{ maxWidth: 200 }}
+                  />
                 </Descriptions.Item>
               ))}
           </Descriptions>

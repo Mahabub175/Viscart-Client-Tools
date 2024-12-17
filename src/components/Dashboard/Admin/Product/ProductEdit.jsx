@@ -122,6 +122,7 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
         },
       ])
     );
+
     setContent(productData?.description);
   }, [productData]);
 

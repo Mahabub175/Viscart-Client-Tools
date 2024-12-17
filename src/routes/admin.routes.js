@@ -7,7 +7,7 @@ import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
 import {
   MdAddShoppingCart,
-  MdLocalOffer,
+  // MdLocalOffer,
   MdOutlineAcUnit,
   MdOutlineMergeType,
   MdOutlineReviews,
@@ -64,11 +64,11 @@ export const adminSidebarRoutes = [
       { name: "Coupon", path: "orders/coupon", icon: RiCoupon3Line },
     ],
   },
-  {
-    name: "Offers",
-    path: "offer",
-    icon: MdLocalOffer,
-  },
+  // {
+  //   name: "Offers",
+  //   path: "offer",
+  //   icon: MdLocalOffer,
+  // },
   {
     name: "Reviews",
     path: "review",

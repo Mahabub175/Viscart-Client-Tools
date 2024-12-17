@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { formatImagePath } from "./formatImagePath";
 
 const excludedKeys = [];
 
@@ -42,7 +43,14 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
           });
           continue;
         } else if (Array.isArray(value)) {
-          value = value.length > 0 ? value[0] : null;
+          if (key === "images" && Array.isArray(value)) {
+            value = value.map((url, index) => ({
+              url: formatImagePath(url),
+              uid: `__AUTO__${Date.now()}_${index}__`,
+            }));
+          } else {
+            value = value.length > 0 ? value[0] : null;
+          }
         } else if (
           typeof value === "string" &&
           value.startsWith("http") &&
@@ -60,6 +68,7 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
     }
   }
 
+  // Add selected data fields that are not in the default value
   if (Array.isArray(selectedData)) {
     selectedData.forEach((data) => {
       if (!fields.some((field) => field.name === data.name)) {
