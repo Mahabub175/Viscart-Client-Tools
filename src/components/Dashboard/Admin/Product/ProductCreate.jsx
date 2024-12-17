@@ -39,6 +39,12 @@ const ProductCreate = ({ open, setOpen }) => {
         description: content,
       };
 
+      if (values?.images.length > 0) {
+        submittedData.images = values?.images.map((image) => {
+          return image?.originFileObj;
+        });
+      }
+
       if (values?.mainImage) {
         submittedData.mainImage = await compressImage(
           values.mainImage[0].originFileObj

@@ -18,19 +18,15 @@ export const appendToFormData = (
     const formKey = parentKey ? `${parentKey}[${key}]` : key;
 
     if (Array.isArray(value)) {
-      if (typeof value[0] === "object" && value[0] !== null) {
-        value.forEach((item, index) => {
-          if (typeof item === "object" && item !== null) {
-            appendToFormData(item, formData, `${formKey}[${index}]`);
-          } else {
-            formData.append(`${formKey}[${index}]`, item);
-          }
-        });
-      } else {
-        value.forEach((item, index) => {
+      value.forEach((item, index) => {
+        if (item instanceof File) {
           formData.append(`${formKey}[${index}]`, item);
-        });
-      }
+        } else if (typeof item === "object" && item !== null) {
+          appendToFormData(item, formData, `${formKey}[${index}]`);
+        } else {
+          formData.append(`${formKey}[${index}]`, item);
+        }
+      });
     } else if (value instanceof File) {
       formData.append(formKey, value);
     } else if (typeof value === "object" && value !== null) {

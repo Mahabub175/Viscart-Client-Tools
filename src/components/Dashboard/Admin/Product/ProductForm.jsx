@@ -9,6 +9,7 @@ import { RiRefreshLine } from "react-icons/ri";
 import { VariantComponent } from "./VariantComponent";
 import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import CustomVideoUploader from "@/components/Reusable/Form/VideoUploader";
+import MultipleFileUploader from "@/components/Reusable/Form/MultipleFIleUploader";
 
 const ProductForm = ({
   attachment,
@@ -134,8 +135,14 @@ const ProductForm = ({
         required={true}
       />
 
+      <MultipleFileUploader name={"images"} label={"Product Images"} />
+
       <Form.Item label={"Product Description"} name={"description"} required>
         <CustomTextEditor value={content} onChange={setContent} />
+      </Form.Item>
+
+      <Form.Item name={"isFeatured"} valuePropName="checked">
+        <Checkbox className="font-semibold">This Product Is Featured</Checkbox>
       </Form.Item>
 
       <Form.Item name={"isVariant"} valuePropName="checked">
@@ -147,10 +154,6 @@ const ProductForm = ({
       {isVariant && (
         <VariantComponent onCustomSubmit={handleVariantProduct} data={data} />
       )}
-
-      <Form.Item name={"isFeatured"} valuePropName="checked">
-        <Checkbox className="font-semibold">This Product Is Featured</Checkbox>
-      </Form.Item>
     </>
   );
 };
