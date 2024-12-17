@@ -36,7 +36,6 @@ import { FaSearch } from "react-icons/fa";
 
 const Orders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [deliveryModalOpen, setDeliveryModalOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemId, setItemId] = useState(null);
@@ -44,6 +43,7 @@ const Orders = () => {
   const [pageSize, setPageSize] = useState(10);
   const [trackingCode, setTrackingCode] = useState(null);
   const [search, setSearch] = useState("");
+  const [orderStatusModal, setOrderStatusModal] = useState("");
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -225,6 +225,60 @@ const Orders = () => {
       dataIndex: "paymentMethod",
       key: "paymentMethod",
       align: "center",
+    },
+    {
+      title: "Order Status",
+      dataIndex: "orderStatus",
+      key: "orderStatus",
+      align: "center",
+      render: (item, record) => {
+        let color;
+        let text;
+
+        switch (item) {
+          case "pending":
+            color = "orange";
+            text = "Pending";
+            break;
+          case "delivered":
+            color = "green";
+            text = "delivered";
+            break;
+          case "returned":
+            color = "red";
+            text = "Returned";
+            break;
+          case "processing":
+            color = "blue";
+            text = "Processing";
+            break;
+          case "cancelled":
+            color = "red";
+            text = "Cancelled";
+            break;
+          case "received":
+            color = "blue";
+            text = "Received";
+            break;
+          default:
+            color = "gray";
+            text = "Unknown";
+            break;
+        }
+
+        return (
+          <Tag
+            color={color}
+            className="capitalize font-semibold cursor-pointer"
+            onClick={() => {
+              setItemId(record.key);
+              setOrderStatusModal(true);
+            }}
+          >
+            {text}
+          </Tag>
+        );
+      },
     },
     {
       title: "Payment Status",
@@ -409,6 +463,7 @@ const Orders = () => {
     paymentStatus: item?.paymentStatus,
     deliveryStatus: item?.deliveryStatus,
     paymentMethod: item?.paymentMethod,
+    orderStatus: item?.orderStatus,
   }));
 
   const filteredTableData = tableData?.filter((item) => {
@@ -432,8 +487,8 @@ const Orders = () => {
 
       if (res.data.success) {
         toast.success("Order Status Updated", { id: toastId });
-        setDeliveryModalOpen(false);
         setPaymentModalOpen(false);
+        setOrderStatusModal(false);
       } else {
         toast.error("An error occurred while updating the Order Status.", {
           id: toastId,
@@ -493,20 +548,22 @@ const Orders = () => {
         func={deleteOrder}
       />
       <Modal
-        open={deliveryModalOpen}
-        onCancel={() => setDeliveryModalOpen(false)}
+        open={orderStatusModal}
+        onCancel={() => setOrderStatusModal(false)}
         footer={null}
         centered
       >
         <CustomForm onSubmit={handleOrderStatus}>
           <CustomSelect
-            name={"deliveryStatus"}
-            label={"Deliver Status"}
+            name={"orderStatus"}
+            label={"Order Status"}
             options={[
               { label: "Pending", value: "pending" },
-              { label: "Shipped", value: "shipped" },
+              { label: "Received", value: "received" },
               { label: "Delivered", value: "delivered" },
               { label: "Returned", value: "returned" },
+              { label: "Cancelled", value: "cancelled" },
+              { label: "Processing", value: "processing" },
             ]}
           />
           <SubmitButton fullWidth text={"Update"} loading={isLoading} />

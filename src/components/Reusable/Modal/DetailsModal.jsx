@@ -139,8 +139,8 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
                   <Image src={value} alt={key} style={{ maxWidth: 200 }} />
                 </Descriptions.Item>
               ))}
-            {details.images.length > 0 &&
-              details.images.map((image, index) => (
+            {details?.images?.length > 0 &&
+              details?.images?.map((image, index) => (
                 <Descriptions.Item key={index} label={`Images ${index + 1}`}>
                   <Image
                     src={formatImagePath(image)}
