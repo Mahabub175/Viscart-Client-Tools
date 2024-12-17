@@ -3,7 +3,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import AntDProvider from "@/components/Shared/AntDProvider";
-import Script from "next/script";
+// import Script from "next/script";
 
 const openSans = Open_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -15,7 +15,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <head>
+      {/* <head>
         <Script
           strategy="afterInteractive"
           src="https://connect.facebook.net/en_US/fbevents.js"
@@ -42,7 +42,7 @@ const RootLayout = ({ children }) => {
             style={{ display: "none" }}
           />
         </noscript>
-      </head>
+      </head> */}
       <body className={openSans.className}>
         <AntDProvider>
           <AntdRegistry>{children}</AntdRegistry>
