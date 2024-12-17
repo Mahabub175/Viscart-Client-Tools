@@ -110,6 +110,29 @@ const SinglePageCart = ({ params }) => {
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-10">
           <div className="bg-primaryLight p-10 rounded-xl relative">
+            {singleProduct?.images?.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-2 mb-5">
+                {singleProduct?.images?.map((image, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedImage(formatImagePath(image))}
+                    className={`cursor-pointer border-2 rounded-xl ${
+                      selectedImage === formatImagePath(image)
+                        ? "border-primary"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    <Image
+                      src={formatImagePath(image)}
+                      alt={`variant image ${index}`}
+                      height={80}
+                      width={80}
+                      className="object-cover rounded-xl"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             {currentImage ? (
               <Zoom>
                 <Image
