@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGetSingleProductBySlugQuery } from "@/redux/services/product/productApi";
-import { Modal, Rate } from "antd";
+import { Rate } from "antd";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
@@ -28,11 +28,12 @@ const SinglePageCart = ({ params }) => {
     window.open(`https://wa.me/${businessWhatsapp}`, "_blank");
   };
 
-  const [videoModal, setVideoModal] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [currentVariant, setCurrentVariant] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [count, setCount] = useState(1);
+  const [variantMedia, setVariantMedia] = useState([]);
 
   const groupedAttributes = singleProduct?.variants?.reduce((acc, variant) => {
     variant.attributeCombination.forEach((attribute) => {
@@ -61,6 +62,7 @@ const SinglePageCart = ({ params }) => {
   useEffect(() => {
     if (Object.keys(selectedAttributes).length === 0) {
       setCurrentVariant(null);
+      setVariantMedia([]);
     } else {
       const updatedVariant = singleProduct?.variants.find((variant) =>
         Object.entries(selectedAttributes).every(
@@ -73,8 +75,14 @@ const SinglePageCart = ({ params }) => {
         )
       );
       setCurrentVariant(updatedVariant);
+
+      if (updatedVariant?.image) {
+        setVariantMedia([formatImagePath(updatedVariant.image)]);
+      } else {
+        setVariantMedia([]);
+      }
     }
-  }, [selectedAttributes, singleProduct?.variants]);
+  }, [selectedAttributes, singleProduct]);
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice
@@ -88,9 +96,32 @@ const SinglePageCart = ({ params }) => {
     ? singleProduct?.mainImage
     : formatImagePath(singleProduct?.mainImage);
 
-  const variantImages = singleProduct?.variants
-    ?.filter((variant) => variant.image)
-    ?.map((variant) => formatImagePath(variant.image));
+  const allMedia =
+    variantMedia.length > 0
+      ? [...variantMedia, singleProduct?.video ? "video-thumbnail" : null]
+      : [
+          singleProduct?.mainImage || null,
+          ...(Array.isArray(singleProduct?.images)
+            ? singleProduct?.images.map((image) => formatImagePath(image))
+            : []),
+          ...(Array.isArray(singleProduct?.variants)
+            ? singleProduct?.variants
+                ?.filter((variant) => variant.image)
+                ?.map((variant) => formatImagePath(variant.image))
+            : []),
+          singleProduct?.video ? "video-thumbnail" : null,
+        ].filter(Boolean);
+
+  const handleMediaClick = (media) => {
+    if (media === "video-thumbnail") {
+      setIsVideoPlaying(true);
+      setSelectedImage(null);
+      setVariantMedia([]);
+    } else {
+      setIsVideoPlaying(false);
+      setSelectedImage(media);
+    }
+  };
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -109,75 +140,60 @@ const SinglePageCart = ({ params }) => {
     <section className="container mx-auto px-2 lg:px-5 lg:py-10">
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-10">
-          <div className="bg-primaryLight p-10 rounded-xl relative">
-            {singleProduct?.images?.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mb-5">
-                {singleProduct?.images?.map((image, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedImage(formatImagePath(image))}
-                    className={`cursor-pointer border-2 rounded-xl ${
-                      selectedImage === formatImagePath(image)
-                        ? "border-primary"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    <Image
-                      src={formatImagePath(image)}
-                      alt={`variant image ${index}`}
-                      height={80}
-                      width={80}
-                      className="object-cover rounded-xl"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            {currentImage ? (
-              <Zoom>
-                <Image
-                  src={currentImage}
-                  alt="product image"
-                  height={400}
-                  width={400}
-                />
-              </Zoom>
-            ) : (
-              <p>No image available</p>
-            )}
-            {singleProduct?.video && (
-              <div className="absolute top-5 right-5">
-                <button
-                  onClick={() => setVideoModal(true)}
-                  className="bg-primary text-white p-3 rounded-full animate-pulse"
+          <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
+            <div className="relative mx-auto">
+              {isVideoPlaying && singleProduct?.video ? (
+                <video
+                  src={formatImagePath(singleProduct?.video)}
+                  controls
+                  autoPlay
+                  className="mx-auto rounded-xl w-full h-auto"
                 >
-                  <FaPlay className="text-xl" />
-                </button>
-              </div>
-            )}
-            {variantImages?.length > 0 && (
-              <div className="flex justify-center gap-2 mt-5">
-                {variantImages.map((image, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedImage(image)}
-                    className={`cursor-pointer border-2 rounded-xl ${
-                      selectedImage === image
-                        ? "border-primary"
-                        : "border-gray-300"
-                    }`}
-                  >
+                  Your browser does not support the video tag.
+                </video>
+              ) : currentImage ? (
+                <Zoom>
+                  <Image
+                    src={currentImage}
+                    alt="product image"
+                    height={400}
+                    width={400}
+                    className="mx-auto rounded-xl"
+                  />
+                </Zoom>
+              ) : (
+                <p>No image available</p>
+              )}
+            </div>
+
+            <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] border rounded-xl p-4 overflow-y-auto thumbnail">
+              {allMedia?.map((media, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleMediaClick(media)}
+                  className={`cursor-pointer border-2 rounded-xl ${
+                    selectedImage === media ||
+                    (media === "video-thumbnail" && isVideoPlaying)
+                      ? "border-primary"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {media === "video-thumbnail" ? (
+                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
+                      <FaPlay className="text-white text-2xl" />
+                    </div>
+                  ) : (
                     <Image
-                      src={image}
-                      alt={`variant image ${index}`}
+                      src={media}
+                      alt={`media ${index}`}
                       height={80}
                       width={80}
                       className="object-cover rounded-xl"
                     />
-                  </div>
-                ))}
-              </div>
-            )}
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="lg:w-1/2 flex flex-col gap-3">
             <h2 className="text-3xl lg:text-4xl font-bold">
@@ -282,29 +298,6 @@ const SinglePageCart = ({ params }) => {
           dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
         ></div>
       </div>
-
-      <Modal
-        centered
-        open={videoModal}
-        onCancel={() => setVideoModal(false)}
-        footer={null}
-        width={800}
-      >
-        <div className="p-5">
-          <video
-            src={formatImagePath(singleProduct?.video)}
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            autoPlay
-            controls
-            className="mx-auto lg:w-[680px] h-[400px]"
-          >
-            {" "}
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </Modal>
     </section>
   );
 };

@@ -23,6 +23,11 @@
   background: var(--primaryColor) !important;
 }
 
+/* Scoped scrollbar styles */
+.thumbnail::-webkit-scrollbar {
+  width: 3px;
+}
+
 .ant-btn-primary {
   background-color: var(--primaryColor) !important;
 
