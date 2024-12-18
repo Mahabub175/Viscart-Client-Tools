@@ -65,7 +65,23 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
         ...(video && { video: video?.[0]?.originFileObj }),
       };
 
-      if (!values.mainImage[0]?.url) {
+      if (values?.images?.length > 0) {
+        const existingImages = values.images
+          .filter((image) => image.url && image.url.startsWith(base_url_image))
+          .map((image) => image.url.replace(base_url_image, ""));
+
+        const newImages = values.images
+          .filter((image) => image.originFileObj)
+          .map((image) => image.originFileObj);
+
+        submittedData.images = [...existingImages, ...newImages];
+      }
+
+      if (
+        values?.mainImage &&
+        Array.isArray(values.mainImage) &&
+        !values.mainImage[0]?.url
+      ) {
         submittedData.mainImage = await compressImage(
           values.mainImage[0].originFileObj
         );
