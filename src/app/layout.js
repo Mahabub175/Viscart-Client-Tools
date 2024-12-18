@@ -3,7 +3,6 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import AntDProvider from "@/components/Shared/AntDProvider";
-// import Script from "next/script";
 
 const openSans = Open_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -28,14 +27,14 @@ const RootLayout = ({ children }) => {
               window.fbq = window.fbq || function() {
                 (window.fbq.q = window.fbq.q || []).push(arguments);
               };
-              fbq('init', '1110726624027987');
+              fbq('init', '1346532146517663');
               fbq('track', 'PageView');
             `,
           }}
         />
         <noscript>
           <img
-            src="https://www.facebook.com/tr?id=1110726624027987&ev=PageView&noscript=1"
+            src="https://www.facebook.com/tr?id=1346532146517663&ev=PageView&noscript=1"
             alt="Facebook Pixel"
             height="1"
             width="1"
