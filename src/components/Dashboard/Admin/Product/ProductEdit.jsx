@@ -82,7 +82,6 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
 
         submittedData.images = [...existingImages, ...newImages];
       }
-
       if (
         values?.mainImage &&
         Array.isArray(values.mainImage) &&

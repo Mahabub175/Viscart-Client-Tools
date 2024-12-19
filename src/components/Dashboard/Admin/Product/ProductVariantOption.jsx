@@ -69,20 +69,25 @@ const ProductVariantOption = ({
   const isEditing = (record) => record.key === editingKey;
 
   const handleFileUpload = (info, record) => {
-    const newFiles = info.fileList.map((file) => {
-      // Check if file is a valid File or Blob object
-      const isFile =
-        file.originFileObj instanceof Blob ||
-        file.originFileObj instanceof File;
-      const url = isFile ? URL.createObjectURL(file.originFileObj) : file.url;
+    const newFiles = info.fileList
+      .map((file) => {
+        const isFile =
+          file.originFileObj instanceof Blob ||
+          file.originFileObj instanceof File;
+        const url = isFile ? URL.createObjectURL(file.originFileObj) : file.url;
 
-      return {
-        uid: file.uid,
-        originFileObj: file.originFileObj || null, // If it's a URL, there's no originFileObj
-        name: file.name,
-        url: url, // If it's a URL, use the URL directly
-      };
-    });
+        // Only return files that have both originFileObj and url
+        if (file.originFileObj && url) {
+          return {
+            uid: file.uid,
+            originFileObj: file.originFileObj || null,
+            name: file.name,
+            url: url,
+          };
+        }
+        return null;
+      })
+      .filter((file) => file !== null);
 
     setData((prevState) =>
       prevState.map((item) => {
@@ -121,22 +126,28 @@ const ProductVariantOption = ({
     setData((prevState) =>
       prevState.map((item) => {
         if (item.key === record.key) {
-          const fileIndex = item.images.findIndex(
-            (img) => img.name === file.name || img.uid === file.uid
+          const fileIndex = item.images.findIndex((img) => img === file.url);
+
+          if (fileIndex === -1) return item;
+
+          const updatedImages = item?.images?.filter((img) => img !== file.url);
+          const updatedPreviews = item?.previews?.filter(
+            (preview) => preview !== file.url
           );
+
           return {
             ...item,
-            images: item.images.filter((_, index) => index !== fileIndex),
-            previews: item.previews.filter((_, index) => index !== fileIndex),
+            images: updatedImages,
+            previews: updatedPreviews,
           };
         }
+
         return item;
       })
     );
   };
 
   const handlePreview = async (file) => {
-    // If the file has no url or preview, generate one using getBase64
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -205,13 +216,18 @@ const ProductVariantOption = ({
       render: (_, record) => {
         const fileList =
           record.images?.map((file, index) => {
-            const isUrl = typeof file === "string"; // Check if it's a URL (string)
+            const isUrl = typeof file === "string";
+
             return {
               uid: index.toString(),
-              name: isUrl ? `Image-${index}` : file?.name, // For URLs, just name it Image-Index
-              url: isUrl ? file : URL.createObjectURL(file), // If URL, use the URL; else create an Object URL
+              name: isUrl ? `Image-${index}` : file?.name,
+              url: isUrl
+                ? file
+                : file instanceof Blob
+                ? URL.createObjectURL(file)
+                : null,
               status: "done",
-              originFileObj: isUrl ? null : file, // If it's a URL, originFileObj is null
+              originFileObj: isUrl ? null : file,
             };
           }) || [];
 
@@ -237,7 +253,6 @@ const ProductVariantOption = ({
         );
       },
     },
-
     {
       title: "Action",
       dataIndex: "action",
