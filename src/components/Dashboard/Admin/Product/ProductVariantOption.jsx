@@ -1,11 +1,10 @@
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   findNonMatchingItems,
   formatProductData,
 } from "@/utilities/lib/variant";
 import { Button, Form, Input, InputNumber, Table, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 
 const EditableCell = ({
   editing,
@@ -47,6 +46,15 @@ const EditableCell = ({
   );
 };
 
+const getBase64 = (file) =>
+  // eslint-disable-next-line no-undef
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 const ProductVariantOption = ({
   combination,
   onCustomSubmit,
@@ -60,27 +68,87 @@ const ProductVariantOption = ({
 
   const isEditing = (record) => record.key === editingKey;
 
-  const handleFileUpload = (file, record) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const fileData = e.target.result;
-      setData((prevState) =>
-        prevState.map((item) =>
-          item.key === record.key
-            ? {
-                ...item,
-                image: file,
-                fileData,
-                preview: file.type.startsWith("image/")
-                  ? URL.createObjectURL(file)
-                  : null,
-              }
-            : item
-        )
-      );
-    };
-    reader.readAsDataURL(file);
+  const handleFileUpload = (info, record) => {
+    const newFiles = info.fileList.map((file) => {
+      // Check if file is a valid File or Blob object
+      const isFile =
+        file.originFileObj instanceof Blob ||
+        file.originFileObj instanceof File;
+      const url = isFile ? URL.createObjectURL(file.originFileObj) : file.url;
+
+      return {
+        uid: file.uid,
+        originFileObj: file.originFileObj || null, // If it's a URL, there's no originFileObj
+        name: file.name,
+        url: url, // If it's a URL, use the URL directly
+      };
+    });
+
+    setData((prevState) =>
+      prevState.map((item) => {
+        if (item.key === record.key) {
+          const updatedImages = [
+            ...(item.images || []),
+            ...newFiles
+              .filter(
+                (file) => !item.images?.some((img) => img.name === file.name)
+              )
+              .map((file) => file.originFileObj),
+          ];
+
+          const updatedPreviews = [
+            ...(item.previews || []),
+            ...newFiles
+              .filter(
+                (file) =>
+                  !item.previews?.some((preview) => preview === file.url)
+              )
+              .map((file) => file.url),
+          ];
+
+          return {
+            ...item,
+            images: updatedImages,
+            previews: updatedPreviews,
+          };
+        }
+        return item;
+      })
+    );
   };
+
+  const handleRemove = (file, record) => {
+    setData((prevState) =>
+      prevState.map((item) => {
+        if (item.key === record.key) {
+          const fileIndex = item.images.findIndex(
+            (img) => img.name === file.name || img.uid === file.uid
+          );
+          return {
+            ...item,
+            images: item.images.filter((_, index) => index !== fileIndex),
+            previews: item.previews.filter((_, index) => index !== fileIndex),
+          };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handlePreview = async (file) => {
+    // If the file has no url or preview, generate one using getBase64
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    const imgWindow = window.open(file.url || file.preview, "_blank");
+    imgWindow?.document.write(
+      `<img src="${
+        file.url || file.preview
+      }" style="max-width: 100%; margin: auto; display: block; max-height: 100%;" />`
+    );
+  };
+
   const columns = [
     {
       title: "Name",
@@ -132,38 +200,44 @@ const ProductVariantOption = ({
       ),
     },
     {
-      title: "Upload File",
+      title: "Upload Files",
       key: "upload",
-      render: (_, record) => (
-        <div>
-          <Upload
-            beforeUpload={(file) => {
-              handleFileUpload(file, record);
-              return false;
-            }}
-            showUploadList={false}
-          >
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          </Upload>
-          {record.preview || record.image ? (
-            <div style={{ marginTop: "10px" }}>
-              <Image
-                src={record.preview || record.image}
-                alt="preview"
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                width={100}
-                height={100}
-              />
-            </div>
-          ) : null}
-          {!record.preview && record.image && (
-            <p style={{ marginTop: "10px", fontSize: "12px" }}>
-              {record.image.name}
-            </p>
-          )}
-        </div>
-      ),
+      render: (_, record) => {
+        const fileList =
+          record.images?.map((file, index) => {
+            const isUrl = typeof file === "string"; // Check if it's a URL (string)
+            return {
+              uid: index.toString(),
+              name: isUrl ? `Image-${index}` : file?.name, // For URLs, just name it Image-Index
+              url: isUrl ? file : URL.createObjectURL(file), // If URL, use the URL; else create an Object URL
+              status: "done",
+              originFileObj: isUrl ? null : file, // If it's a URL, originFileObj is null
+            };
+          }) || [];
+
+        return (
+          <div>
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={(info) => handleFileUpload(info, record)}
+              onRemove={(file) => handleRemove(file, record)}
+              beforeUpload={() => false}
+              multiple
+            >
+              {fileList.length >= 8 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+              )}
+            </Upload>
+          </div>
+        );
+      },
     },
+
     {
       title: "Action",
       dataIndex: "action",

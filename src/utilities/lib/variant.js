@@ -20,7 +20,7 @@ export function formatProductData(data, sku) {
       id: item._id,
       name,
       sku: skuValue,
-      image: formatImagePath(item?.image),
+      images: item?.images?.map((image) => formatImagePath(image)),
       stock: item.stock || 0,
       sellingPrice: item.sellingPrice,
       buyingPrice: item.buyingPrice,

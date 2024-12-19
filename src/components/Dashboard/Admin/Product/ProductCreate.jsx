@@ -39,7 +39,7 @@ const ProductCreate = ({ open, setOpen }) => {
         description: content,
       };
 
-      if (values?.images.length > 0) {
+      if (values?.images?.length > 0) {
         submittedData.images = values?.images.map((image) => {
           return image?.originFileObj;
         });

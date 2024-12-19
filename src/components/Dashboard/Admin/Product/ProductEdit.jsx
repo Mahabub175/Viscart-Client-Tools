@@ -49,16 +49,22 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
         ...values,
         ...(variantData?.selectedRowData && {
           variants: variantData.selectedRowData.map((variant) => {
-            const { image, ...rest } = variant;
+            const { images, ...rest } = variant;
 
-            const cleanedImage =
-              typeof image === "string" && image.startsWith(base_url_image)
-                ? image.replace(base_url_image, "")
-                : image;
+            const processedImages = images.map((image) => {
+              if (
+                typeof image === "string" &&
+                image.startsWith(base_url_image)
+              ) {
+                return image.replace(base_url_image, "");
+              }
+              return image;
+            });
 
-            return cleanedImage
-              ? { ...rest, image: cleanedImage }
-              : { ...rest };
+            return {
+              ...rest,
+              images: processedImages.filter(Boolean),
+            };
           }),
         }),
         ...(content && { description: content }),
