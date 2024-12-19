@@ -192,7 +192,7 @@ const ProductVariantOption = ({
       title: "Buying Price",
       dataIndex: "buyingPrice",
       key: "buyingPrice",
-      align: "right",
+      align: "center",
       editable: true,
       width: 150,
       render: (buyingPrice) => (
@@ -203,7 +203,7 @@ const ProductVariantOption = ({
       title: "Selling Price",
       dataIndex: "sellingPrice",
       key: "sellingPrice",
-      align: "right",
+      align: "center",
       width: 150,
       editable: true,
       render: (sellingPrice) => (
