@@ -9,7 +9,6 @@ import {
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Rate } from "antd";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlay, FaWhatsapp } from "react-icons/fa";
 import Zoom from "react-medium-image-zoom";
@@ -22,8 +21,6 @@ const SingleProductDetails = ({ params }) => {
   const { data: singleProduct } = useGetSingleProductBySlugQuery(
     params?.productId
   );
-
-  const pathname = usePathname();
 
   const businessWhatsapp = globalData?.results?.businessWhatsapp;
 
@@ -89,8 +86,10 @@ const SingleProductDetails = ({ params }) => {
       );
       setCurrentVariant(updatedVariant);
 
-      if (updatedVariant?.image) {
-        setVariantMedia([formatImagePath(updatedVariant.image)]);
+      if (updatedVariant?.images) {
+        setVariantMedia(
+          updatedVariant.images.map((image) => formatImagePath(image))
+        );
       } else {
         setVariantMedia([]);
       }
@@ -103,24 +102,25 @@ const SingleProductDetails = ({ params }) => {
 
   const currentImage = selectedImage
     ? selectedImage
-    : currentVariant?.image
-    ? formatImagePath(currentVariant.image)
-    : pathname.includes("/products")
-    ? singleProduct?.mainImage
+    : currentVariant?.images && currentVariant.images.length > 0
+    ? formatImagePath(currentVariant.images[0])
     : formatImagePath(singleProduct?.mainImage);
 
   const allMedia =
     variantMedia.length > 0
       ? [...variantMedia, singleProduct?.video ? "video-thumbnail" : null]
       : [
-          singleProduct?.mainImage || null,
+          formatImagePath(singleProduct?.mainImage) || null,
           ...(Array.isArray(singleProduct?.images)
             ? singleProduct?.images.map((image) => formatImagePath(image))
             : []),
           ...(Array.isArray(singleProduct?.variants)
             ? singleProduct?.variants
-                ?.filter((variant) => variant.image)
-                ?.map((variant) => formatImagePath(variant.image))
+                ?.filter((variant) => variant.images)
+                ?.map((variant) =>
+                  variant.images.map((image) => formatImagePath(image))
+                )
+                .flat()
             : []),
           singleProduct?.video ? "video-thumbnail" : null,
         ].filter(Boolean);
@@ -209,7 +209,7 @@ const SingleProductDetails = ({ params }) => {
             </div>
           )}
           <div className="flex items-center mt-4 gap-4 font-bold">
-            <Rate disabled value={singleProduct?.ratings?.average} allowHalf />(
+            <Rate disabled value={singleProduct?.ratings?.average} allowHalf />({" "}
             {singleProduct?.ratings?.count})
           </div>
           <div className="flex items-center gap-4 text-textColor font-bold my-2">
@@ -276,13 +276,7 @@ const SingleProductDetails = ({ params }) => {
               ))}
             </div>
           </>
-        ) : (
-          <div>
-            <p className="text-center">
-              No similar products available right now
-            </p>
-          </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

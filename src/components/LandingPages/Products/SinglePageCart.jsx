@@ -9,7 +9,6 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import Image from "next/image";
 import { FaWhatsapp, FaPlay, FaMinus, FaPlus } from "react-icons/fa";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
-import { usePathname } from "next/navigation";
 import SingleProductCart from "./SingleProductCart";
 import { toast } from "sonner";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
@@ -19,8 +18,6 @@ const SinglePageCart = ({ params }) => {
   const { data: singleProduct } = useGetSingleProductBySlugQuery(
     params?.productId
   );
-
-  const pathname = usePathname();
 
   const businessWhatsapp = globalData?.results?.businessWhatsapp;
 
@@ -76,8 +73,10 @@ const SinglePageCart = ({ params }) => {
       );
       setCurrentVariant(updatedVariant);
 
-      if (updatedVariant?.image) {
-        setVariantMedia([formatImagePath(updatedVariant.image)]);
+      if (updatedVariant?.images) {
+        setVariantMedia(
+          updatedVariant.images.map((image) => formatImagePath(image))
+        );
       } else {
         setVariantMedia([]);
       }
@@ -90,24 +89,25 @@ const SinglePageCart = ({ params }) => {
 
   const currentImage = selectedImage
     ? selectedImage
-    : currentVariant?.image
-    ? formatImagePath(currentVariant.image)
-    : pathname.includes("/products")
-    ? singleProduct?.mainImage
+    : currentVariant?.images && currentVariant.images.length > 0
+    ? formatImagePath(currentVariant.images[0])
     : formatImagePath(singleProduct?.mainImage);
 
   const allMedia =
     variantMedia.length > 0
       ? [...variantMedia, singleProduct?.video ? "video-thumbnail" : null]
       : [
-          singleProduct?.mainImage || null,
+          formatImagePath(singleProduct?.mainImage) || null,
           ...(Array.isArray(singleProduct?.images)
             ? singleProduct?.images.map((image) => formatImagePath(image))
             : []),
           ...(Array.isArray(singleProduct?.variants)
             ? singleProduct?.variants
-                ?.filter((variant) => variant.image)
-                ?.map((variant) => formatImagePath(variant.image))
+                ?.filter((variant) => variant.images)
+                ?.map((variant) =>
+                  variant.images.map((image) => formatImagePath(image))
+                )
+                .flat()
             : []),
           singleProduct?.video ? "video-thumbnail" : null,
         ].filter(Boolean);
