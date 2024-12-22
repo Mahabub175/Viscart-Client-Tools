@@ -92,7 +92,7 @@ const LandingHeader = () => {
   };
 
   const handleResize = () => {
-    setIsMobile(window.innerWidth < 768);
+    setIsMobile(window.innerWidth < 600);
   };
 
   useEffect(() => {
@@ -159,125 +159,127 @@ const LandingHeader = () => {
   };
 
   return (
-    <nav className="mb-5 relative">
-      {isMobile ? (
-        <>
-          {top}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Button
-                type="primary"
-                icon={<MenuOutlined />}
-                onClick={showDrawer}
-                style={{ margin: 16 }}
-              />
-            </div>
-            <Link href={"/"}>
-              <Image
-                src={globalData?.results?.logo}
-                priority
-                alt="logo"
-                width={50}
-                height={50}
-              />
-            </Link>
-            <div className="md:flex items-center gap-4 ">
-              {user?._id ? (
-                <>
-                  {" "}
-                  <div className="flex items-center gap-2">
-                    <Popover
-                      placement="bottomRight"
-                      content={content}
-                      className="cursor-pointer flex items-center gap-1"
-                    >
-                      {data?.profile_image ? (
-                        <Image
-                          src={data?.profile_image}
-                          alt="profile"
-                          height={40}
-                          width={40}
-                          className="rounded-full w-[40px] h-[40px] border-2 border-primary"
-                        />
-                      ) : (
-                        <Avatar
-                          className=""
-                          size={40}
-                          icon={<UserOutlined />}
-                        />
-                      )}
-                      <Tooltip placement="top" title={data?.name || "User"}>
-                        <h2 className="font-semibold">
-                          {data?.name
-                            ? data.name.length > 6
-                              ? data.name.slice(0, 6).concat("...")
-                              : data.name
-                            : "User"}
-                        </h2>
-                      </Tooltip>
-                      <IoMdArrowDropdown />
-                    </Popover>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href={"/sign-in"}
-                    className="flex items-center gap-2 text-primary"
-                  >
-                    <Button type="primary" className="font-bold mr-2">
-                      Sign In
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
-            <Drawer
-              title="Menu"
-              placement="left"
-              onClose={onClose}
-              open={drawerVisible}
-            >
-              <div className="flex items-center justify-between gap-4 mb-10">
-                <Link href={"/"}>
-                  <Image
-                    src={globalData?.results?.logo}
-                    alt="logo"
-                    width={50}
-                    height={50}
-                  />
-                </Link>
-                <button
-                  className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
-                  onClick={onClose}
-                >
-                  <GiCancel className="text-xl text-gray-700" />
-                </button>
-              </div>
-              <div className="relative mb-8">
-                <AutoComplete
-                  options={options}
-                  onSearch={handleSearch}
-                  placeholder="Search for Products..."
-                  size="large"
-                  className="w-full"
+    <header>
+      <nav className="mb-5">
+        {isMobile ? (
+          <>
+            {top}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Button
+                  type="primary"
+                  icon={<MenuOutlined />}
+                  onClick={showDrawer}
+                  style={{ margin: 16 }}
                 />
-                <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-primary text-xl" />
               </div>
+              <Link href={"/"}>
+                <Image
+                  src={globalData?.results?.logo}
+                  priority
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
+              </Link>
+              <div className="md:flex items-center gap-4 ">
+                {user?._id ? (
+                  <>
+                    {" "}
+                    <div className="flex items-center gap-2">
+                      <Popover
+                        placement="bottomRight"
+                        content={content}
+                        className="cursor-pointer flex items-center gap-1"
+                      >
+                        {data?.profile_image ? (
+                          <Image
+                            src={data?.profile_image}
+                            alt="profile"
+                            height={40}
+                            width={40}
+                            className="rounded-full w-[40px] h-[40px] border-2 border-primary"
+                          />
+                        ) : (
+                          <Avatar
+                            className=""
+                            size={40}
+                            icon={<UserOutlined />}
+                          />
+                        )}
+                        <Tooltip placement="top" title={data?.name || "User"}>
+                          <h2 className="font-semibold">
+                            {data?.name
+                              ? data.name.length > 6
+                                ? data.name.slice(0, 6).concat("...")
+                                : data.name
+                              : "User"}
+                          </h2>
+                        </Tooltip>
+                        <IoMdArrowDropdown />
+                      </Popover>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href={"/sign-in"}
+                      className="flex items-center gap-2 text-primary"
+                    >
+                      <Button type="primary" className="font-bold mr-2">
+                        Sign In
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
+              <Drawer
+                title="Menu"
+                placement="left"
+                onClose={onClose}
+                open={drawerVisible}
+              >
+                <div className="flex items-center justify-between gap-4 mb-10">
+                  <Link href={"/"}>
+                    <Image
+                      src={globalData?.results?.logo}
+                      alt="logo"
+                      width={50}
+                      height={50}
+                    />
+                  </Link>
+                  <button
+                    className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+                    onClick={onClose}
+                  >
+                    <GiCancel className="text-xl text-gray-700" />
+                  </button>
+                </div>
+                <div className="relative mb-8">
+                  <AutoComplete
+                    options={options}
+                    onSearch={handleSearch}
+                    placeholder="Search for Products..."
+                    size="large"
+                    className="w-full"
+                  />
+                  <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-primary text-xl" />
+                </div>
 
-              <CategoryNavigation onClose={onClose} />
-            </Drawer>
-            <BottomNavigation />
+                <CategoryNavigation onClose={onClose} />
+              </Drawer>
+              <BottomNavigation />
+            </div>
+          </>
+        ) : (
+          <div>
+            {top}
+            <LandingTopHeader />
+            <CategoryNavigation />
           </div>
-        </>
-      ) : (
-        <div className="!sticky top-0 z-50 bg-white">
-          {top}
-          <LandingTopHeader />
-          <CategoryNavigation />
-        </div>
-      )}
-    </nav>
+        )}
+      </nav>
+    </header>
   );
 };
 
