@@ -4,7 +4,6 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { Rate, Tooltip } from "antd";
 import Image from "next/image";
-import Link from "next/link";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,6 +12,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useRef } from "react";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const FeatureProduct = () => {
   const swiperRef = useRef(null);
@@ -102,7 +102,7 @@ const FeatureProduct = () => {
                               width={100}
                               className="rounded-xl"
                             />
-                            <Link href={`/products/${item?.slug}`}>
+                            <LinkButton href={`/products/${item?.slug}`}>
                               <Tooltip placement="top" title={item?.name}>
                                 <h2 className="text-start font-semibold mt-2 mb-6">
                                   {item?.name.length > 40
@@ -141,7 +141,7 @@ const FeatureProduct = () => {
                                   </p>
                                 )}
                               </div>
-                            </Link>
+                            </LinkButton>
                           </div>
                         ))}
                       </div>

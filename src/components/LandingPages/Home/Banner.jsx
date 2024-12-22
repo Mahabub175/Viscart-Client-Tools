@@ -7,7 +7,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css";
 import { useGetAllSlidersQuery } from "@/redux/services/slider/sliderApi";
-import Link from "next/link";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const Banner = () => {
   const swiperRef = useRef();
@@ -34,7 +34,7 @@ const Banner = () => {
         {activeSliders?.map((item) => {
           return (
             <SwiperSlide key={item?._id}>
-              <Link href={`/products?filter=${item?.category?.name}`}>
+              <LinkButton href={`/products?filter=${item?.category?.name}`}>
                 <Image
                   src={
                     item?.attachment ??
@@ -45,7 +45,7 @@ const Banner = () => {
                   height={450}
                   className="h-[200px] lg:h-fit w-full rounded-xl"
                 />
-              </Link>
+              </LinkButton>
             </SwiperSlide>
           );
         })}

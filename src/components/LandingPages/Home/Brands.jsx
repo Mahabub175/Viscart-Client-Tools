@@ -7,7 +7,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css";
 import { useGetAllBrandsQuery } from "@/redux/services/brand/brandApi";
-import Link from "next/link";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const Brands = () => {
   const swiperRef = useRef();
@@ -47,7 +47,7 @@ const Brands = () => {
           {activeBrands?.map((item) => {
             return (
               <SwiperSlide key={item?._id}>
-                <Link href={`/products?filter=${item?.name}`}>
+                <LinkButton href={`/products?filter=${item?.name}`}>
                   <Image
                     src={
                       item?.attachment ??
@@ -58,7 +58,7 @@ const Brands = () => {
                     height={120}
                     className="border-2 border-transparent hover:border-primary duration-500 w-[240px] h-[120px] rounded-xl mx-auto"
                   />
-                </Link>
+                </LinkButton>
               </SwiperSlide>
             );
           })}

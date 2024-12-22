@@ -11,6 +11,7 @@ import { logout, useCurrentToken } from "@/redux/services/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 
 const AntDProvider = ({ children }) => {
   return (
@@ -108,6 +109,22 @@ const WrappedAntDConfig = ({ children }) => {
     >
       <Toaster closeButton duration={2000} richColors position="top-right" />
       {children}
+      <Script
+        id="crisp-chat"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+              window.$crisp=[];window.CRISP_WEBSITE_ID="a716db7a-951a-48d0-823a-79141fe8b539";
+              (function(){
+                d=document;
+                s=d.createElement("script");
+                s.src="https://client.crisp.chat/l.js";
+                s.async=1;
+                d.getElementsByTagName("head")[0].appendChild(s);
+              })();
+            `,
+        }}
+      />
     </ConfigProvider>
   );
 };

@@ -10,7 +10,6 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
 import { Button } from "antd";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -18,6 +17,7 @@ import { MdDelete } from "react-icons/md";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { toast } from "sonner";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -118,12 +118,12 @@ const CompareList = () => {
                       height={128}
                       className="w-32 h-32 rounded-xl border-2 border-primary"
                     />
-                    <Link
+                    <LinkButton
                       href={`/products/${item?.slug}`}
                       className="text-sm font-normal hover:underline text-center"
                     >
                       {item?.name}
-                    </Link>
+                    </LinkButton>
                     <Button
                       htmlType="submit"
                       size="large"

@@ -5,7 +5,6 @@ import {
   useDeleteWishlistMutation,
   useGetSingleWishlistByUserQuery,
 } from "@/redux/services/wishlist/wishlistApi";
-import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import deleteImage from "@/assets/images/Trash-can.png";
@@ -17,6 +16,7 @@ import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const Wishlist = () => {
   const user = useSelector(useCurrentUser);
@@ -84,12 +84,12 @@ const Wishlist = () => {
                       height={128}
                       className="w-32 h-32 rounded-xl border-2 border-primary"
                     />
-                    <Link
+                    <LinkButton
                       href={`/products/${item?.product?.slug}`}
                       className="text-xl font-normal hover:underline"
                     >
                       {item?.product?.name}
-                    </Link>
+                    </LinkButton>
                   </div>
                   <div className="flex items-center gap-4">
                     {item?.product?.offerPrice ? (

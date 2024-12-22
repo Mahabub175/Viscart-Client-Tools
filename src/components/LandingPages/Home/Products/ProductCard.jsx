@@ -2,10 +2,10 @@ import { Rate, Tooltip } from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
-import Link from "next/link";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { usePathname } from "next/navigation";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -65,7 +65,7 @@ const ProductCard = ({ item }) => {
       </div>
 
       <div className="bg-white p-3 lg:p-5 rounded-b-xl">
-        <Link href={`/products/${item?.slug}`}>
+        <LinkButton href={`/products/${item?.slug}`}>
           <Tooltip placement="top" title={item?.name}>
             <h2 className="text-sm lg:text-base text-start lg:font-semibold -mt-2 lg:mt-2 mb-6">
               {item?.name.length > 40
@@ -94,7 +94,7 @@ const ProductCard = ({ item }) => {
               </p>
             )}
           </div>
-        </Link>
+        </LinkButton>
       </div>
     </div>
   );
