@@ -7,7 +7,6 @@ import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
 import {
   MdAddShoppingCart,
-  // MdLocalOffer,
   MdOutlineAcUnit,
   MdOutlineMergeType,
   MdOutlineReviews,
