@@ -73,7 +73,7 @@ const SliderEdit = ({ open, setOpen, itemId }) => {
       transformDefaultValues(sliderData, [
         {
           name: "category",
-          value: sliderData?.category?.name,
+          value: sliderData?.category?._id,
           errors: "",
         },
       ])

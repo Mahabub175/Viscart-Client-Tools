@@ -1,4 +1,4 @@
-import { Rate, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
@@ -14,21 +14,11 @@ const ProductCard = ({ item }) => {
 
   return (
     <div
-      className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[170px] h-[310px] lg:w-[230px] lg:h-[400px] mx-auto bg-white"
+      className="rounded-xl relative group lg:w-[260px] mx-auto lg:h-[550px] flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {item?.stock > 0 ? (
-        <div className="absolute top-2 right-2 p-2 bg-gradient-to-r from-green-500 to-green-700 text-white rounded font-bold text-xs z-10">
-          In Stock
-        </div>
-      ) : (
-        <div className="absolute top-2 right-2 p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
-          Out Of Stock
-        </div>
-      )}
-
-      <div className="relative overflow-hidden rounded-t-xl">
+      <div className="relative overflow-hidden rounded-xl">
         {item?.video && isHovered ? (
           <video
             src={formatImagePath(item?.video)}
@@ -38,7 +28,7 @@ const ProductCard = ({ item }) => {
             autoPlay
             muted
             controls={false}
-            className="w-full h-[160px] lg:h-[220px] rounded-t-xl object-cover"
+            className="w-full h-[160px] lg:h-[380px] rounded-xl object-cover"
           >
             Your browser does not support the video tag.
           </video>
@@ -50,9 +40,9 @@ const ProductCard = ({ item }) => {
                 : formatImagePath(item?.mainImage)
             }
             alt={item?.name}
-            width={230}
-            height={220}
-            className="rounded-t-xl w-[185px] md:w-full h-[160px] lg:h-[220px] group-hover:scale-110 duration-500"
+            width={300}
+            height={260}
+            className="rounded-xl lg:h-[380px] group-hover:scale-110 duration-500 object-cover"
           />
         )}
 
@@ -64,37 +54,37 @@ const ProductCard = ({ item }) => {
         </div>
       </div>
 
-      <div className="bg-white px-3 lg:p-5 rounded-b-xl">
+      <div className="lg:p-5 text-center lg:text-start">
         <LinkButton href={`/products/${item?.slug}`}>
           <Tooltip placement="top" title={item?.name}>
-            <h2 className="text-base text-start lg:font-semibold lg:mt-2 mb-6">
+            <h2 className="text-sm text-center lg:text-start md:text-base font-semibold mt-2 mb-4">
               {item?.name.length > 40
                 ? item.name.slice(0, 40).concat("...")
                 : item.name}
             </h2>
           </Tooltip>
-
-          <div className="lg:flex items-center mb-2 gap-4 font-bold hidden">
-            <Rate disabled value={item?.ratings?.average} allowHalf />
-          </div>
-
-          <div className="flex items-center gap-2 lg:gap-4 justify-start absolute bottom-5">
+          <div className="flex items-center gap-4 justify-center lg:justify-start">
             {item?.offerPrice && (
-              <p className="text-sm lg:text-base font-bold line-through text-red-500">
+              <p className="text-sm lg:text-base font-bold line-through text-black/60">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
               </p>
             )}
             {item?.offerPrice ? (
-              <p className="text-primary text-sm lg:text-xl font-bold">
+              <p className="text-black text-sm lg:text-xl font-bold">
                 {globalData?.results?.currency + " " + item?.offerPrice}
               </p>
             ) : (
-              <p className="text-primary text-sm lg:text-xl font-bold">
+              <p className="text-black text-sm lg:text-xl font-semibold">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
               </p>
             )}
           </div>
         </LinkButton>
+        {!item?.stock > 0 ? (
+          <div className=" text-red-500">(Out Of Stock)</div>
+        ) : (
+          <div className=" text-green-500">(In Stock)</div>
+        )}
       </div>
     </div>
   );

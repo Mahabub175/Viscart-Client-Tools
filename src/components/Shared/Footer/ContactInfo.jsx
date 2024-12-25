@@ -1,19 +1,10 @@
 import { FaLocationDot, FaPhone, FaClock } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
-import Image from "next/image";
-import logo from "@/assets/images/logo-white.png";
 
 const ContactInfo = ({ globalData }) => {
   return (
-    <div className="col-span-2">
-      <Image
-        src={globalData?.results?.logo ?? logo}
-        priority
-        alt="logo"
-        height={200}
-        width={200}
-        className="-mt-10"
-      />
+    <div className="col-span-2 mt-10 lg:mt-0">
+      <h3 className="text-2xl font-bold mb-6">Contact</h3>
       <div className="flex items-center gap-2 lg:w-5/6 -mt-2">
         <FaLocationDot className="text-primary" />
         <p className="text-textColor">

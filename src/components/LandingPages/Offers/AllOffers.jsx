@@ -11,23 +11,21 @@ const AllOffers = () => {
   );
 
   return (
-    <section>
-      <div className="lg:my-10 py-5 lg:py-10 relative container px-2 lg:px-5 mx-auto bg-white shadow-xl rounded-xl">
-        {filteredProducts?.length ? (
-          <>
-            <div className="capitalize text-center text-2xl lg:text-3xl text-primary font-semibold">
-              {"Offer Products"}
+    <section className="my-container relative border p-2 rounded-xl mt-10">
+      <h2 className="my-10 text-3xl font-bold text-center">Offer Products</h2>
+      {filteredProducts?.length > 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap lg:justify-center lg:items-center gap-5 mt-5">
+          {filteredProducts?.map((product) => (
+            <div key={product?._id}>
+              <ProductCard item={product} />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-5 lg:gap-10 mt-10">
-              {filteredProducts?.map((product) => (
-                <ProductCard key={product?._id} item={product} />
-              ))}
-            </div>
-          </>
-        ) : (
-          <p className="text-center">No offer products available right now.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-xl font-semibold my-10">
+          No offer products found.
+        </div>
+      )}
     </section>
   );
 };

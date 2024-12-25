@@ -83,7 +83,12 @@ const QuickProductView = ({
       <div className="flex flex-col items-center justify-center lg:flex-row gap-10 pt-5">
         <div className="w-full">
           <Image
-            src={currentImage}
+            src={
+              currentImage ??
+              ["/products", "/wishlist", "/compare"].includes(pathname)
+                ? item?.mainImage
+                : formatImagePath(item?.mainImage)
+            }
             alt={item?.name}
             width={300}
             height={300}

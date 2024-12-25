@@ -54,7 +54,7 @@ const BottomNavigation = () => {
       href: "/compare",
       icon: (
         <div className="relative">
-          <FaCodeCompare className="rotate-90 mt-1 mb-1" />
+          <FaCodeCompare className="rotate-90 mt-2.5 mb-0.5" />
           {compareData?.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {compareData.length}
@@ -83,7 +83,7 @@ const BottomNavigation = () => {
     navItems.push({
       name: "Dashboard",
       href: `/${data.role}/dashboard`,
-      icon: <TbLayoutDashboardFilled className="mt-1 mb-1" />,
+      icon: <TbLayoutDashboardFilled className="mt-2 mb-1" />,
     });
   }
 

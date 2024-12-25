@@ -1,6 +1,7 @@
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import FileUploader from "@/components/Reusable/Form/FileUploader";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
+import CustomInput from "@/components/Reusable/Form/CustomInput";
 
 const SliderForm = ({ attachment }) => {
   const { data: categoriesData, isFetching: isCategoryFetching } =
@@ -15,6 +16,8 @@ const SliderForm = ({ attachment }) => {
 
   return (
     <>
+      <CustomInput name="name" label="Banner Text" />
+      <CustomInput name="buttonText" label="Button Text" />
       <CustomSelect
         label="Category"
         name="category"

@@ -1,39 +1,58 @@
 "use client";
 
-import { MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { AutoComplete, Avatar, Button, Drawer, Popover, Tooltip } from "antd";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import LandingTopHeader from "./LandingTopHeader";
-import { GiCancel } from "react-icons/gi";
-import { FaLocationDot } from "react-icons/fa6";
-import CategoryNavigation from "./CategoryNavigation";
-import BottomNavigation from "./BottomNavigation";
-import Image from "next/image";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
-import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
-import { toast } from "sonner";
-import { usePathname } from "next/navigation";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { FaSearch } from "react-icons/fa";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { MenuOutlined, UserOutlined } from "@ant-design/icons";
+import { AutoComplete, Avatar, Button, Drawer, Modal, Popover } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { FaHeart, FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
+import { FaCodeCompare } from "react-icons/fa6";
+import CategoryNavigation from "./CategoryNavigation";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
+import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
+import DrawerCart from "../Product/DrawerCart";
+import { GiCancel } from "react-icons/gi";
+import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
+import { usePathname } from "next/navigation";
+import { toast } from "sonner";
+import { IoMdArrowDropdown } from "react-icons/io";
+import BottomNavigation from "./BottomNavigation";
 
 const LandingHeader = () => {
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
-
-  const { data: globalData } = useGetAllGlobalSettingQuery();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [options, setOptions] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
   const { data } = useGetSingleUserQuery(user?._id);
+  const { data: compareData } = useGetSingleCompareByUserQuery(
+    user?._id ?? deviceId
+  );
+  const { data: wishListData } = useGetSingleWishlistByUserQuery(
+    user?._id ?? deviceId
+  );
+  const { data: cartData, refetch } = useGetSingleCartByUserQuery(
+    user?._id ?? deviceId
+  );
 
-  const { data: products } = useGetAllProductsQuery();
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+  const { data: products } = useGetAllProductsQuery(undefined, {
+    skip: !isSearchOpen,
+  });
 
-  const [options, setOptions] = useState([]);
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -83,38 +102,6 @@ const LandingHeader = () => {
     </div>
   );
 
-  const showDrawer = () => {
-    setDrawerVisible(true);
-  };
-
-  const onClose = () => {
-    setDrawerVisible(false);
-  };
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 600);
-  };
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const top = (
-    <div className="bg-primary">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between px-5 py-2 text-white font-bold">
-        <Link href={"/track-order"} className="flex items-center gap-2">
-          <FaLocationDot />
-          Track Order
-        </Link>
-        <div></div>
-      </div>
-    </div>
-  );
-
   const handleSearch = (value) => {
     if (!value) {
       setOptions([]);
@@ -159,126 +146,171 @@ const LandingHeader = () => {
   };
 
   return (
-    <header>
-      <nav className="mb-5">
-        {isMobile ? (
-          <>
-            {top}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Button
-                  type="primary"
-                  icon={<MenuOutlined />}
-                  onClick={showDrawer}
-                  style={{ margin: 16 }}
-                />
-              </div>
-              <Link href={"/"}>
-                <Image
-                  src={globalData?.results?.logo}
-                  priority
-                  alt="logo"
-                  width={50}
-                  height={50}
-                />
-              </Link>
-              <div className="md:flex items-center gap-4 ">
-                {user?._id ? (
-                  <>
-                    {" "}
-                    <div className="flex items-center gap-2">
-                      <Popover
-                        placement="bottomRight"
-                        content={content}
-                        className="cursor-pointer flex items-center gap-1"
-                      >
-                        {data?.profile_image ? (
-                          <Image
-                            src={data?.profile_image}
-                            alt="profile"
-                            height={40}
-                            width={40}
-                            className="rounded-full w-[40px] h-[40px] border-2 border-primary"
-                          />
-                        ) : (
-                          <Avatar
-                            className=""
-                            size={40}
-                            icon={<UserOutlined />}
-                          />
-                        )}
-                        <Tooltip placement="top" title={data?.name || "User"}>
-                          <h2 className="font-semibold">
-                            {data?.name
-                              ? data.name.length > 6
-                                ? data.name.slice(0, 6).concat("...")
-                                : data.name
-                              : "User"}
-                          </h2>
-                        </Tooltip>
-                        <IoMdArrowDropdown />
-                      </Popover>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href={"/sign-in"}
-                      className="flex items-center gap-2 text-primary"
-                    >
-                      <Button type="primary" className="font-bold mr-2">
-                        Sign In
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-              <Drawer
-                title="Menu"
-                placement="left"
-                onClose={onClose}
-                open={drawerVisible}
-              >
-                <div className="flex items-center justify-between gap-4 mb-10">
-                  <Link href={"/"}>
-                    <Image
-                      src={globalData?.results?.logo}
-                      alt="logo"
-                      width={50}
-                      height={50}
-                    />
-                  </Link>
-                  <button
-                    className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
-                    onClick={onClose}
-                  >
-                    <GiCancel className="text-xl text-gray-700" />
-                  </button>
-                </div>
-                <div className="relative mb-8">
-                  <AutoComplete
-                    options={options}
-                    onSearch={handleSearch}
-                    placeholder="Search for Products..."
-                    size="large"
-                    className="w-full"
-                  />
-                  <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-primary text-xl" />
-                </div>
-
-                <CategoryNavigation onClose={onClose} />
-              </Drawer>
-              <BottomNavigation />
-            </div>
-          </>
-        ) : (
-          <div>
-            {top}
-            <LandingTopHeader />
+    <header className="shadow-md sticky top-0 z-50 bg-white">
+      <nav className="my-container flex justify-between items-center py-2">
+        <Button
+          type="text"
+          className="lg:hidden"
+          icon={<MenuOutlined />}
+          onClick={toggleDrawer}
+        />
+        <div className="flex items-center gap-6">
+          <Link href={"/"}>
+            <Image
+              src={globalData?.results?.logo}
+              alt="logo"
+              width={50}
+              height={20}
+            />
+          </Link>
+          <div className="hidden lg:flex gap-6 items-center">
             <CategoryNavigation />
           </div>
-        )}
+        </div>
+
+        <div className="flex gap-6 items-center text-lg">
+          <FaSearch
+            className="cursor-pointer hover:text-primary duration-300"
+            onClick={() => setIsSearchOpen(true)}
+          />
+          {user?._id ? (
+            <>
+              {" "}
+              <div className="flex items-center gap-2">
+                <Popover
+                  placement="bottomRight"
+                  content={content}
+                  className="cursor-pointer flex items-center gap-1"
+                >
+                  {data?.profile_image ? (
+                    <Image
+                      src={data?.profile_image}
+                      alt="profile"
+                      height={40}
+                      width={40}
+                      className="rounded-full w-[40px] h-[40px] border-2 border-primary"
+                    />
+                  ) : (
+                    <Avatar className="" size={40} icon={<UserOutlined />} />
+                  )}
+                  <h2 className="font-semibold">{data?.name ?? "User"}</h2>
+                  <IoMdArrowDropdown />
+                </Popover>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link href={"/sign-in"}>
+                <FaUser className="cursor-pointer hover:text-primary duration-300" />
+              </Link>
+            </>
+          )}
+
+          <Link href={"/compare"} className="hidden lg:flex">
+            {compareData?.[0]?.product?.length > 0 ? (
+              <span className="relative">
+                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                  {compareData?.[0]?.product?.length}
+                </span>
+                <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
+              </span>
+            ) : (
+              <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
+            )}
+          </Link>
+          <Link href={"/wishlist"} className="hidden lg:flex">
+            {wishListData?.length > 0 ? (
+              <span className="relative">
+                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                  {wishListData?.length}
+                </span>
+                <FaHeart className="cursor-pointer hover:text-primary duration-300" />
+              </span>
+            ) : (
+              <FaHeart className="cursor-pointer hover:text-primary duration-300" />
+            )}
+          </Link>
+          <div className="hidden lg:flex">
+            {cartData?.length > 0 ? (
+              <span className="relative">
+                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                  {cartData?.length}
+                </span>
+                <FaShoppingBag
+                  className="cursor-pointer hover:text-primary duration-300"
+                  onClick={() => setIsCartOpen(true)}
+                />
+              </span>
+            ) : (
+              <FaShoppingBag
+                className="cursor-pointer hover:text-primary duration-300"
+                onClick={() => setIsCartOpen(true)}
+              />
+            )}
+          </div>
+        </div>
       </nav>
+
+      <Drawer
+        placement="left"
+        onClose={() => setIsDrawerOpen(false)}
+        open={isDrawerOpen}
+      >
+        <div className="flex justify-between items-center -mt-5 mb-10">
+          <Link href={"/"}>
+            <Image
+              src={globalData?.results?.logo}
+              alt="logo"
+              width={50}
+              height={50}
+            />
+          </Link>
+          <button
+            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+            onClick={() => setIsDrawerOpen(false)}
+          >
+            <GiCancel className="text-xl text-gray-700" />
+          </button>
+        </div>
+        <CategoryNavigation />
+      </Drawer>
+      <Modal
+        open={isSearchOpen}
+        onCancel={() => setIsSearchOpen(false)}
+        footer={null}
+        destroyOnClose
+      >
+        {" "}
+        <div className="p-5 relative">
+          <AutoComplete
+            options={options}
+            onSearch={handleSearch}
+            placeholder="Search for Products..."
+            size="large"
+            className="w-full"
+          />
+          <FaSearch className="absolute right-8 top-1/2 -translate-y-1/2 text-primary text-xl" />
+        </div>
+      </Modal>
+      <Drawer
+        placement="right"
+        onClose={() => setIsCartOpen(false)}
+        open={isCartOpen}
+        width={450}
+        destroyOnClose
+      >
+        <div className="flex justify-between items-center mb-4 border-b pb-4">
+          <p className="text-2xl font-semibold">Shopping Cart</p>
+          <button
+            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+            onClick={() => setIsCartOpen(false)}
+          >
+            <GiCancel className="text-xl text-gray-700" />
+          </button>
+        </div>
+        <DrawerCart data={cartData} refetch={refetch} />
+      </Drawer>
+      <BottomNavigation setIsCartOpen={setIsCartOpen} />
     </header>
   );
 };

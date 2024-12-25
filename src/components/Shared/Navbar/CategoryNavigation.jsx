@@ -1,31 +1,24 @@
-import { useState } from "react";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import { RightOutlined } from "@ant-design/icons";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import { Menu, Dropdown } from "antd";
 import Link from "next/link";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { usePathname } from "next/navigation";
+import React from "react";
 
-const CategoryNavigation = ({ onClose }) => {
-  const pathname = usePathname();
-
+const CategoryNavigation = () => {
   const { data: categories } = useGetAllCategoriesQuery();
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  const handleDropdownToggle = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
 
   const renderSubcategories = (category) => {
     if (category?.subcategories && category?.subcategories.length > 0) {
       return (
         <Menu>
           {category.subcategories.map((subCategory) => (
-            <Menu.Item key={subCategory?._id} className="hover:text-white">
+            <Menu.Item key={subCategory?._id}>
               <Link href={`/products?filter=${subCategory?.name}`}>
-                <div className="flex items-center justify-between">
-                  {subCategory?.name}
-                </div>
+                {subCategory?.name}
+                {subCategory?.subcategories &&
+                  subCategory?.subcategories.length > 0 && (
+                    <RightOutlined className="ml-2" />
+                  )}
               </Link>
             </Menu.Item>
           ))}
@@ -44,12 +37,9 @@ const CategoryNavigation = ({ onClose }) => {
             title={
               <Link
                 href={`/products?filter=${category?.name}`}
-                className="flex items-center justify-between"
+                className="flex items-center"
               >
-                <div className="flex items-center hover:text-white">
-                  {category?.name}
-                  {category?.subcategories?.length > 0 && <RightOutlined />}
-                </div>
+                {category?.name}
               </Link>
             }
           >
@@ -60,81 +50,37 @@ const CategoryNavigation = ({ onClose }) => {
     );
   };
 
-  const routes = (
-    <div className="flex flex-col text-sm lg:text-base md:flex-row md:items-center gap-10">
-      {[
-        {
-          name: "Home",
-          link: "/",
-        },
-        {
-          name: "Products",
-          link: "/products",
-        },
-        {
-          name: "Offers",
-          link: "/offers",
-        },
-        {
-          name: "Contact Us",
-          link: "/contact",
-        },
-      ].map((item, index) => (
-        <Link
-          key={index}
-          href={item.link}
-          onClick={onClose}
-          className={`flex flex-col lg:items-center font-bold duration-300 ${
-            pathname === item.link
-              ? "text-primary hover:text-primary"
-              : "text-black hover:text-primary"
-          }`}
+  const renderParentCategories = () => {
+    return categories?.results
+      ?.filter((item) => item?.level === "parentCategory")
+      .map((parentCategory) => (
+        <Dropdown
+          key={parentCategory?._id}
+          overlay={renderCategories(parentCategory)}
+          trigger={["hover"]}
         >
-          <span>{item.name}</span>
-        </Link>
-      ))}
-    </div>
-  );
+          <Link
+            href={`/products?filter=${parentCategory?.name}`}
+            className="flex items-center cursor-pointer"
+          >
+            <span>{parentCategory?.name}</span>
+            {parentCategory?.categories &&
+              parentCategory?.categories.length > 0 && (
+                <DownOutlined className="!text-sm" />
+              )}
+          </Link>
+        </Dropdown>
+      ));
+  };
 
   return (
-    <div className="bg-white lg:text-black lg:border-y mb-5">
-      <div className="container lg:px-5 mx-auto flex flex-col md:flex-row gap-10 items-start md:items-center">
-        <Dropdown
-          overlay={
-            <Menu>
-              {categories?.results
-                ?.filter((item) => item?.level === "parentCategory")
-                .map((parentCategory) => (
-                  <Menu.SubMenu
-                    key={parentCategory?._id}
-                    title={
-                      <Link
-                        href={`/products?filter=${parentCategory?.name}`}
-                        className="flex items-center"
-                      >
-                        <div className="flex items-center justify-between">
-                          {parentCategory?.name}
-                        </div>
-                      </Link>
-                    }
-                  >
-                    {renderCategories(parentCategory)}
-                  </Menu.SubMenu>
-                ))}
-            </Menu>
-          }
-          open={dropdownVisible}
-          onOpenChange={setDropdownVisible}
-        >
-          <div
-            onClick={handleDropdownToggle}
-            className="bg-primary py-4 px-8 font-bold flex items-center gap-2 text-white rounded cursor-pointer"
-          >
-            <GiHamburgerMenu />
-            Categories
-          </div>
-        </Dropdown>
-        {routes}
+    <div>
+      <div className="flex flex-col lg:flex-row gap-5 lg:items-center px-5">
+        {renderParentCategories()}
+        <span className="hidden lg:block">|</span>
+        <span className="lg:hidden"></span>
+        <Link href={"/products"}>All Products</Link>
+        <Link href={"/offers"}>Offers</Link>
       </div>
     </div>
   );
