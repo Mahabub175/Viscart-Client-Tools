@@ -14,7 +14,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div
-      className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[170px] h-[330px] lg:w-[230px] lg:h-[400px] mx-auto bg-white"
+      className="border hover:border-primary duration-300 rounded-xl shadow-xl relative group w-[170px] h-[310px] lg:w-[230px] lg:h-[400px] mx-auto bg-white"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -64,10 +64,10 @@ const ProductCard = ({ item }) => {
         </div>
       </div>
 
-      <div className="bg-white p-3 lg:p-5 rounded-b-xl">
+      <div className="bg-white px-3 lg:p-5 rounded-b-xl">
         <LinkButton href={`/products/${item?.slug}`}>
           <Tooltip placement="top" title={item?.name}>
-            <h2 className="text-sm lg:text-base text-start lg:font-semibold -mt-2 lg:mt-2 mb-6">
+            <h2 className="text-base text-start lg:font-semibold lg:mt-2 mb-6">
               {item?.name.length > 40
                 ? item.name.slice(0, 40).concat("...")
                 : item.name}
@@ -85,11 +85,11 @@ const ProductCard = ({ item }) => {
               </p>
             )}
             {item?.offerPrice ? (
-              <p className="text-primary lg:text-xl font-bold">
+              <p className="text-primary text-sm lg:text-xl font-bold">
                 {globalData?.results?.currency + " " + item?.offerPrice}
               </p>
             ) : (
-              <p className="text-primary lg:text-xl font-bold">
+              <p className="text-primary text-sm lg:text-xl font-bold">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
               </p>
             )}

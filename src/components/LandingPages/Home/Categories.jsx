@@ -63,7 +63,6 @@ const Categories = () => {
             }}
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={10}
-            loop={filteredProducts?.length === 5 ? true : false}
             slidesPerView={2}
             breakpoints={{
               480: { slidesPerView: 2 },

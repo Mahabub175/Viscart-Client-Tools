@@ -30,7 +30,6 @@ const Brands = () => {
           }}
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={20}
-          loop={activeBrands?.length === 5 ? true : false}
           slidesPerView={1}
           breakpoints={{
             640: { slidesPerView: 1 },

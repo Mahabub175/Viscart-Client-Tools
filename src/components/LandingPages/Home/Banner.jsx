@@ -25,8 +25,6 @@ const Banner = () => {
           swiperRef.current = swiper;
         }}
         modules={[Navigation, Pagination]}
-        spaceBetween={20}
-        loop={true}
         slidesPerView={1}
         navigation
         className="max-h-[450px] rounded-xl"

@@ -106,7 +106,7 @@ const WrappedAntDConfig = ({ children }) => {
         },
       }}
     >
-      <Toaster closeButton duration={2000} richColors position="top-right" />
+      <Toaster closeButton duration={2000} richColors position="top-center" />
       {children}
     </ConfigProvider>
   );

@@ -11,13 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ProductCard from "./ProductCard";
 
-const tabs = [
-  "Featured",
-  "Best Selling",
-  "Best Offer",
-  "Top Rated",
-  "New Arrivals",
-];
+const tabs = ["Featured", "Best Offer", "Top Rated", "New Arrivals"];
 
 const ProductTab = () => {
   const swiperRef = useRef(null);
@@ -33,12 +27,6 @@ const ProductTab = () => {
     switch (tab) {
       case "Featured":
         return activeProducts?.filter((product) => product?.isFeatured);
-      case "Best Selling":
-        return activeProducts
-          ?.sort(
-            (a, b) => (b?.ratings?.average || 0) - (a?.ratings?.average || 0)
-          )
-          .slice(0, 8);
       case "Best Offer":
         return activeProducts
           ?.filter((product) => product?.offerPrice > 0)
@@ -81,7 +69,6 @@ const ProductTab = () => {
             }}
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={10}
-            loop={filteredProducts(activeTab)?.length ? true : false}
             slidesPerView={2}
             breakpoints={{
               480: { slidesPerView: 2 },
@@ -102,13 +89,13 @@ const ProductTab = () => {
           </Swiper>
           <div className="flex items-center justify-center gap-5">
             <button
-              className="absolute top-[45%] left-5 lg:top-[3%] lg:left-[93%] lg:z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[50%] -left-1 lg:top-[3%] lg:left-[92%] z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slidePrev()}
             >
               <FaAngleLeft className="text-xl" />
             </button>
             <button
-              className="absolute top-[45%] right-5 lg:top-[3%] lg:right-8 lg:z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
+              className="absolute top-[50%] -right-1 lg:top-[3%] lg:right-8 z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
               onClick={() => swiperRef.current?.slideNext()}
             >
               <FaAngleRight className="text-xl" />

@@ -93,7 +93,7 @@ const FeatureProduct = () => {
                         {slideProducts?.map((item) => (
                           <div
                             key={item._id}
-                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-3 h-[150px]"
+                            className="flex items-center gap-5 rounded-xl bg-white shadow-xl p-3 lg:h-[150px]"
                           >
                             <Image
                               src={formatImagePath(item?.mainImage)}
@@ -104,7 +104,7 @@ const FeatureProduct = () => {
                             />
                             <LinkButton href={`/products/${item?.slug}`}>
                               <Tooltip placement="top" title={item?.name}>
-                                <h2 className="text-start font-semibold mt-2 mb-6">
+                                <h2 className="text-start lg:font-semibold mt-2 mb-6">
                                   {item?.name.length > 40
                                     ? item.name.slice(0, 40).concat("...")
                                     : item.name}
@@ -128,13 +128,13 @@ const FeatureProduct = () => {
                                   </p>
                                 )}
                                 {item?.offerPrice ? (
-                                  <p className="text-primary lg:text-2xl font-bold">
+                                  <p className="text-primary text-sm  lg:text-2xl font-bold">
                                     {globalData?.results?.currency +
                                       " " +
                                       item?.offerPrice}
                                   </p>
                                 ) : (
-                                  <p className="text-primary lg:text-2xl font-bold">
+                                  <p className="text-primary text-sm  lg:text-2xl font-bold">
                                     {globalData?.results?.currency +
                                       " " +
                                       item?.sellingPrice}

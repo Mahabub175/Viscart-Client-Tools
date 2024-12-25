@@ -165,7 +165,7 @@ const SingleProductDetails = ({ params }) => {
             )}
           </div>
 
-          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] border rounded-xl p-4 overflow-y-auto thumbnail">
+          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
             {allMedia?.map((media, index) => (
               <div
                 key={index}
@@ -182,13 +182,17 @@ const SingleProductDetails = ({ params }) => {
                     <FaPlay className="text-white text-2xl" />
                   </div>
                 ) : (
-                  <Image
-                    src={media}
-                    alt={`media ${index}`}
-                    height={80}
-                    width={80}
-                    className="object-cover rounded-xl"
-                  />
+                  <>
+                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
+                      <Image
+                        src={media}
+                        alt={`media ${index}`}
+                        height={80}
+                        width={80}
+                        className="object-cover rounded-xl"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             ))}
