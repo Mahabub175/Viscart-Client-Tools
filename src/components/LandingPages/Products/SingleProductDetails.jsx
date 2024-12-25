@@ -137,7 +137,7 @@ const SingleProductDetails = ({ params }) => {
   };
 
   return (
-    <section className="container mx-auto px-2 lg:px-5 lg:py-10">
+    <section className="container mx-auto px-2 lg:px-5 py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
           <div className="relative mx-auto">

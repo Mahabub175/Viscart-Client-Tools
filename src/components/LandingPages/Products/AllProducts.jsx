@@ -117,7 +117,7 @@ const AllProducts = ({ searchParams }) => {
   };
 
   return (
-    <section className="my-container py-10 relative -mt-10 lg:-mt-0">
+    <section className="my-container py-10 relative -mt-5 lg:mt-0">
       <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
         <p className="text-xs md:text-base">
           <span className="font-semibold text-lg">
