@@ -63,11 +63,11 @@ const QuickProductView = ({
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice
-    : item?.sellingPrice;
+    : item?.offerPrice ?? item?.sellingPrice;
 
   const currentImage = currentVariant?.images?.length
     ? formatImagePath(currentVariant.images[0])
-    : ["products", "wishlist", "compare"].includes(pathname)
+    : ["/products", "/wishlist", "/compare"].includes(pathname)
     ? item?.mainImage
     : formatImagePath(item?.mainImage);
 
