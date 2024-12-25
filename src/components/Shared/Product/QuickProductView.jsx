@@ -65,9 +65,9 @@ const QuickProductView = ({
     ? currentVariant?.sellingPrice
     : item?.sellingPrice;
 
-  const currentImage = currentVariant?.images
-    ? formatImagePath(currentVariant?.images?.[0])
-    : ["/products", "/wishlist", "/compare"].includes(pathname)
+  const currentImage = currentVariant?.images?.length
+    ? formatImagePath(currentVariant.images[0])
+    : ["products", "wishlist", "compare"].includes(pathname)
     ? item?.mainImage
     : formatImagePath(item?.mainImage);
 
@@ -83,12 +83,7 @@ const QuickProductView = ({
       <div className="flex flex-col items-center justify-center lg:flex-row gap-10 pt-5">
         <div className="w-full">
           <Image
-            src={
-              currentImage ??
-              ["/products", "/wishlist", "/compare"].includes(pathname)
-                ? item?.mainImage
-                : formatImagePath(item?.mainImage)
-            }
+            src={currentImage}
             alt={item?.name}
             width={300}
             height={300}

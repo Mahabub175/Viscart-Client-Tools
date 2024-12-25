@@ -139,7 +139,7 @@ const SingleProductDetails = ({ params }) => {
   return (
     <section className="container mx-auto px-2 lg:px-5 py-10">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
-        <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
+        <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
           <div className="relative mx-auto">
             {isVideoPlaying && singleProduct?.video ? (
               <video
@@ -165,7 +165,7 @@ const SingleProductDetails = ({ params }) => {
             )}
           </div>
 
-          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
+          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto border rounded-xl p-4 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto thumbnail">
             {allMedia?.map((media, index) => (
               <div
                 key={index}
@@ -183,7 +183,7 @@ const SingleProductDetails = ({ params }) => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
+                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20 mx-auto">
                       <Image
                         src={media}
                         alt={`media ${index}`}

@@ -3,7 +3,7 @@ import { MdEmail } from "react-icons/md";
 
 const ContactInfo = ({ globalData }) => {
   return (
-    <div className="col-span-2 mt-10 lg:mt-0">
+    <div>
       <h3 className="text-2xl font-bold mb-6">Contact</h3>
       <div className="flex items-center gap-2 lg:w-5/6 -mt-2">
         <FaLocationDot className="text-primary" />
