@@ -14,7 +14,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div
-      className="rounded-xl relative group lg:w-[220px] mx-auto lg:h-[550px] flex flex-col"
+      className="rounded-xl relative group lg:w-[220px] mx-auto lg:h-[380px] flex flex-col border border-gray-200 p-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -28,7 +28,7 @@ const ProductCard = ({ item }) => {
             autoPlay
             muted
             controls={false}
-            className="w-full h-[160px] lg:h-[380px] rounded-xl object-cover"
+            className="w-full h-[160px] lg:h-[220px] rounded-xl object-cover"
           >
             Your browser does not support the video tag.
           </video>
@@ -42,7 +42,7 @@ const ProductCard = ({ item }) => {
             alt={item?.name}
             width={220}
             height={260}
-            className="rounded-xl lg:h-[380px] group-hover:scale-110 duration-500"
+            className="rounded-xl lg:h-[220px] group-hover:scale-110 duration-500"
           />
         )}
 
@@ -54,27 +54,27 @@ const ProductCard = ({ item }) => {
         </div>
       </div>
 
-      <div className="lg:p-5 text-center lg:text-start">
+      <div className="text-center">
         <LinkButton href={`/products/${item?.slug}`}>
           <Tooltip placement="top" title={item?.name}>
-            <h2 className="text-sm text-center lg:text-start md:text-base font-semibold mt-2 mb-4">
+            <h2 className="text-sm text-center md:text-base mt-3 hover:text-gray-500 duration-300 mb-4">
               {item?.name.length > 40
                 ? item.name.slice(0, 40).concat("...")
                 : item.name}
             </h2>
           </Tooltip>
-          <div className="flex items-center gap-4 justify-center lg:justify-start">
+          <div className="flex items-center gap-4 justify-center mb-2">
             {item?.offerPrice && (
-              <p className="text-sm lg:text-base font-bold line-through text-black/60">
+              <p className="text-sm lg:text-base line-through text-black/60">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
               </p>
             )}
             {item?.offerPrice ? (
-              <p className="text-black text-sm lg:text-xl font-bold">
+              <p className="text-black text-sm lg:text-base">
                 {globalData?.results?.currency + " " + item?.offerPrice}
               </p>
             ) : (
-              <p className="text-black text-sm lg:text-xl font-semibold">
+              <p className="text-black text-sm lg:text-base">
                 {globalData?.results?.currency + " " + item?.sellingPrice}
               </p>
             )}
