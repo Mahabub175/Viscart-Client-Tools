@@ -69,7 +69,7 @@ const DrawerCart = ({ data }) => {
   return (
     <div>
       {data?.length ? (
-        <div className="max-h-[800px] overflow-y-auto">
+        <div className="pb-20 lg:pb-32 max-w-[400px] lg:max-w-full">
           {data.map((item) => (
             <div
               key={item._id}
@@ -99,9 +99,14 @@ const DrawerCart = ({ data }) => {
                     className="text-base font-normal hover:underline hover:text-black"
                   >
                     <Tooltip placement="top" title={item.productName}>
-                      <h2 className="text-md font-semibold mt-2">
-                        {item.productName.length > 30
-                          ? item.productName.slice(0, 30) + "..."
+                      <h2 className="text-md font-semibold mt-2 lg:hidden">
+                        {item.productName.length > 10
+                          ? item.productName.slice(0, 10) + "..."
+                          : item.productName}
+                      </h2>
+                      <h2 className="text-md font-semibold mt-2 lg:block hidden">
+                        {item.productName.length > 40
+                          ? item.productName.slice(0, 40) + "..."
                           : item.productName}
                       </h2>
                     </Tooltip>
@@ -156,9 +161,9 @@ const DrawerCart = ({ data }) => {
       {data?.length > 0 && (
         <Link
           href="/cart"
-          className="hover:text-white text-white text-xl absolute bottom-10 left-10"
+          className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-10 w-5/6 mx-auto"
         >
-          <div className="flex items-center justify-between bg-primary gap-10 px-5 py-4 rounded-xl">
+          <div className="flex items-center justify-between bg-primary gap-5 px-5 py-4 rounded-xl">
             <p>Proceed To Checkout</p>
             <p className="font-bold">
               {globalData?.results?.currency} {subtotal?.toFixed(2)}
