@@ -177,7 +177,7 @@ const LandingHeader = () => {
           {globalData?.results?.businessWhatsapp}
         </span>
       </div>
-      <nav className="my-container px-2 lg:px-0">
+      <nav className="my-container px-2">
         <div className="flex justify-between items-center lg:py-2">
           <Button
             type="text"

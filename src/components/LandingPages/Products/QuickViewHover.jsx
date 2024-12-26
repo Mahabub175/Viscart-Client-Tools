@@ -76,7 +76,7 @@ const QuickViewHover = ({ item }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 lg:gap-4 px-3 py-2 lg:py-4 mt-2">
+    <div className="flex items-center justify-center gap-2 lg:gap-4 px-3 py-2 lg:py-4">
       <Tooltip placement="top" title={"Quick View"}>
         <div
           className="text-sm lg:text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"

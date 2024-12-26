@@ -6,15 +6,21 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { usePathname } from "next/navigation";
 import LinkButton from "@/components/Shared/LinkButton";
+import QuickProductView from "@/components/Shared/Product/QuickProductView";
 
 const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <div
-      className="rounded-xl relative group lg:w-[220px] mx-auto h-[350px] lg:h-[380px] flex flex-col border border-gray-200 p-2"
+      className="rounded-xl relative group lg:w-[220px] mx-auto h-[400px] flex flex-col border border-gray-200 p-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -28,7 +34,7 @@ const ProductCard = ({ item }) => {
             autoPlay
             muted
             controls={false}
-            className="w-full h-[160px] lg:h-[220px] rounded-xl object-cover"
+            className="w-full h-[160px] lg:h-[200px] rounded-xl object-cover"
           >
             Your browser does not support the video tag.
           </video>
@@ -40,9 +46,9 @@ const ProductCard = ({ item }) => {
                 : formatImagePath(item?.mainImage)
             }
             alt={item?.name}
-            width={220}
+            width={200}
             height={260}
-            className="rounded-xl lg:h-[220px] group-hover:scale-110 duration-500"
+            className="rounded-xl h-[180px] lg:h-[200px] group-hover:scale-110 duration-500"
           />
         )}
 
@@ -57,7 +63,7 @@ const ProductCard = ({ item }) => {
       <div className="text-center">
         <LinkButton href={`/products/${item?.slug}`}>
           <Tooltip placement="top" title={item?.name}>
-            <h2 className="text-sm text-center md:text-base mt-3 hover:text-gray-500 duration-300 mb-4">
+            <h2 className="text-sm text-center md:text-base lg:mt-3 hover:text-gray-500 duration-300 mb-4">
               {item?.name.length > 40
                 ? item.name.slice(0, 40).concat("...")
                 : item.name}
@@ -85,7 +91,20 @@ const ProductCard = ({ item }) => {
         ) : (
           <div className=" text-green-500">(In Stock)</div>
         )}
+        <div className="absolute bottom-2 left-0 right-0">
+          <button
+            className="bg-primary text-white px-5 py-2 mt-4 rounded-lg hover:scale-105 duration-300"
+            onClick={() => setIsModalVisible(true)}
+          >
+            Quick Add
+          </button>
+        </div>
       </div>
+      <QuickProductView
+        item={item}
+        isModalVisible={isModalVisible}
+        handleModalClose={handleModalClose}
+      />
     </div>
   );
 };
