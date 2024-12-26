@@ -137,7 +137,7 @@ const SingleProductDetails = ({ params }) => {
   };
 
   return (
-    <section className="container mx-auto px-2 lg:px-5 py-10">
+    <section className="container mx-auto px-2 lg:px-5 py-10 -mt-5 lg:-mt-0">
       <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
         <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
           <div className="relative mx-auto">
@@ -272,7 +272,7 @@ const SingleProductDetails = ({ params }) => {
         {activeProducts && activeProducts.length > 0 ? (
           <>
             <h2 className="text-xl lg:text-3xl font-bold mb-5 border-b pb-2 px-2">
-              Similar Products
+              You may also like
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-5 lg:gap-5">
               {activeProducts.map((product) => (

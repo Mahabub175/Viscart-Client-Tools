@@ -167,12 +167,18 @@ const LandingHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full bg-white shadow-md transition-transform duration-300 z-50 px-2 lg:px-0 ${
+      className={`fixed top-0 left-0 w-full bg-white shadow-md transition-transform duration-300 z-50 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <nav className="my-container">
-        <div className="flex justify-between items-center py-2">
+      <div className="bg-primary py-2 text-center text-white px-2 text-sm md:text-base">
+        To order any product, please call or whatsapp us at{" "}
+        <span className="font-semibold">
+          {globalData?.results?.businessWhatsapp}
+        </span>
+      </div>
+      <nav className="my-container px-2 lg:px-0">
+        <div className="flex justify-between items-center lg:py-2">
           <Button
             type="text"
             className="lg:hidden"
@@ -185,7 +191,7 @@ const LandingHeader = () => {
               onClick={() => setIsSearchOpen(true)}
             />
           </div>
-          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3 lg:ml-0">
+          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3">
             <Image
               src={globalData?.results?.logo}
               alt="logo"

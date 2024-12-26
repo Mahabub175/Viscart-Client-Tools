@@ -11,7 +11,7 @@ const AllOffers = () => {
   );
 
   return (
-    <section className="my-container relative border p-2 rounded-xl mt-28 lg:mt-44">
+    <section className="my-container relative border p-2 rounded-xl mt-32 lg:mt-44">
       <h2 className="my-5 lg:my-10 text-3xl font-bold text-center">
         Offer Products
       </h2>

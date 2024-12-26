@@ -9,7 +9,7 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 const ContactDetails = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   return (
-    <section className="my-container lg:my-20">
+    <section className="my-container pt-10 lg:pt-24">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:gap-10">
         <div>
           <div className="bg-white p-5 rounded-xl shadow-xl mb-10">
@@ -53,7 +53,9 @@ const ContactDetails = () => {
           </div>
         </div>
         <div className="col-span-2 bg-white p-5 rounded-xl shadow-xl">
-          <h2 className="text-3xl font-medium mb-4">Tell Us Your Message :</h2>
+          <h2 className="text-2xl lg:text-3xl font-medium mb-4">
+            Tell Us Your Message :
+          </h2>
           <ContactForm />
         </div>
       </div>

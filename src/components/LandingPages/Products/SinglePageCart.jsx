@@ -137,7 +137,7 @@ const SinglePageCart = ({ params }) => {
 
   const isOutOfStock = singleProduct?.stock <= 0 || currentVariant?.stock <= 0;
   return (
-    <section className="container mx-auto px-2 lg:px-5 py-10">
+    <section className="container mx-auto px-2 lg:px-5 py-10 -mt-5 lg:-mt-0">
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-10">
           <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
