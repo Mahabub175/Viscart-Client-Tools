@@ -1,13 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { AutoComplete, Avatar, Button, Drawer, Modal, Popover } from "antd";
+import { AutoComplete, Avatar, Button, Drawer, Popover } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaHeart, FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
@@ -23,7 +24,6 @@ import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { IoMdArrowDropdown } from "react-icons/io";
-import BottomNavigation from "./BottomNavigation";
 
 const LandingHeader = () => {
   const pathname = usePathname();
@@ -66,6 +66,26 @@ const LandingHeader = () => {
     Wishlist: `/${data?.role}/orders/wishlist`,
     Cart: `/${data?.role}/orders/cart`,
   };
+
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY) {
+      setShowNavbar(false);
+    } else {
+      setShowNavbar(true);
+    }
+    setLastScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   const content = (
     <div>
@@ -146,111 +166,120 @@ const LandingHeader = () => {
   };
 
   return (
-    <header className="shadow-md sticky top-0 z-50 bg-white">
-      <nav className="my-container flex justify-between items-center py-2">
-        <Button
-          type="text"
-          className="lg:hidden"
-          icon={<MenuOutlined />}
-          onClick={toggleDrawer}
-        />
-        <div className="flex items-center gap-6">
-          <Link href={"/"}>
+    <header
+      className={`fixed top-0 left-0 w-full bg-white shadow-md transition-transform duration-300 z-50 px-2 lg:px-0 ${
+        showNavbar ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      <nav className="my-container">
+        <div className="flex justify-between items-center py-2">
+          <Button
+            type="text"
+            className="lg:hidden"
+            icon={<MenuOutlined />}
+            onClick={toggleDrawer}
+          />
+          <div>
+            <FaSearch
+              className="cursor-pointer hover:text-primary duration-300 hidden lg:block text-xl"
+              onClick={() => setIsSearchOpen(true)}
+            />
+          </div>
+          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3 lg:ml-0">
             <Image
               src={globalData?.results?.logo}
               alt="logo"
-              width={50}
-              height={20}
+              width={70}
+              height={70}
             />
           </Link>
-          <div className="hidden lg:flex gap-6 items-center">
-            <CategoryNavigation />
-          </div>
-        </div>
 
-        <div className="flex gap-6 items-center text-lg">
-          <FaSearch
-            className="cursor-pointer hover:text-primary duration-300"
-            onClick={() => setIsSearchOpen(true)}
-          />
-          {user?._id ? (
-            <>
-              {" "}
-              <div className="flex items-center gap-2">
-                <Popover
-                  placement="bottomRight"
-                  content={content}
-                  className="cursor-pointer flex items-center gap-1"
-                >
-                  {data?.profile_image ? (
-                    <Image
-                      src={data?.profile_image}
-                      alt="profile"
-                      height={40}
-                      width={40}
-                      className="rounded-full w-[40px] h-[40px] border-2 border-primary"
-                    />
-                  ) : (
-                    <Avatar className="" size={40} icon={<UserOutlined />} />
-                  )}
-                  <h2 className="font-semibold">{data?.name ?? "User"}</h2>
-                  <IoMdArrowDropdown />
-                </Popover>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link href={"/sign-in"}>
-                <FaUser className="cursor-pointer hover:text-primary duration-300" />
-              </Link>
-            </>
-          )}
+          <div className="flex gap-6 items-center text-lg">
+            <FaSearch
+              className="cursor-pointer hover:text-primary duration-300 lg:hidden"
+              onClick={() => setIsSearchOpen(true)}
+            />
+            {user?._id ? (
+              <>
+                {" "}
+                <div className="flex items-center gap-2">
+                  <Popover
+                    placement="bottomRight"
+                    content={content}
+                    className="cursor-pointer flex items-center gap-1"
+                  >
+                    {data?.profile_image ? (
+                      <Image
+                        src={data?.profile_image}
+                        alt="profile"
+                        height={40}
+                        width={40}
+                        className="rounded-full w-[40px] h-[40px] border-2 border-primary"
+                      />
+                    ) : (
+                      <Avatar className="" size={40} icon={<UserOutlined />} />
+                    )}
+                    <h2 className="font-semibold">{data?.name ?? "User"}</h2>
+                    <IoMdArrowDropdown />
+                  </Popover>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link href={"/sign-in"}>
+                  <FaUser className="cursor-pointer hover:text-primary duration-300" />
+                </Link>
+              </>
+            )}
 
-          <Link href={"/compare"} className="hidden lg:flex">
-            {compareData?.[0]?.product?.length > 0 ? (
-              <span className="relative">
-                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                  {compareData?.[0]?.product?.length}
+            <Link href={"/compare"} className="hidden lg:flex">
+              {compareData?.[0]?.product?.length > 0 ? (
+                <span className="relative">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {compareData?.[0]?.product?.length}
+                  </span>
+                  <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
                 </span>
+              ) : (
                 <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
-              </span>
-            ) : (
-              <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
-            )}
-          </Link>
-          <Link href={"/wishlist"} className="hidden lg:flex">
-            {wishListData?.length > 0 ? (
-              <span className="relative">
-                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                  {wishListData?.length}
+              )}
+            </Link>
+            <Link href={"/wishlist"} className="hidden lg:flex">
+              {wishListData?.length > 0 ? (
+                <span className="relative">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {wishListData?.length}
+                  </span>
+                  <FaHeart className="cursor-pointer hover:text-primary duration-300" />
                 </span>
+              ) : (
                 <FaHeart className="cursor-pointer hover:text-primary duration-300" />
-              </span>
-            ) : (
-              <FaHeart className="cursor-pointer hover:text-primary duration-300" />
-            )}
-          </Link>
-          <div className="hidden lg:flex">
-            {cartData?.length > 0 ? (
-              <span className="relative">
-                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                  {cartData?.length}
+              )}
+            </Link>
+            <div className="hidden lg:flex">
+              {cartData?.length > 0 ? (
+                <span className="relative">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {cartData?.length}
+                  </span>
+                  <FaShoppingBag
+                    className="cursor-pointer hover:text-primary duration-300"
+                    onClick={() => setIsCartOpen(true)}
+                  />
                 </span>
+              ) : (
                 <FaShoppingBag
                   className="cursor-pointer hover:text-primary duration-300"
                   onClick={() => setIsCartOpen(true)}
                 />
-              </span>
-            ) : (
-              <FaShoppingBag
-                className="cursor-pointer hover:text-primary duration-300"
-                onClick={() => setIsCartOpen(true)}
-              />
-            )}
+              )}
+            </div>
           </div>
         </div>
       </nav>
-
+      <div className="hidden lg:flex gap-6 items-center bg-grey">
+        <CategoryNavigation />
+      </div>
       <Drawer
         placement="left"
         onClose={() => setIsDrawerOpen(false)}
@@ -274,29 +303,68 @@ const LandingHeader = () => {
         </div>
         <CategoryNavigation />
       </Drawer>
-      <Modal
+      <Drawer
         open={isSearchOpen}
         onCancel={() => setIsSearchOpen(false)}
         footer={null}
+        keyboard={true}
         destroyOnClose
+        placement="top"
       >
-        {" "}
-        <div className="p-5 relative">
-          <AutoComplete
-            options={options}
-            onSearch={handleSearch}
-            placeholder="Search for Products..."
-            size="large"
-            className="w-full"
-          />
-          <FaSearch className="absolute right-8 top-1/2 -translate-y-1/2 text-primary text-xl" />
+        <div className="flex justify-between items-center -mt-2">
+          <div></div>
+          <button
+            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+            onClick={() => setIsSearchOpen(false)}
+          >
+            <GiCancel className="text-xl text-gray-700" />
+          </button>
         </div>
-      </Modal>
+        <div className="p-5 flex items-center justify-between gap-10">
+          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3 lg:ml-0">
+            <Image
+              src={globalData?.results?.logo}
+              alt="logo"
+              width={80}
+              height={80}
+            />
+          </Link>
+          <div className="relative w-full">
+            <AutoComplete
+              options={options}
+              onSearch={handleSearch}
+              placeholder="Search for Products..."
+              size="large"
+              className="w-full"
+            />
+            <FaSearch className="absolute right-8 top-1/2 -translate-y-1/2 text-primary text-xl" />
+          </div>
+          <div className="hidden lg:flex">
+            {cartData?.length > 0 ? (
+              <span className="relative">
+                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                  {cartData?.length}
+                </span>
+                <FaShoppingBag
+                  className="cursor-pointer hover:text-primary duration-300 text-2xl"
+                  onClick={() => setIsCartOpen(true)}
+                />
+              </span>
+            ) : (
+              <FaShoppingBag
+                className="cursor-pointer hover:text-primary duration-300 text-2xl"
+                onClick={() => setIsCartOpen(true)}
+              />
+            )}
+          </div>
+        </div>
+      </Drawer>
       <Drawer
         placement="right"
         onClose={() => setIsCartOpen(false)}
         open={isCartOpen}
         width={450}
+        keyboard={true}
         destroyOnClose
       >
         <div className="flex justify-between items-center mb-4 border-b pb-4">
@@ -310,7 +378,6 @@ const LandingHeader = () => {
         </div>
         <DrawerCart data={cartData} refetch={refetch} />
       </Drawer>
-      <BottomNavigation setIsCartOpen={setIsCartOpen} />
     </header>
   );
 };

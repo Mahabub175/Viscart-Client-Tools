@@ -74,13 +74,13 @@ const CategoryNavigation = () => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col lg:flex-row gap-5 lg:items-center px-5">
-        {renderParentCategories()}
+    <div className="my-container">
+      <div className="flex flex-col lg:flex-row gap-5 lg:items-center py-5">
+        <Link href={"/offers"}>Offers</Link>
+        <Link href={"/products"}>All Products</Link>
         <span className="hidden lg:block">|</span>
         <span className="lg:hidden"></span>
-        <Link href={"/products"}>All Products</Link>
-        <Link href={"/offers"}>Offers</Link>
+        {renderParentCategories()}
       </div>
     </div>
   );
