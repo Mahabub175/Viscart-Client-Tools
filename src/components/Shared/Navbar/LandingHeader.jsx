@@ -145,14 +145,14 @@ const LandingHeader = () => {
             <Image
               src={formatImagePath(product?.mainImage)}
               alt="product"
-              width={30}
-              height={30}
-              className="object-cover"
+              width={80}
+              height={50}
+              className="object-cover rounded-xl"
             />
             <div className="ml-2">
               <p className="text-lg font-medium">{product?.name}</p>
               <p>
-                Price: $
+                Price: {globalData?.results?.currency}{" "}
                 {product?.offerPrice
                   ? product?.offerPrice
                   : product?.sellingPrice}
@@ -310,6 +310,7 @@ const LandingHeader = () => {
         keyboard={true}
         destroyOnClose
         placement="top"
+        height={250}
       >
         <div className="flex justify-between items-center -mt-2">
           <div></div>
@@ -321,7 +322,7 @@ const LandingHeader = () => {
           </button>
         </div>
         <div className="p-5 flex items-center justify-between gap-10">
-          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3 lg:ml-0">
+          <Link href={"/"} className="hidden lg:flex">
             <Image
               src={globalData?.results?.logo}
               alt="logo"

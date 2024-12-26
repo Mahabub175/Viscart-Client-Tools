@@ -14,7 +14,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div
-      className="rounded-xl relative group lg:w-[220px] mx-auto lg:h-[380px] flex flex-col border border-gray-200 p-2"
+      className="rounded-xl relative group lg:w-[220px] mx-auto h-[350px] lg:h-[380px] flex flex-col border border-gray-200 p-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
