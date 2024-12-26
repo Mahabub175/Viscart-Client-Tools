@@ -34,7 +34,7 @@ const NewsletterBanner = () => {
     <section className="mt-10 my-container flex flex-col lg:flex-row justify-between items-center gap-5">
       <div className="text-center lg:text-start">
         <h3 className="text-3xl font-bold mb-2">Newsletter</h3>
-        <p>Subscribe to our Latest News and stay Fashion Updated.</p>
+        <p>Subscribe to get updates about our products.</p>
       </div>
       <div className="px-10 space-y-3 py-10">
         <Form

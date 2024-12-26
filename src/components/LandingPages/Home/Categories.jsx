@@ -1,106 +1,87 @@
 "use client";
-import { useState, useRef } from "react";
-import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
-import { Tabs } from "antd";
-import ProductCard from "./Products/ProductCard";
+
+import Image from "next/image";
+import { useRef } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import LinkButton from "@/components/Shared/LinkButton";
+import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 
 const Categories = () => {
-  const swiperRef = useRef(null);
-  const { data: categories } = useGetAllCategoriesQuery();
-  const { data: productData } = useGetAllProductsQuery();
+  const swiperRef = useRef();
 
-  const activeProducts = productData?.results?.filter(
+  const { data: categories } = useGetAllCategoriesQuery();
+
+  const activeCategories = categories?.results?.filter(
     (item) => item?.status !== "Inactive"
   );
 
-  const activeCategories = categories?.results
-    ?.filter((category) => category?.status !== "Inactive")
-    ?.filter((category) =>
-      activeProducts?.some(
-        (product) => product?.category?._id === category?._id
-      )
-    );
-
-  const [activeCategory, setActiveCategory] = useState("all-products");
-
-  const filteredProducts =
-    activeCategory === "all-products"
-      ? activeProducts
-      : activeProducts?.filter(
-          (product) => product?.category?._id === activeCategory
-        );
-
   return (
-    <section className="container mx-auto px-2 lg:px-5">
-      <div className="flex flex-col lg:flex-row items-center justify-between border-b">
-        <h2 className="text-2xl lg:text-3xl font-semibold text-center mb-5">
-          Top Categories
-        </h2>
-        <Tabs
-          defaultActiveKey="all-products"
-          size="large"
-          className="font-semibold max-w-[350px] lg:max-w-[600px]"
-          onChange={(key) => setActiveCategory(key)}
+    <section className="my-container p-5 rounded-xl mt-20 relative">
+      <h2 className="text-2xl lg:text-4xl font-bold text-start mb-10 border-b pb-4">
+        Collections
+      </h2>
+      <div>
+        <Swiper
+          onBeforeInit={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={20}
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 5 },
+          }}
+          navigation
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          className="mySwiper"
         >
-          <Tabs.TabPane tab="All" key="all-products" />
-          {activeCategories?.map((category) => (
-            <Tabs.TabPane tab={category?.name} key={category?._id} />
-          ))}
-        </Tabs>
-      </div>
-      {filteredProducts?.length > 0 ? (
-        <div className="relative mt-5">
-          <Swiper
-            onBeforeInit={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={10}
-            slidesPerView={2}
-            breakpoints={{
-              480: { slidesPerView: 2 },
-              600: { slidesPerView: 3 },
-              1024: { slidesPerView: 5 },
-            }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: true,
-            }}
-            className="mySwiper my-10 rounded-xl"
-          >
-            {filteredProducts?.map((product) => (
-              <SwiperSlide key={product?._id}>
-                <ProductCard item={product} />
+          {activeCategories?.map((item) => {
+            return (
+              <SwiperSlide key={item?._id}>
+                <div className="group">
+                  <LinkButton href={`/products?filter=${item?.name}`}>
+                    <div className="overflow-hidden rounded-xl w-[200px] h-[200px] mx-auto">
+                      <Image
+                        src={
+                          item?.attachment ??
+                          "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
+                        }
+                        alt={item?.name ?? "demo"}
+                        width={200}
+                        height={120}
+                        className="w-[200px] h-[200px] rounded-xl mx-auto object-fill group-hover:scale-110 duration-500"
+                      />
+                    </div>
+                    <h2 className="mt-4 text-xl font-semibold">{item?.name}</h2>
+                  </LinkButton>
+                </div>
               </SwiperSlide>
-            ))}
-          </Swiper>
-          <div className="flex items-center justify-center gap-5">
-            <button
-              className="absolute top-[45%] -left-2 z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
-              onClick={() => swiperRef.current?.slidePrev()}
-            >
-              <FaAngleLeft className="text-xl" />
-            </button>
-            <button
-              className="absolute top-[45%] -right-2 z-10 lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300"
-              onClick={() => swiperRef.current?.slideNext()}
-            >
-              <FaAngleRight className="text-xl" />
-            </button>
-          </div>
+            );
+          })}
+        </Swiper>
+        <div className="flex items-center justify-center gap-5 mt-10">
+          <button
+            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-24"
+            onClick={() => swiperRef.current.slidePrev()}
+          >
+            <FaAngleLeft className="text-xl" />
+          </button>
+          <button
+            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-12"
+            onClick={() => swiperRef.current.slideNext()}
+          >
+            <FaAngleRight className="text-xl" />
+          </button>
         </div>
-      ) : (
-        <div className="text-center text-xl font-semibold my-10">
-          No products found for this category.
-        </div>
-      )}
+      </div>
     </section>
   );
 };
