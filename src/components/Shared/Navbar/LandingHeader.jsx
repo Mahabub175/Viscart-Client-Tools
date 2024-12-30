@@ -171,7 +171,11 @@ const LandingHeader = () => {
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="bg-primary py-2 text-center text-white px-2 text-sm md:text-base">
+      <div
+        className={`bg-primary py-2 text-center text-white px-2 text-sm md:text-base ${
+          lastScrollY > 0 ? "hidden" : ""
+        }`}
+      >
         To order any product, please call or whatsapp us at{" "}
         <span className="font-semibold">
           {globalData?.results?.businessWhatsapp}

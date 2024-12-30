@@ -18,7 +18,6 @@ const Banner = () => {
     <section className="relative mb-10">
       <Swiper
         modules={[Autoplay]}
-        loop={true}
         slidesPerView={1}
         autoplay={{
           delay: 3000,
