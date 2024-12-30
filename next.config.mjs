@@ -10,7 +10,7 @@ const nextConfig = {
       "viscartapi.vitasoftsolutions.com",
       "viscartdemoapi.vitasoftsolutions.com",
       "photohouseapi.photohousemagazine.com",
-      "api.arshopsbd.com",
+      "viscartapi.moonsgallerysystem.com",
       "facebook.com",
     ],
   },

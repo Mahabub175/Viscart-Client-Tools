@@ -239,7 +239,9 @@ const SingleProductDetails = ({ params }) => {
             )}
             {singleProduct?.offerPrice && (
               <p className="text-base line-through text-red-500">
-                {globalData?.results?.currency + " " + currentPrice}
+                {globalData?.results?.currency +
+                  " " +
+                  singleProduct?.sellingPrice}
               </p>
             )}
           </div>
