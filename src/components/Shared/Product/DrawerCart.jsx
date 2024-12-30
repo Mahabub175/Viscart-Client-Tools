@@ -69,7 +69,7 @@ const DrawerCart = ({ data }) => {
   return (
     <div>
       {data?.length ? (
-        <div className="pb-20 lg:pb-32 max-w-[400px] lg:max-w-full">
+        <div className="pb-20 lg:pb-32 max-w-[500px] lg:max-w-full">
           {data.map((item) => (
             <div
               key={item._id}
@@ -82,7 +82,7 @@ const DrawerCart = ({ data }) => {
                     alt={item.product?.name || "Product Image"}
                     width={128}
                     height={128}
-                    className="w-28 h-32 rounded-xl"
+                    className="lg:w-28 lg:h-32 rounded-xl"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center rounded-xl transition-opacity duration-300">
                     <button
@@ -93,21 +93,14 @@ const DrawerCart = ({ data }) => {
                     </button>
                   </div>
                 </div>
-                <div>
+                <div className="w-full">
                   <Link
                     href={`/products/${item.slug}`}
                     className="text-base font-normal hover:underline hover:text-black"
                   >
                     <Tooltip placement="top" title={item.productName}>
-                      <h2 className="text-md font-semibold mt-2 lg:hidden">
-                        {item.productName.length > 10
-                          ? item.productName.slice(0, 10) + "..."
-                          : item.productName}
-                      </h2>
-                      <h2 className="text-md font-semibold mt-2 lg:block hidden">
-                        {item.productName.length > 40
-                          ? item.productName.slice(0, 40) + "..."
-                          : item.productName}
+                      <h2 className="text-md font-semibold mt-2">
+                        {item.productName}
                       </h2>
                     </Tooltip>
                     {item.variant &&

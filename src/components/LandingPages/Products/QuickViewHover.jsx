@@ -1,35 +1,21 @@
 "use client";
 
-import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCompareMutation } from "@/redux/services/compare/compareApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useAddWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
 import { Tooltip } from "antd";
-import Link from "next/link";
-import { useState } from "react";
-import { AiOutlineFullscreen } from "react-icons/ai";
 import { FaCodeCompare } from "react-icons/fa6";
-import { TbHeart, TbListDetails } from "react-icons/tb";
+import { TbHeart } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const QuickViewHover = ({ item }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
 
   const [addWishlist] = useAddWishlistMutation();
   const [addCompare] = useAddCompareMutation();
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-  };
 
   const addToWishlist = async (id) => {
     const data = {
@@ -77,24 +63,6 @@ const QuickViewHover = ({ item }) => {
 
   return (
     <div className="flex items-center justify-center gap-2 lg:gap-4 px-3 py-2 lg:py-4">
-      <Tooltip placement="top" title={"Quick View"}>
-        <div
-          className="text-sm lg:text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
-          onClick={showModal}
-        >
-          <AiOutlineFullscreen />
-        </div>
-      </Tooltip>
-
-      <Tooltip placement="top" title={"Details"}>
-        <Link
-          href={`/products/${item?.slug}`}
-          className="text-sm lg:text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
-        >
-          <TbListDetails />
-        </Link>
-      </Tooltip>
-
       <Tooltip placement="top" title={"Add to Wishlist"}>
         <div
           className="text-sm lg:text-xl cursor-pointer hover:scale-110 duration-300 text-white bg-primary rounded-full p-2"
@@ -112,12 +80,6 @@ const QuickViewHover = ({ item }) => {
           <FaCodeCompare className="rotate-90" />
         </div>
       </Tooltip>
-
-      <QuickProductView
-        item={item}
-        isModalVisible={isModalVisible}
-        handleModalClose={handleModalClose}
-      />
     </div>
   );
 };

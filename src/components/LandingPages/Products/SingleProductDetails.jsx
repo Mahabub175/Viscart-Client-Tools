@@ -98,7 +98,7 @@ const SingleProductDetails = ({ params }) => {
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice
-    : singleProduct?.sellingPrice;
+    : singleProduct?.offerPrice ?? singleProduct?.sellingPrice;
 
   const currentImage = selectedImage
     ? selectedImage
@@ -108,19 +108,27 @@ const SingleProductDetails = ({ params }) => {
 
   const allMedia =
     variantMedia.length > 0
-      ? [...variantMedia, singleProduct?.video ? "video-thumbnail" : null]
+      ? [
+          ...variantMedia,
+          singleProduct?.video ? "video-thumbnail" : null,
+        ].filter(Boolean)
       : [
-          formatImagePath(singleProduct?.mainImage) || null,
+          singleProduct?.mainImage
+            ? formatImagePath(singleProduct.mainImage)
+            : null,
           ...(Array.isArray(singleProduct?.images)
-            ? singleProduct?.images.map((image) => formatImagePath(image))
+            ? singleProduct.images.map((image) =>
+                image ? formatImagePath(image) : null
+              )
             : []),
           ...(Array.isArray(singleProduct?.variants)
-            ? singleProduct?.variants
-                ?.filter((variant) => variant.images)
-                ?.map((variant) =>
-                  variant.images.map((image) => formatImagePath(image))
-                )
-                .flat()
+            ? singleProduct.variants.flatMap((variant) =>
+                Array.isArray(variant.images)
+                  ? variant.images.map((image) =>
+                      image ? formatImagePath(image) : null
+                    )
+                  : []
+              )
             : []),
           singleProduct?.video ? "video-thumbnail" : null,
         ].filter(Boolean);
@@ -155,8 +163,8 @@ const SingleProductDetails = ({ params }) => {
                 <Image
                   src={currentImage}
                   alt="product image"
-                  height={400}
-                  width={400}
+                  height={450}
+                  width={450}
                   className="mx-auto rounded-xl"
                 />
               </Zoom>
@@ -165,7 +173,7 @@ const SingleProductDetails = ({ params }) => {
             )}
           </div>
 
-          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto border rounded-xl p-4 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto thumbnail">
+          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
             {allMedia?.map((media, index) => (
               <div
                 key={index}
@@ -183,12 +191,12 @@ const SingleProductDetails = ({ params }) => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20 mx-auto">
+                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
                       <Image
                         src={media}
                         alt={`media ${index}`}
-                        height={80}
-                        width={80}
+                        height={60}
+                        width={60}
                         className="object-cover rounded-xl"
                       />
                     </div>
@@ -198,25 +206,25 @@ const SingleProductDetails = ({ params }) => {
             ))}
           </div>
         </div>
-        <div className="lg:w-1/2 flex flex-col gap-3 text-sm lg:text-lg">
-          <h2 className="text-2xl lg:text-4xl font-bold">
+        <div className="lg:w-1/2 flex flex-col text-sm lg:text-base">
+          <h2 className="text-xl md:text-3xl font-medium mb-2">
             {singleProduct?.name}
           </h2>
-          <div className="flex items-center gap-2">
-            <span className="font-bold">Category:</span>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-medium">Category:</span>
             <span>{singleProduct?.category?.name}</span>
           </div>
           {singleProduct?.brand && (
             <div className="flex items-center gap-2">
-              <span className="font-bold">Brand:</span>
+              <span className="font-medium">Brand:</span>
               <span>{singleProduct?.brand?.name}</span>
             </div>
           )}
-          <div className="flex items-center mt-4 gap-4 font-bold">
-            <Rate disabled value={singleProduct?.ratings?.average} allowHalf />({" "}
+          <div className="flex items-center mt-4 gap-4 font-medium">
+            <Rate disabled value={singleProduct?.ratings?.average} allowHalf />(
             {singleProduct?.ratings?.count})
           </div>
-          <div className="flex items-center gap-4 text-textColor font-bold my-2">
+          <div className="flex items-center gap-4 text-textColor font-medium my-2">
             Price:{" "}
             {singleProduct?.offerPrice ? (
               <p className="text-primary text-xl">

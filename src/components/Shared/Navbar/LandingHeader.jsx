@@ -177,8 +177,8 @@ const LandingHeader = () => {
           {globalData?.results?.businessWhatsapp}
         </span>
       </div>
-      <nav className="my-container px-2">
-        <div className="flex justify-between items-center lg:py-2">
+      <nav className="my-container px-2 -my-5 lg:-my-2">
+        <div className="flex justify-around items-center">
           <Button
             type="text"
             className="lg:hidden"
@@ -187,16 +187,16 @@ const LandingHeader = () => {
           />
           <div>
             <FaSearch
-              className="cursor-pointer hover:text-primary duration-300 hidden lg:block text-xl"
+              className="cursor-pointer hover:text-primary duration-300 hidden lg:block text-xl text-primary"
               onClick={() => setIsSearchOpen(true)}
             />
           </div>
-          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-3">
+          <Link href={"/"} className="flex flex-[1] lg:flex-none lg:ml-10">
             <Image
               src={globalData?.results?.logo}
               alt="logo"
-              width={70}
-              height={70}
+              width={100}
+              height={100}
             />
           </Link>
 
@@ -291,13 +291,13 @@ const LandingHeader = () => {
         onClose={() => setIsDrawerOpen(false)}
         open={isDrawerOpen}
       >
-        <div className="flex justify-between items-center -mt-5 mb-10">
+        <div className="flex justify-between items-center -mt-5 mb-5">
           <Link href={"/"}>
             <Image
               src={globalData?.results?.logo}
               alt="logo"
-              width={50}
-              height={50}
+              width={80}
+              height={80}
             />
           </Link>
           <button
@@ -316,7 +316,7 @@ const LandingHeader = () => {
         keyboard={true}
         destroyOnClose
         placement="top"
-        height={250}
+        height={200}
       >
         <div className="flex justify-between items-center -mt-2">
           <div></div>
@@ -375,7 +375,7 @@ const LandingHeader = () => {
         destroyOnClose
       >
         <div className="flex justify-between items-center mb-4 border-b pb-4">
-          <p className="text-2xl font-semibold">Shopping Cart</p>
+          <p className="lg:text-2xl font-semibold">Shopping Cart</p>
           <button
             className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
             onClick={() => setIsCartOpen(false)}

@@ -15,7 +15,7 @@ const NewArrivalProducts = () => {
 
   return (
     <section className="my-container mt-10 lg:mt-20">
-      <h2 className="my-5 lg:my-10 text-2xl lg:text-3xl font-semibold lg:font-bold text-center">
+      <h2 className="my-5 lg:my-10 text-2xl lg:text-4xl font-medium text-center">
         New Arrivals
       </h2>
       {activeProducts?.length > 0 ? (

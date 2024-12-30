@@ -65,7 +65,7 @@ const CompareList = () => {
           </h2>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-10 items-center">
           <div className="border rounded-xl p-5 mb-10 lg:mb-0">
             <p className="text-center font-bold text-xl border-b">Summary</p>
             <div className="space-y-8 mt-4 text-center lg:text-start">
@@ -97,7 +97,7 @@ const CompareList = () => {
             </div>
           </div>
           <div className="border rounded-xl p-5 col-span-2">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-10 border-b pb-2">
+            <div className="flex flex-row items-center justify-between gap-10 border-b pb-2">
               <div></div>
               <p className="text-center font-bold text-xl">Products</p>
               <div

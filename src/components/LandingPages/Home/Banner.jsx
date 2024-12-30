@@ -1,17 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css";
-import "swiper/css/pagination";
 import { useGetAllSlidersQuery } from "@/redux/services/slider/sliderApi";
 import Link from "next/link";
 
 const Banner = () => {
-  const swiperRef = useRef();
-
   const { data: sliders } = useGetAllSlidersQuery();
 
   const activeSliders = sliders?.results?.filter(
@@ -21,16 +17,9 @@ const Banner = () => {
   return (
     <section className="relative mb-10">
       <Swiper
-        onBeforeInit={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        modules={[Autoplay, Pagination]}
+        modules={[Autoplay]}
         loop={true}
         slidesPerView={1}
-        pagination={{
-          clickable: true,
-          el: ".custom-pagination",
-        }}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
@@ -47,7 +36,7 @@ const Banner = () => {
                     "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
                   }
                   alt={item.name}
-                  width={450}
+                  width={2500}
                   height={700}
                   className="h-[200px] lg:h-fit w-full"
                 />
@@ -68,8 +57,6 @@ const Banner = () => {
           );
         })}
       </Swiper>
-
-      <div className="custom-pagination flex justify-center space-x-2 absolute bottom-5 z-10 left-1/2"></div>
     </section>
   );
 };

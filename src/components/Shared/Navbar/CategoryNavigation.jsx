@@ -75,7 +75,7 @@ const CategoryNavigation = () => {
 
   return (
     <div className="my-container">
-      <div className="flex flex-col lg:flex-row gap-5 lg:items-center py-5">
+      <div className="flex flex-col lg:flex-row gap-5 lg:items-center justify-center py-5">
         <Link href={"/offers"}>Offers</Link>
         <Link href={"/products"}>All Products</Link>
         <span className="hidden lg:block">|</span>
