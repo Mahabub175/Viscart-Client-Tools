@@ -141,7 +141,7 @@ const SinglePageCart = ({ params }) => {
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-10">
           <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
-            <div className="relative mx-auto">
+            <div className="relative mx-auto lg:w-[300px] xl:w-full">
               {isVideoPlaying && singleProduct?.video ? (
                 <video
                   src={formatImagePath(singleProduct?.video)}
