@@ -3,7 +3,7 @@
 import { useGetAllBrandsQuery } from "@/redux/services/brand/brandApi";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { useGetProductsQuery } from "@/redux/services/product/productApi";
-import { Pagination, Slider, Checkbox, Select, Button, Modal } from "antd";
+import { Pagination, Slider, Checkbox, Select, Button, Modal, Radio } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { paginationNumbers } from "@/assets/data/paginationData";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
@@ -21,6 +21,7 @@ const AllProducts = ({ searchParams }) => {
   const [sorting, setSorting] = useState("");
   const [filterModal, setFilterModal] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
+  const [availability, setAvailability] = useState("all"); // New state for availability
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: brandData } = useGetAllBrandsQuery();
@@ -52,7 +53,14 @@ const AllProducts = ({ searchParams }) => {
   );
 
   useEffect(() => {
-    debouncedSetSearchFilter(searchParams);
+    if (searchParams) {
+      debouncedSetSearchFilter(searchParams);
+    } else {
+      setSelectedBrands([]);
+      setSelectedCategories([]);
+      setPriceRange([0, 10000]);
+      setSorting("");
+    }
     return () => debouncedSetSearchFilter.cancel();
   }, [searchParams, debouncedSetSearchFilter]);
 
@@ -83,7 +91,13 @@ const AllProducts = ({ searchParams }) => {
       const isPriceMatch =
         product.sellingPrice >= priceRange[0] &&
         product.sellingPrice <= priceRange[1];
-      return isBrandMatch && isCategoryMatch && isPriceMatch;
+      const isAvailabilityMatch =
+        availability === "inStock"
+          ? product.stock > 0
+          : availability === "outOfStock"
+          ? product.stock === 0
+          : true;
+      return isBrandMatch && isCategoryMatch && isPriceMatch && isAvailabilityMatch;
     });
 
     if (sorting === "PriceLowToHigh") {
@@ -93,7 +107,7 @@ const AllProducts = ({ searchParams }) => {
       return filtered?.sort((a, b) => b.sellingPrice - a.sellingPrice);
     }
     return filtered;
-  }, [activeProducts, selectedBrands, selectedCategories, priceRange, sorting]);
+  }, [activeProducts, selectedBrands, selectedCategories, priceRange, sorting, availability]);
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -116,105 +130,133 @@ const AllProducts = ({ searchParams }) => {
     setSorting(value);
   };
 
+  const handleAvailabilityChange = (e) => {
+    setAvailability(e.target.value);
+  };
+
   return (
-    <section className="my-container py-10 relative -mt-5 lg:mt-0">
-      <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
-        <p className="text-xs md:text-base">
-          <span className="font-semibold text-lg">
-            {filteredProducts?.length}
-          </span>{" "}
-          products showing.
-        </p>
-        <div className="flex items-center lg:w-1/4">
-          <Select
-            allowClear
-            placeholder="Select Sorting"
-            style={{ width: "100%" }}
-            onChange={handleSortingChange}
-          >
-            <Option value="PriceLowToHigh">Price Low To High</Option>
-            <Option value="PriceHighToLow">Price High To Low</Option>
-          </Select>
-        </div>
-        <Button
-          type="primary"
-          className="lg:hidden"
-          onClick={() => setFilterModal(true)}
-        >
-          Advance Filter
-        </Button>
+    <section className="py-10 relative -mt-10">
+      <div className="bg-primary py-20 mb-10 text-medium text-xl md:text-3xl text-center text-white">
+        {selectedBrands.length > 0 && selectedCategories.length > 0
+          ? `(${selectedBrands.join(", ")}) (${selectedCategories.join(", ")})`
+          : selectedBrands.length > 0
+          ? `(${selectedBrands.join(", ")})`
+          : selectedCategories.length > 0
+          ? `(${selectedCategories.join(", ")})`
+          : "All Products"}
       </div>
-      <div className="flex flex-col lg:flex-row gap-5 items-start">
-        <div className="w-full lg:w-3/12 p-4 border rounded-lg shadow-sm lg:sticky top-5 hidden lg:block">
-          <h2 className="mb-4 text-lg font-semibold">Filter Products</h2>
-          <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
-            <label className="block mb-2 font-semibold">Brands</label>
-            <Checkbox.Group
-              options={activeBrands?.map((brand) => ({
-                label: brand.name,
-                value: brand.name,
-              }))}
-              value={selectedBrands}
-              onChange={handleBrandChange}
-              className="flex flex-col gap-2"
-            />
+
+      <div className="my-container">
+        <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
+          <p className="text-xs md:text-base">
+            <span className="font-semibold text-lg">
+              {filteredProducts?.length}
+            </span>{" "}
+            products showing.
+          </p>
+          <div className="flex items-center lg:w-1/4">
+            <Select
+              allowClear
+              placeholder="Select Sorting"
+              style={{ width: "100%" }}
+              onChange={handleSortingChange}
+            >
+              <Option value="PriceLowToHigh">Price Low To High</Option>
+              <Option value="PriceHighToLow">Price High To Low</Option>
+            </Select>
           </div>
-          <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
-            <label className="block mb-2 font-semibold">Categories</label>
-            <Checkbox.Group
-              options={activeCategories?.map((category) => ({
-                label: category.name,
-                value: category.name,
-              }))}
-              value={selectedCategories}
-              onChange={handleCategoryChange}
-              className="flex flex-col gap-2"
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block mb-2 font-semibold">Price Range</label>
-            <Slider
-              range
-              min={0}
-              max={10000}
-              defaultValue={[0, 10000]}
-              value={priceRange}
-              onChange={handlePriceChange}
-              step={50}
-              tooltip={{
-                formatter: (value) =>
-                  `${globalData?.results?.currency} ${value}`,
-              }}
-            />
-            <div className="flex justify-between mt-2 text-sm">
-              <span>{globalData?.results?.currency + " " + priceRange[0]}</span>
-              <span>{globalData?.results?.currency + " " + priceRange[1]}</span>
+          <Button
+            type="primary"
+            className="lg:hidden"
+            onClick={() => setFilterModal(true)}
+          >
+            Advance Filter
+          </Button>
+        </div>
+        <div className="flex flex-col lg:flex-row gap-5 items-start">
+          <div className="w-full lg:w-3/12 p-4 border rounded-lg shadow-sm lg:sticky top-5 hidden lg:block">
+            <h2 className="mb-4 text-lg font-semibold">Filter Products</h2>
+            <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
+              <label className="block mb-2 font-semibold">Brands</label>
+              <Checkbox.Group
+                options={activeBrands?.map((brand) => ({
+                  label: brand.name,
+                  value: brand.name,
+                }))}
+                value={selectedBrands}
+                onChange={handleBrandChange}
+                className="flex flex-col gap-2"
+              />
+            </div>
+            <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
+              <label className="block mb-2 font-semibold">Categories</label>
+              <Checkbox.Group
+                options={activeCategories?.map((category) => ({
+                  label: category.name,
+                  value: category.name,
+                }))}
+                value={selectedCategories}
+                onChange={handleCategoryChange}
+                className="flex flex-col gap-2"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold">Price Range</label>
+              <Slider
+                range
+                min={0}
+                max={10000}
+                defaultValue={[0, 10000]}
+                value={priceRange}
+                onChange={handlePriceChange}
+                step={50}
+                tooltip={{
+                  formatter: (value) =>
+                    `${globalData?.results?.currency} ${value}`,
+                }}
+              />
+              <div className="flex justify-between mt-2 text-sm">
+                <span>{globalData?.results?.currency + " " + priceRange[0]}</span>
+                <span>{globalData?.results?.currency + " " + priceRange[1]}</span>
+              </div>
+            </div>
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold">Availability</label>
+              <Radio.Group
+                value={availability}
+                onChange={handleAvailabilityChange}
+                className="flex flex-col gap-2"
+              >
+                <Radio value="all">All</Radio>
+                <Radio value="inStock">In Stock</Radio>
+                <Radio value="outOfStock">Out of Stock</Radio>
+              </Radio.Group>
             </div>
           </div>
-        </div>
-        <div className="w-full">
-          <div>
-            {filteredProducts?.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-5">
-                {filteredProducts?.map((product) => (
-                  <ProductCard key={product?._id} item={product} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-gray-500 mt-32 text-xl">
-                No products found.
-              </p>
-            )}
-            <Pagination
-              className="flex justify-end items-center !mt-10"
-              total={productData?.meta?.totalCount}
-              current={currentPage}
-              onChange={handlePageChange}
-              pageSize={pageSize}
-              showSizeChanger
-              pageSizeOptions={paginationNumbers}
-              simple
-            />
+          <div className="w-full">
+            <div>
+              {filteredProducts?.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-5">
+                  {filteredProducts?.map((product) => (
+                    <ProductCard key={product?._id} item={product} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-gray-500 mt-32 text-xl">
+                  No products found.
+                </p>
+              )}
+              <Pagination
+                className="flex justify-end items-center !mt-10"
+                total={productData?.meta?.totalCount}
+                current={currentPage}
+                onChange={handlePageChange}
+                pageSize={pageSize}
+                showSizeChanger
+                pageSizeOptions={paginationNumbers}
+                simple
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -270,6 +312,18 @@ const AllProducts = ({ searchParams }) => {
               <span>{globalData?.results?.currency + " " + priceRange[1]}</span>
             </div>
           </div>
+          {/* <div className="mb-6 rounded-xl border p-5">
+            <label className="block mb-2 font-semibold">Availability</label>
+            <Radio.Group
+              value={availability}
+              onChange={handleAvailabilityChange}
+              className="flex flex-col gap-2"
+            >
+              <Radio value="all">All</Radio>
+              <Radio value="inStock">In Stock {filteredProducts?.length}</Radio>
+              <Radio value="outOfStock">Out of Stock</Radio>
+            </Radio.Group>
+          </div> */}
         </div>
       </Modal>
     </section>

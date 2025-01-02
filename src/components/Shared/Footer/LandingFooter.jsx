@@ -12,8 +12,8 @@ const LandingFooter = () => {
 
   return (
     <section className="bg-white border-t mt-10">
-      <footer className="my-container py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center">
+      <footer className="pt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center my-container">
           <div className="flex flex-col items-start gap-4">
             <h3 className="text-2xl font-bold mb-2">Social</h3>
             <Link
@@ -68,10 +68,10 @@ const LandingFooter = () => {
           <ContactInfo globalData={globalData} />
         </div>
 
-        <hr className="my-10" />
+        <hr className="mt-10" />
 
-        <div className="flex flex-col md:flex-row gap-5 lg:gap-0 justify-between items-center">
-          <p className="font-semibold text-textColor">
+        <div className="flex flex-col md:flex-row gap-5 lg:gap-0 justify-between items-center bg-primary py-10">
+          <p className="font-semibold text-white my-container">
             ©{new Date().getFullYear()}, All rights reserved
           </p>
         </div>
