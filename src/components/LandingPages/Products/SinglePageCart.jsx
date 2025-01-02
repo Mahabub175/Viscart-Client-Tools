@@ -95,19 +95,27 @@ const SinglePageCart = ({ params }) => {
 
   const allMedia =
     variantMedia.length > 0
-      ? [...variantMedia, singleProduct?.video ? "video-thumbnail" : null]
+      ? [
+          ...variantMedia,
+          singleProduct?.video ? "video-thumbnail" : null,
+        ].filter(Boolean)
       : [
-          formatImagePath(singleProduct?.mainImage) || null,
+          singleProduct?.mainImage
+            ? formatImagePath(singleProduct.mainImage)
+            : null,
           ...(Array.isArray(singleProduct?.images)
-            ? singleProduct?.images.map((image) => formatImagePath(image))
+            ? singleProduct.images.map((image) =>
+                image ? formatImagePath(image) : null
+              )
             : []),
           ...(Array.isArray(singleProduct?.variants)
-            ? singleProduct?.variants
-                ?.filter((variant) => variant.images)
-                ?.map((variant) =>
-                  variant.images.map((image) => formatImagePath(image))
-                )
-                .flat()
+            ? singleProduct.variants.flatMap((variant) =>
+                Array.isArray(variant.images)
+                  ? variant.images.map((image) =>
+                      image ? formatImagePath(image) : null
+                    )
+                  : []
+              )
             : []),
           singleProduct?.video ? "video-thumbnail" : null,
         ].filter(Boolean);
@@ -137,10 +145,10 @@ const SinglePageCart = ({ params }) => {
 
   const isOutOfStock = singleProduct?.stock <= 0 || currentVariant?.stock <= 0;
   return (
-    <section className="container mx-auto px-2 lg:px-5 py-10 -mt-5 lg:-mt-0">
+    <section className="my-container py-10 -mt-5 lg:-mt-0">
       <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-10">
-          <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-10">
+          <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
             <div className="relative mx-auto lg:w-[300px] xl:w-full">
               {isVideoPlaying && singleProduct?.video ? (
                 <video
@@ -166,7 +174,7 @@ const SinglePageCart = ({ params }) => {
               )}
             </div>
 
-            <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[147px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
+            <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[149px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
               {allMedia?.map((media, index) => (
                 <div
                   key={index}
@@ -200,20 +208,20 @@ const SinglePageCart = ({ params }) => {
             </div>
           </div>
           <div className="lg:w-1/2 flex flex-col gap-3">
-            <h2 className="text-3xl lg:text-4xl font-bold">
+            <h2 className="text-xl lg:text-3xl font-medium">
               {singleProduct?.name}
             </h2>
             <div className="flex items-center gap-2">
-              <span className="font-bold">Category:</span>
+              <span className="font-medium">Category:</span>
               <span>{singleProduct?.category?.name}</span>
             </div>
             {singleProduct?.brand && (
               <div className="flex items-center gap-2">
-                <span className="font-bold">Brand:</span>
+                <span className="font-medium">Brand:</span>
                 <span>{singleProduct?.brand?.name}</span>
               </div>
             )}
-            <div className="flex items-center mt-4 gap-4 font-bold">
+            <div className="flex items-center mt-4 gap-4 font-medium">
               <Rate
                 disabled
                 value={singleProduct?.ratings?.average}
@@ -221,7 +229,7 @@ const SinglePageCart = ({ params }) => {
               />
               ({singleProduct?.ratings?.count})
             </div>
-            <div className="flex items-center gap-4 text-textColor font-bold my-2">
+            <div className="flex items-center gap-4 text-textColor font-medium my-2">
               Price:{" "}
               {singleProduct?.offerPrice ? (
                 <p className="text-primary text-xl">
