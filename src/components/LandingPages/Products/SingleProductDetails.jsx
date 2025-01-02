@@ -15,6 +15,7 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
+import SmallFeature from "../Home/SmallFeature";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -173,7 +174,7 @@ const SingleProductDetails = ({ params }) => {
             )}
           </div>
 
-          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[147px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
+          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[142px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
             {allMedia?.map((media, index) => (
               <div
                 key={index}
@@ -186,17 +187,17 @@ const SingleProductDetails = ({ params }) => {
                 }`}
               >
                 {media === "video-thumbnail" ? (
-                  <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
+                  <div className="flex items-center justify-center rounded-xl w-20 h-20">
                     <FaPlay className="text-white text-2xl" />
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center justify-center bg-black rounded-xl w-20 h-20">
+                    <div className="flex items-center justify-center rounded-xl w-20 h-20">
                       <Image
                         src={media}
                         alt={`media ${index}`}
-                        height={60}
-                        width={60}
+                        height={80}
+                        width={80}
                         className="object-cover rounded-xl"
                       />
                     </div>
@@ -278,6 +279,7 @@ const SingleProductDetails = ({ params }) => {
           dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
         ></div>
       </div>
+      <SmallFeature />
       <div className="mt-20">
         {activeProducts && activeProducts.length > 0 ? (
           <>

@@ -1,26 +1,19 @@
 export const smallFeatureData = [
   {
-    name: "Free Shipping",
-    feature:
-      "Free shipping for all orders over BDT. 5000 Contrary to popular believe",
+    name: "100% Natural",
+    feature: "We use 100% natural ingredients in our products",
     image:
       "https://photohouseapi.photohousemagazine.com/uploads/1733663863494-image1.png",
   },
   {
-    name: "Replacement Guarantee",
-    feature: "We Provide Replacement Guarantee within 7 days",
+    name: "Green Delivery",
+    feature: "We use green delivery packaging system for all orders",
     image:
       "https://photohouseapi.photohousemagazine.com/uploads/1733663875986-image2.png",
   },
   {
-    name: "Dedicated Customer Support",
-    feature: "Friendly 9 AM-10 PM Daily customer support",
-    image:
-      "https://photohouseapi.photohousemagazine.com/uploads/1733663885143-image3.png",
-  },
-  {
-    name: "Cash On delivery",
-    feature: "We Delivery whole Bangladesh on Cash Delivery",
+    name: "Safe Payment",
+    feature: "Secure payment gateway for all payment methods",
     image:
       "https://photohouseapi.photohousemagazine.com/uploads/1733663893553-image4.png",
   },
