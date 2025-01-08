@@ -42,8 +42,8 @@ const TopProducts = () => {
       {sortedCategories?.length > 0 ? (
         sortedCategories?.slice(0, 7)?.map(({ category, products }) => (
           <div key={category?._id} className="py-10">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg lg:text-3xl font-medium text-center lg:text-start">
                 {category?.name}
               </h2>
               <Link
