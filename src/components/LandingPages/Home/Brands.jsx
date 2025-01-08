@@ -13,7 +13,7 @@ const Brands = () => {
 
   return (
     <section className="my-container p-5 rounded-xl mt-20 relative">
-      <h2 className="text-2xl lg:text-4xl font-medium text-center lg:text-start mb-10">
+      <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5">
         Top Brands We Deal In
       </h2>
       <div className="flex flex-wrap justify-center items-center gap-5">

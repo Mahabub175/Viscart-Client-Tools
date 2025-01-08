@@ -27,6 +27,10 @@
   height: 3px;
 }
 
+body {
+  background-color: #ededed;
+}
+
 .ant-btn-primary {
   background-color: var(--primaryColor) !important;
 

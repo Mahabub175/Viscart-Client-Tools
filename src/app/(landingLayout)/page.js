@@ -3,7 +3,7 @@ import Brands from "@/components/LandingPages/Home/Brands";
 import Categories from "@/components/LandingPages/Home/Categories";
 import NewsletterBanner from "@/components/LandingPages/Home/NewsletterBanner";
 import CategoryProducts from "@/components/LandingPages/Home/Products/CategoryProducts";
-import NewArrivalProducts from "@/components/LandingPages/Home/Products/NewArrivalProducts";
+import TopProducts from "@/components/LandingPages/Home/Products/TopProducts";
 
 export const metadata = {
   title: "Home | Viscart",
@@ -17,7 +17,7 @@ const page = async () => {
       <Categories />
       <CategoryProducts />
       <Brands />
-      <NewArrivalProducts />
+      <TopProducts />
       <NewsletterBanner />
     </div>
   );

@@ -33,7 +33,7 @@ const CategoryProducts = () => {
   return (
     <section className="my-container mt-10">
       <div className="flex flex-col lg:flex-row items-center justify-between border-b">
-        <h2 className="text-xl lg:text-3xl font-medium   text-center mb-5">
+        <h2 className="text-xl lg:text-3xl font-medium text-center mb-5">
           Top Categories Featured
         </h2>
         <Tabs
