@@ -12,8 +12,8 @@ const page = async () => {
   return (
     <div className="overflow-x-hidden">
       <Banner />
-      <NewArrivalProducts />
       <Categories />
+      <NewArrivalProducts />
       <NewsletterBanner />
     </div>
   );
