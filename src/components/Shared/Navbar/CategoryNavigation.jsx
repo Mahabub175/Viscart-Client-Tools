@@ -1,11 +1,16 @@
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import { Menu, Dropdown } from "antd";
 import Link from "next/link";
-import React from "react";
+import { useState } from "react";
 
 const CategoryNavigation = () => {
   const { data: categories } = useGetAllCategoriesQuery();
+
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
 
   const renderSubcategories = (category) => {
     if (category?.subcategories && category?.subcategories.length > 0) {
@@ -15,10 +20,6 @@ const CategoryNavigation = () => {
             <Menu.Item key={subCategory?._id}>
               <Link href={`/products?filter=${subCategory?.name}`}>
                 {subCategory?.name}
-                {subCategory?.subcategories &&
-                  subCategory?.subcategories.length > 0 && (
-                    <RightOutlined className="ml-2" />
-                  )}
               </Link>
             </Menu.Item>
           ))}
@@ -34,6 +35,7 @@ const CategoryNavigation = () => {
         {parentCategory?.categories?.map((category) => (
           <Menu.SubMenu
             key={category?._id}
+            icon={null}
             title={
               <Link
                 href={`/products?filter=${category?.name}`}
@@ -64,22 +66,48 @@ const CategoryNavigation = () => {
             className="flex items-center cursor-pointer"
           >
             <span>{parentCategory?.name}</span>
-            {parentCategory?.categories &&
-              parentCategory?.categories.length > 0 && (
-                <DownOutlined className="!text-sm" />
-              )}
           </Link>
         </Dropdown>
       ));
   };
 
   return (
-    <div className="my-container">
-      <div className="flex flex-col lg:flex-row gap-5 lg:items-center flex-wrap justify-center py-5">
+    <div className="my-container -mt-5 lg:-mt-0">
+      <div className="flex flex-col lg:flex-row gap-5 lg:items-center justify-center xl:justify-start flex-wrap py-4 text-sm">
         <Link href={"/offers"}>Offers</Link>
         <Link href={"/products"}>All Products</Link>
-        <span className="hidden lg:block">|</span>
-        <span className="lg:hidden"></span>
+        <Dropdown
+          overlay={
+            <Menu>
+              {categories?.results
+                ?.filter((item) => item?.level === "parentCategory")
+                .map((parentCategory) => (
+                  <Menu.SubMenu
+                    key={parentCategory?._id}
+                    icon={null}
+                    title={
+                      <Link
+                        href={`/products?filter=${parentCategory?.name}`}
+                        className="flex items-center"
+                      >
+                        <div className="flex items-center justify-between">
+                          {parentCategory?.name}
+                        </div>
+                      </Link>
+                    }
+                  >
+                    {renderCategories(parentCategory)}
+                  </Menu.SubMenu>
+                ))}
+            </Menu>
+          }
+          open={dropdownVisible}
+          onOpenChange={setDropdownVisible}
+        >
+          <div onClick={handleDropdownToggle} className="cursor-pointer">
+            Shop By Categories
+          </div>
+        </Dropdown>
         {renderParentCategories()}
       </div>
     </div>

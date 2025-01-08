@@ -9,7 +9,13 @@ import { AutoComplete, Avatar, Button, Drawer, Popover } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaHeart, FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
+import {
+  FaHeart,
+  FaPhoneAlt,
+  FaSearch,
+  FaShoppingBag,
+  FaUser,
+} from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +29,7 @@ import { GiCancel } from "react-icons/gi";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdMail } from "react-icons/io";
 
 const LandingHeader = () => {
   const pathname = usePathname();
@@ -46,9 +52,7 @@ const LandingHeader = () => {
   );
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
-  const { data: products } = useGetAllProductsQuery(undefined, {
-    skip: !isSearchOpen,
-  });
+  const { data: products } = useGetAllProductsQuery();
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -167,35 +171,44 @@ const LandingHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full bg-white shadow-md transition-transform duration-300 z-50 ${
+      className={`fixed top-0 left-0 w-full bg-[#f8f7f7] shadow-md transition-transform duration-300 z-50 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <div
-        className={`bg-primary py-2 text-center text-white px-2 text-sm md:text-base ${
+        className={`bg-grey py-2 text-center px-2 text-sm md:text-base text-black ${
           lastScrollY > 0 ? "hidden" : ""
         }`}
       >
-        To order any product, please call or whatsapp us at{" "}
-        <span className="font-semibold">
-          {globalData?.results?.businessWhatsapp}
-        </span>
+        <div className="my-container flex flex-col lg:flex-row items-center justify-between text-sm">
+          <Link
+            href={"/contact"}
+            className="hover:text-primary border-b border-b-transparent hover:border-b-primary duration-300"
+          >
+            Contact Us
+          </Link>
+          <div className="flex items-center gap-5">
+            <div className="flex items-center gap-2">
+              <FaPhoneAlt />
+              {globalData?.results?.businessWhatsapp}
+            </div>
+            <div className="h-[16px] w-[1px] bg-black"></div>
+            <div className="flex items-center gap-2">
+              <IoMdMail />
+              {globalData?.results?.businessEmail}
+            </div>
+          </div>
+        </div>
       </div>
-      <nav className="my-container px-2 -my-5 lg:-my-2">
-        <div className="flex justify-around items-center">
+      <nav className="my-container px-2 -my-3 lg:-my-2">
+        <div className="flex justify-between items-center gap-10">
           <Button
             type="text"
             className="lg:hidden"
             icon={<MenuOutlined />}
             onClick={toggleDrawer}
           />
-          <div>
-            <FaSearch
-              className="cursor-pointer hover:text-primary duration-300 hidden lg:block text-xl text-primary"
-              onClick={() => setIsSearchOpen(true)}
-            />
-          </div>
-          <Link href={"/"} className="flex flex-[1] lg:flex-none lg:ml-10">
+          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-10 lg:ml-0">
             <Image
               src={globalData?.results?.logo}
               alt="logo"
@@ -204,11 +217,55 @@ const LandingHeader = () => {
             />
           </Link>
 
-          <div className="flex gap-6 items-center text-lg">
-            <FaSearch
-              className="cursor-pointer hover:text-primary duration-300 lg:hidden"
-              onClick={() => setIsSearchOpen(true)}
+          <div className="relative w-full hidden lg:block">
+            <AutoComplete
+              options={options}
+              onSearch={handleSearch}
+              placeholder="Search for Products..."
+              size="large"
+              className="w-full"
             />
+            <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-primary text-xl" />
+          </div>
+
+          <div className="flex gap-6 items-center text-lg">
+            <div
+              className="cursor-pointer hover:text-primary duration-300 lg:hidden bg-redLight p-3 rounded-full"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <FaSearch />
+            </div>
+
+            <Link
+              href={"/compare"}
+              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer rotate-90 hover:text-primary duration-300"
+            >
+              {compareData?.[0]?.product?.length > 0 ? (
+                <span className="relative">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {compareData?.[0]?.product?.length}
+                  </span>
+                  <FaCodeCompare />
+                </span>
+              ) : (
+                <FaCodeCompare />
+              )}
+            </Link>
+            <Link
+              href={"/wishlist"}
+              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+            >
+              {wishListData?.length > 0 ? (
+                <span className="relative">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {wishListData?.length}
+                  </span>
+                  <FaHeart />
+                </span>
+              ) : (
+                <FaHeart />
+              )}
+            </Link>
             {user?._id ? (
               <>
                 {" "}
@@ -236,46 +293,27 @@ const LandingHeader = () => {
               </>
             ) : (
               <>
-                <Link href={"/sign-in"}>
-                  <FaUser className="cursor-pointer hover:text-primary duration-300" />
+                <Link
+                  href={"/sign-in"}
+                  className="bg-redLight p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
+                >
+                  <FaUser />
+                  <span className="text-sm hidden lg:block">
+                    Login / Register
+                  </span>
                 </Link>
               </>
             )}
-
-            <Link href={"/compare"} className="hidden lg:flex">
-              {compareData?.[0]?.product?.length > 0 ? (
-                <span className="relative">
-                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                    {compareData?.[0]?.product?.length}
-                  </span>
-                  <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
-                </span>
-              ) : (
-                <FaCodeCompare className="cursor-pointer rotate-90 hover:text-primary duration-300" />
-              )}
-            </Link>
-            <Link href={"/wishlist"} className="hidden lg:flex">
-              {wishListData?.length > 0 ? (
-                <span className="relative">
-                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                    {wishListData?.length}
-                  </span>
-                  <FaHeart className="cursor-pointer hover:text-primary duration-300" />
-                </span>
-              ) : (
-                <FaHeart className="cursor-pointer hover:text-primary duration-300" />
-              )}
-            </Link>
-            <div className="hidden lg:flex">
+            <div
+              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+              onClick={() => setIsCartOpen(true)}
+            >
               {cartData?.length > 0 ? (
                 <span className="relative">
                   <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                     {cartData?.length}
                   </span>
-                  <FaShoppingBag
-                    className="cursor-pointer hover:text-primary duration-300"
-                    onClick={() => setIsCartOpen(true)}
-                  />
+                  <FaShoppingBag />
                 </span>
               ) : (
                 <FaShoppingBag
@@ -331,7 +369,7 @@ const LandingHeader = () => {
             <GiCancel className="text-xl text-gray-700" />
           </button>
         </div>
-        <div className="p-5 flex items-center justify-between gap-10">
+        <div className="mt-10 flex items-center justify-between gap-10">
           <Link href={"/"} className="hidden lg:flex">
             <Image
               src={globalData?.results?.logo}

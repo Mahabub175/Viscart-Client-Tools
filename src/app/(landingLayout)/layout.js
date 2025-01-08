@@ -7,10 +7,9 @@ const LandingLayout = ({ children }) => {
   return (
     <>
       <LandingHeader />
-      <div className="mt-28 md:mt-[6.4rem] lg:mt-[11.9rem]">{children}</div>
+      <div className="mt-28 md:mt-[6.4rem] lg:mt-[10.9rem]">{children}</div>
       <BackToTop />
       <BottomNavigation />
-
       <LandingFooter />
     </>
   );
