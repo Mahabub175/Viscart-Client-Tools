@@ -6,14 +6,25 @@ import Link from "next/link";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import ContactInfo from "./ContactInfo";
+import Image from "next/image";
 
 const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
-    <section className="bg-white border-t mt-10 mb-16 lg:mb-0">
+    <section className="bg-black border-t mt-10 mb-16 lg:mb-0 text-gray-400">
       <footer className="pt-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center my-container">
+        <div className="my-container">
+          <Link href={"/"}>
+            <Image
+              src={globalData?.results?.logo}
+              alt="logo"
+              width={200}
+              height={200}
+            />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center  my-container">
           <div className="flex flex-col items-start gap-4">
             <h3 className="text-2xl font-bold mb-2">Social</h3>
             <Link
@@ -68,9 +79,9 @@ const LandingFooter = () => {
           <ContactInfo globalData={globalData} />
         </div>
 
-        <hr className="mt-10" />
+        <hr className="mt-10 border-textColor" />
 
-        <div className="flex flex-col md:flex-row gap-5 lg:gap-0 justify-between items-center bg-primary py-10">
+        <div className="flex flex-col md:flex-row gap-5 lg:gap-0 justify-between items-center py-5">
           <p className="font-semibold text-white my-container">
             ©{new Date().getFullYear()}, All rights reserved
           </p>
