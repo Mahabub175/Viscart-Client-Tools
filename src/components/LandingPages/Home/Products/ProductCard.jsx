@@ -89,7 +89,7 @@ const ProductCard = ({ item }) => {
             alt={item?.name}
             width={220}
             height={260}
-            className="h-[180px] lg:h-[200px] group-hover:scale-110 duration-500"
+            className="h-[180px] lg:h-[200px] lg:group-hover:scale-110 duration-500"
           />
         )}
       </div>
@@ -97,7 +97,7 @@ const ProductCard = ({ item }) => {
       <div>
         <div
           className={`text-center lg:text-start px-2 transition-transform duration-500 bg-white ${
-            isHovered ? "-translate-y-[50px]" : "translate-y-0"
+            isHovered ? "lg:-translate-y-[50px]" : "lg:translate-y-0"
           }`}
         >
           <LinkButton href={`/products/${item?.slug}`}>
@@ -118,10 +118,10 @@ const ProductCard = ({ item }) => {
       </div>
       <div
         className={`text-center lg:text-start px-2 transition-transform duration-500 bg-white absolute bottom-10 lg:bottom-0 ${
-          isHovered ? "-translate-y-[50px]" : "translate-y-0"
+          isHovered ? "lg:-translate-y-[50px]" : "lg:translate-y-0"
         }`}
       >
-        <div className="flex items-center gap-4 mb-3">
+        <div className="flex items-center gap-2 lg:gap-4 mb-3">
           {item?.offerPrice && (
             <p className="text-xs lg:text-base line-through text-black/60">
               {globalData?.results?.currency + " " + item?.sellingPrice}
@@ -136,13 +136,13 @@ const ProductCard = ({ item }) => {
               {globalData?.results?.currency + " " + item?.sellingPrice}
             </p>
           )}
-          {/* <div className="text-center">
+          <div className="text-center">
             {!item?.stock > 0 ? (
               <div className="text-xs text-red-500">(Out Of Stock)</div>
             ) : (
               <div className="text-xs text-green-500">(In Stock)</div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
 

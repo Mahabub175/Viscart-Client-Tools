@@ -12,7 +12,7 @@ const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
-    <section className="bg-black border-t mt-10 mb-16 lg:mb-0 text-gray-400">
+    <section className="bg-[#0f0f0f] border-t mt-10 mb-16 lg:mb-0 text-gray-400">
       <footer className="pt-10">
         <div className="my-container">
           <Link href={"/"}>

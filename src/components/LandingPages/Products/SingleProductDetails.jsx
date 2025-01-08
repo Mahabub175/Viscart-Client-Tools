@@ -15,7 +15,6 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
-import SmallFeature from "../Home/SmallFeature";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -146,153 +145,160 @@ const SingleProductDetails = ({ params }) => {
   };
 
   return (
-    <section className="container mx-auto px-2 lg:px-5 py-10 -mt-5 lg:-mt-0">
-      <div className="border-2 border-primary rounded-xl p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 shadow-xl">
-        <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
-          <div className="relative mx-auto lg:w-[300px] xl:w-full">
-            {isVideoPlaying && singleProduct?.video ? (
-              <video
-                src={formatImagePath(singleProduct?.video)}
-                controls
-                autoPlay
-                className="mx-auto rounded-xl w-full h-auto"
-              >
-                Your browser does not support the video tag.
-              </video>
-            ) : currentImage ? (
-              <Zoom>
-                <Image
-                  src={currentImage}
-                  alt="product image"
-                  height={450}
-                  width={450}
-                  className="mx-auto rounded-xl"
-                />
-              </Zoom>
-            ) : (
-              <p>No image available</p>
-            )}
-          </div>
+    <section className="py-10 -mt-10">
+      <div className="bg-white">
+        <div className="p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 my-container pt-16 lg:pt-20">
+          <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
+            <div className="relative mx-auto lg:w-[300px] xl:w-full">
+              {isVideoPlaying && singleProduct?.video ? (
+                <video
+                  src={formatImagePath(singleProduct?.video)}
+                  controls
+                  autoPlay
+                  className="mx-auto rounded-xl w-full h-auto"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : currentImage ? (
+                <Zoom>
+                  <Image
+                    src={currentImage}
+                    alt="product image"
+                    height={450}
+                    width={450}
+                    className="mx-auto rounded-xl"
+                  />
+                </Zoom>
+              ) : (
+                <p>No image available</p>
+              )}
+            </div>
 
-          <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[147px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
-            {allMedia?.map((media, index) => (
-              <div
-                key={index}
-                onClick={() => handleMediaClick(media)}
-                className={`cursor-pointer border-2 rounded-xl ${
-                  selectedImage === media ||
-                  (media === "video-thumbnail" && isVideoPlaying)
-                    ? "border-primary"
-                    : "border-gray-300"
-                }`}
-              >
-                {media === "video-thumbnail" ? (
-                  <div className="flex items-center justify-center rounded-xl w-20 h-20">
-                    <FaPlay className="text-white text-2xl" />
-                  </div>
-                ) : (
-                  <>
+            <div className="flex flex-row lg:flex-col justify-start gap-2 mt-5 max-h-[400px] w-[300px] lg:w-auto xl:w-[143px] border rounded-xl p-4 !overflow-x-auto lg:overflow-y-auto thumbnail">
+              {allMedia?.map((media, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleMediaClick(media)}
+                  className={`cursor-pointer border-2 rounded-xl ${
+                    selectedImage === media ||
+                    (media === "video-thumbnail" && isVideoPlaying)
+                      ? "border-primary"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {media === "video-thumbnail" ? (
                     <div className="flex items-center justify-center rounded-xl w-20 h-20">
-                      <Image
-                        src={media}
-                        alt={`media ${index}`}
-                        height={80}
-                        width={80}
-                        className="object-cover rounded-xl"
-                      />
+                      <FaPlay className="text-white text-2xl" />
                     </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="lg:w-1/2 flex flex-col text-sm lg:text-base">
-          <h2 className="text-xl md:text-3xl font-medium mb-2">
-            {singleProduct?.name}
-          </h2>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium">Category:</span>
-            <span>{singleProduct?.category?.name}</span>
-          </div>
-          {singleProduct?.brand && (
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Brand:</span>
-              <span>{singleProduct?.brand?.name}</span>
-            </div>
-          )}
-          <div className="flex items-center mt-4 gap-4 font-medium">
-            <Rate disabled value={singleProduct?.ratings?.average} allowHalf />(
-            {singleProduct?.ratings?.count})
-          </div>
-          <div className="flex items-center gap-4 text-textColor font-medium my-2">
-            Price:{" "}
-            {singleProduct?.offerPrice ? (
-              <p className="text-primary text-xl">
-                {globalData?.results?.currency +
-                  " " +
-                  singleProduct?.offerPrice}
-              </p>
-            ) : (
-              <p className="text-primary text-xl">
-                {globalData?.results?.currency + " " + currentPrice}
-              </p>
-            )}
-            {singleProduct?.offerPrice && (
-              <p className="text-base line-through text-red-500">
-                {globalData?.results?.currency +
-                  " " +
-                  singleProduct?.sellingPrice}
-              </p>
-            )}
-          </div>
-          <AttributeOptionSelector
-            groupedAttributes={groupedAttributes}
-            selectedAttributes={selectedAttributes}
-            handleAttributeSelect={handleAttributeSelect}
-            item={singleProduct}
-          />
-          <ProductCountCart
-            item={singleProduct}
-            previousSelectedVariant={currentVariant}
-            setPreviousSelectedVariant={setCurrentVariant}
-            fullWidth
-            selectedPreviousAttributes={selectedAttributes}
-          />
-          <div
-            className="w-full bg-primary px-10 py-2 text-xs lg:text-sm rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer"
-            onClick={handleWhatsappClick}
-          >
-            <p>Click To Place a Order With Just a Phone Call</p>
-            <div className="flex items-center justify-center gap-2 mt-1">
-              <FaWhatsapp className="text-2xl" />
-              <p>{businessWhatsapp}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="border-2 border-primary rounded-xl p-5 mb-10 shadow-xl bg-white flex flex-col items-center justify-center">
-        <div className="bg-primary mb-10 px-10 py-2 text-white font-bold rounded-xl inline-block">
-          Description
-        </div>
-        <div
-          dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
-        ></div>
-      </div>
-      <SmallFeature />
-      <div className="mt-20">
-        {activeProducts && activeProducts.length > 0 ? (
-          <>
-            <h2 className="text-xl lg:text-3xl font-bold mb-5 border-b pb-2 px-2">
-              You may also like
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-5 lg:gap-5">
-              {activeProducts.map((product) => (
-                <ProductCard key={product._id} item={product} />
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-center rounded-xl w-20 h-20">
+                        <Image
+                          src={media}
+                          alt={`media ${index}`}
+                          height={80}
+                          width={80}
+                          className="object-cover rounded-xl"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
               ))}
             </div>
-          </>
-        ) : null}
+          </div>
+          <div className="lg:w-1/2 flex flex-col text-sm lg:text-base">
+            <h2 className="text-xl md:text-3xl font-medium mb-2">
+              {singleProduct?.name}
+            </h2>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-medium">Category:</span>
+              <span>{singleProduct?.category?.name}</span>
+            </div>
+            {singleProduct?.brand && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Brand:</span>
+                <span>{singleProduct?.brand?.name}</span>
+              </div>
+            )}
+            <div className="flex items-center mt-4 gap-4 font-medium">
+              <Rate
+                disabled
+                value={singleProduct?.ratings?.average}
+                allowHalf
+              />
+              ({singleProduct?.ratings?.count})
+            </div>
+            <div className="flex items-center gap-4 text-textColor font-medium my-2">
+              Price:{" "}
+              {singleProduct?.offerPrice ? (
+                <p className="text-primary text-xl">
+                  {globalData?.results?.currency +
+                    " " +
+                    singleProduct?.offerPrice}
+                </p>
+              ) : (
+                <p className="text-primary text-xl">
+                  {globalData?.results?.currency + " " + currentPrice}
+                </p>
+              )}
+              {singleProduct?.offerPrice && (
+                <p className="text-base line-through text-red-500">
+                  {globalData?.results?.currency +
+                    " " +
+                    singleProduct?.sellingPrice}
+                </p>
+              )}
+            </div>
+            <AttributeOptionSelector
+              groupedAttributes={groupedAttributes}
+              selectedAttributes={selectedAttributes}
+              handleAttributeSelect={handleAttributeSelect}
+              item={singleProduct}
+            />
+            <ProductCountCart
+              item={singleProduct}
+              previousSelectedVariant={currentVariant}
+              setPreviousSelectedVariant={setCurrentVariant}
+              fullWidth
+              selectedPreviousAttributes={selectedAttributes}
+            />
+            <div
+              className="w-full bg-primary px-10 py-2 text-xs lg:text-sm rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer"
+              onClick={handleWhatsappClick}
+            >
+              <p>Click To Place a Order With Just a Phone Call</p>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <FaWhatsapp className="text-2xl" />
+                <p>{businessWhatsapp}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="my-container">
+        <div className="rounded-xl p-5 mb-10 shadow-xl bg-white">
+          <div className="bg-primary mb-10 px-10 py-2 text-white font-bold rounded-xl inline-block">
+            Description
+          </div>
+          <div
+            dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
+          ></div>
+        </div>
+        <div className="mt-20">
+          {activeProducts && activeProducts.length > 0 ? (
+            <>
+              <h2 className="text-xl lg:text-3xl font-normal mb-5 border-b pb-2 px-2">
+                Related Products
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-5 lg:gap-5">
+                {activeProducts.map((product) => (
+                  <ProductCard key={product._id} item={product} />
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
       </div>
     </section>
   );
