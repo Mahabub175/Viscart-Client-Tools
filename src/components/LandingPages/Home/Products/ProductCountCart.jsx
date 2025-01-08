@@ -49,15 +49,15 @@ const ProductCountCart = ({
 
   const groupedAttributes = item?.variants?.reduce((acc, variant) => {
     variant.attributeCombination.forEach((attribute) => {
-      const attributeName = attribute.attribute.name;
+      const attributeName = attribute?.attribute?.name;
       if (!acc[attributeName]) {
         acc[attributeName] = [];
       }
       if (!acc[attributeName].some((opt) => opt.name === attribute.name)) {
         acc[attributeName].push({
-          name: attribute.name,
-          label: attribute.label || attribute.name,
-          _id: attribute._id,
+          name: attribute?.name,
+          label: attribute?.label || attribute?.name,
+          _id: attribute?._id,
         });
       }
     });

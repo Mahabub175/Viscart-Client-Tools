@@ -79,7 +79,7 @@ const QuickViewHover = ({ item }) => {
   return (
     <div className="flex items-center gap-4 px-3 py-2">
       <div className="bg-primary px-2 lg:px-4 py-2 text-white rounded-full text-xs lg:text-sm">
-        {item?.isVariant ? (
+        {item?.isVariant || item?.variants?.length > 0 ? (
           <LinkButton href={`/products/${item?.slug}`}>
             <div>Details</div>
           </LinkButton>

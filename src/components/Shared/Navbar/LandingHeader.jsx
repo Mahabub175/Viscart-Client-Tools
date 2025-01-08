@@ -238,17 +238,17 @@ const LandingHeader = () => {
 
             <Link
               href={"/compare"}
-              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer rotate-90 hover:text-primary duration-300"
+              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
             >
               {compareData?.[0]?.product?.length > 0 ? (
                 <span className="relative">
                   <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                     {compareData?.[0]?.product?.length}
                   </span>
-                  <FaCodeCompare />
+                  <FaCodeCompare className="rotate-90" />
                 </span>
               ) : (
-                <FaCodeCompare />
+                <FaCodeCompare className="rotate-90" />
               )}
             </Link>
             <Link
@@ -269,7 +269,7 @@ const LandingHeader = () => {
             {user?._id ? (
               <>
                 {" "}
-                <div className="flex items-center gap-2">
+                <div className="">
                   <Popover
                     placement="bottomRight"
                     content={content}
@@ -281,13 +281,15 @@ const LandingHeader = () => {
                         alt="profile"
                         height={40}
                         width={40}
-                        className="rounded-full w-[40px] h-[40px] border-2 border-primary"
+                        className="rounded-full w-[35px] h-[35px] border-2 border-primary"
                       />
                     ) : (
-                      <Avatar className="" size={40} icon={<UserOutlined />} />
+                      <Avatar className="" size={30} icon={<UserOutlined />} />
                     )}
-                    <h2 className="font-semibold">{data?.name ?? "User"}</h2>
-                    <IoMdArrowDropdown />
+                    <h2 className="font-normal text-sm flex items-center mr-2">
+                      {data?.name ?? "User"}
+                      <IoMdArrowDropdown />
+                    </h2>
                   </Popover>
                 </div>
               </>

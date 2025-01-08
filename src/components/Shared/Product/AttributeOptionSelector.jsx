@@ -22,8 +22,8 @@ const AttributeOptionSelector = ({
                 const variantWithImage = item?.variants.find((variant) =>
                   variant.attributeCombination.some(
                     (attr) =>
-                      attr.attribute.name === attributeName &&
-                      attr.name === option.name
+                      attr?.attribute?.name === attributeName &&
+                      attr?.name === option?.name
                   )
                 );
 
