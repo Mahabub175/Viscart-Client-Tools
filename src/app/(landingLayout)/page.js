@@ -1,6 +1,7 @@
 import Banner from "@/components/LandingPages/Home/Banner";
 import Categories from "@/components/LandingPages/Home/Categories";
 import NewsletterBanner from "@/components/LandingPages/Home/NewsletterBanner";
+import CategoryProducts from "@/components/LandingPages/Home/Products/CategoryProducts";
 import NewArrivalProducts from "@/components/LandingPages/Home/Products/NewArrivalProducts";
 
 export const metadata = {
@@ -13,6 +14,7 @@ const page = async () => {
     <div className="overflow-x-hidden">
       <Banner />
       <Categories />
+      <CategoryProducts />
       <NewArrivalProducts />
       <NewsletterBanner />
     </div>

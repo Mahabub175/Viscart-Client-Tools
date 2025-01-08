@@ -27,7 +27,7 @@ const Categories = () => {
       <h2 className="text-2xl lg:text-4xl font-medium text-center lg:text-start mb-10">
         Collections
       </h2>
-      <div className="grid grid-cols-2 md:flex md:flex-wrap gap-5">
+      <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-5">
         {activeCategories?.map((item) => {
           const productCount = getProductCountByCategory(item?._id);
           return (
