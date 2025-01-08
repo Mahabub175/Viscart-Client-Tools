@@ -25,8 +25,25 @@ const LandingFooter = () => {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center  my-container">
+          <ContactInfo globalData={globalData} />
+
+          {footerData?.map((item, i) => (
+            <div key={i}>
+              <h3 className="text-2xl font-bold mb-6">{item?.title}</h3>
+              <ul>
+                {item?.links?.map((link, j) => (
+                  <Link key={j} href={link?.to}>
+                    <p className="mt-2 hover:underline hover:text-primary duration-300">
+                      {link?.name}
+                    </p>
+                  </Link>
+                ))}
+              </ul>
+            </div>
+          ))}
+
           <div className="flex flex-col items-start gap-4">
-            <h3 className="text-2xl font-bold mb-2">Social</h3>
+            <h3 className="text-2xl font-bold mb-2">Follow Us</h3>
             <Link
               href={globalData?.results?.businessFacebook ?? "/"}
               target="_blank"
@@ -60,23 +77,6 @@ const LandingFooter = () => {
               <p>Twitter</p>
             </Link>
           </div>
-
-          {footerData?.map((item, i) => (
-            <div key={i}>
-              <h3 className="text-2xl font-bold mb-6">{item?.title}</h3>
-              <ul>
-                {item?.links?.map((link, j) => (
-                  <Link key={j} href={link?.to}>
-                    <p className="mt-2 hover:underline hover:text-primary duration-300">
-                      {link?.name}
-                    </p>
-                  </Link>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          <ContactInfo globalData={globalData} />
         </div>
 
         <hr className="mt-10 border-textColor" />
