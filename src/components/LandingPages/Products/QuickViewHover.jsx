@@ -84,7 +84,7 @@ const QuickViewHover = ({ item }) => {
             <div>Details</div>
           </LinkButton>
         ) : (
-          <button onClick={addToCart}>Add to Cart</button>
+          <button onClick={addToCart}>Add...</button>
         )}
       </div>
       <Tooltip placement="top" title={"Add to Compare"}>

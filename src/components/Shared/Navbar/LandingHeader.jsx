@@ -30,11 +30,11 @@ import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { IoMdArrowDropdown, IoMdMail } from "react-icons/io";
+import CategoryBrandNavigation from "./CategoryBrandNavigation";
 
 const LandingHeader = () => {
   const pathname = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const dispatch = useDispatch();
@@ -200,7 +200,7 @@ const LandingHeader = () => {
           </div>
         </div>
       </div>
-      <nav className="my-container px-2 -my-3 lg:-my-2">
+      <nav className="my-container px-2 -my-6 lg:-my-2">
         <div className="flex justify-between items-center gap-10">
           <Button
             type="text"
@@ -229,13 +229,6 @@ const LandingHeader = () => {
           </div>
 
           <div className="flex gap-6 items-center text-lg">
-            <div
-              className="cursor-pointer hover:text-primary duration-300 lg:hidden bg-redLight p-3 rounded-full"
-              onClick={() => setIsSearchOpen(true)}
-            >
-              <FaSearch />
-            </div>
-
             <Link
               href={"/compare"}
               className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
@@ -335,7 +328,7 @@ const LandingHeader = () => {
         onClose={() => setIsDrawerOpen(false)}
         open={isDrawerOpen}
       >
-        <div className="flex justify-between items-center -mt-5 mb-5">
+        <div className="flex justify-between items-center -mt-5">
           <Link href={"/"}>
             <Image
               src={globalData?.results?.logo}
@@ -351,64 +344,17 @@ const LandingHeader = () => {
             <GiCancel className="text-xl text-gray-700" />
           </button>
         </div>
-        <CategoryNavigation />
-      </Drawer>
-      <Drawer
-        open={isSearchOpen}
-        onCancel={() => setIsSearchOpen(false)}
-        footer={null}
-        keyboard={true}
-        destroyOnClose
-        placement="top"
-        height={200}
-      >
-        <div className="flex justify-between items-center -mt-2">
-          <div></div>
-          <button
-            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
-            onClick={() => setIsSearchOpen(false)}
-          >
-            <GiCancel className="text-xl text-gray-700" />
-          </button>
+        <div className="relative w-full lg:hidden mb-2">
+          <AutoComplete
+            options={options}
+            onSearch={handleSearch}
+            placeholder="Search for Products..."
+            size="large"
+            className="w-full"
+          />
+          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-primary text-xl" />
         </div>
-        <div className="mt-10 flex items-center justify-between gap-10">
-          <Link href={"/"} className="hidden lg:flex">
-            <Image
-              src={globalData?.results?.logo}
-              alt="logo"
-              width={80}
-              height={80}
-            />
-          </Link>
-          <div className="relative w-full">
-            <AutoComplete
-              options={options}
-              onSearch={handleSearch}
-              placeholder="Search for Products..."
-              size="large"
-              className="w-full"
-            />
-            <FaSearch className="absolute right-8 top-1/2 -translate-y-1/2 text-primary text-xl" />
-          </div>
-          <div className="hidden lg:flex">
-            {cartData?.length > 0 ? (
-              <span className="relative">
-                <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                  {cartData?.length}
-                </span>
-                <FaShoppingBag
-                  className="cursor-pointer hover:text-primary duration-300 text-2xl"
-                  onClick={() => setIsCartOpen(true)}
-                />
-              </span>
-            ) : (
-              <FaShoppingBag
-                className="cursor-pointer hover:text-primary duration-300 text-2xl"
-                onClick={() => setIsCartOpen(true)}
-              />
-            )}
-          </div>
-        </div>
+        <CategoryBrandNavigation />
       </Drawer>
       <Drawer
         placement="right"

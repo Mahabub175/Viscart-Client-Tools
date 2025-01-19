@@ -53,7 +53,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div
-      className="relative group lg:w-[220px] mx-auto h-[330px] flex flex-col border border-gray-200 bg-white rounded-xl overflow-hidden"
+      className="relative group lg:w-[200px] mx-auto h-[330px] flex flex-col border border-gray-200 bg-white rounded-xl overflow-hidden hover:-translate-y-2 duration-500"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -87,7 +87,7 @@ const ProductCard = ({ item }) => {
                 : formatImagePath(item?.mainImage)
             }
             alt={item?.name}
-            width={220}
+            width={200}
             height={260}
             className="h-[180px] lg:h-[200px] lg:group-hover:scale-110 duration-500"
           />

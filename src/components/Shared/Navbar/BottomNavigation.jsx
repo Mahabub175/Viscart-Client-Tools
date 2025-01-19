@@ -90,13 +90,13 @@ const BottomNavigation = () => {
     navItems.push({
       name: "Dashboard",
       href: `/${data.role}/dashboard`,
-      icon: <TbLayoutDashboardFilled className="mt-2 mb-1" />,
+      icon: <TbLayoutDashboardFilled className="mt-[13px] mb-1" />,
     });
   }
 
   return (
     <div>
-      <div className="fixed bottom-0 left-0 z-50 w-full bg-white border-t border-gray-300 shadow-md lg:hidden">
+      <div className="fixed -bottom-[1px] left-0 z-50 w-full bg-white border-t border-gray-300 shadow-md lg:hidden">
         <div className="flex justify-around items-center py-1">
           {navItems.map((item) => (
             <Link

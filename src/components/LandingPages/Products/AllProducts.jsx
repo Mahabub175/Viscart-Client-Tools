@@ -11,9 +11,9 @@ import {
   Button,
   Modal,
   Radio,
+  Spin,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import { paginationNumbers } from "@/assets/data/paginationData";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import ProductCard from "../Home/Products/ProductCard";
 import { debounce } from "lodash";
@@ -22,7 +22,7 @@ const { Option } = Select;
 
 const AllProducts = ({ searchParams }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(18);
+  const [pageSize, setPageSize] = useState(20);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 10000]);
@@ -30,6 +30,10 @@ const AllProducts = ({ searchParams }) => {
   const [filterModal, setFilterModal] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
   const [availability, setAvailability] = useState("inStock");
+  const [loading, setLoading] = useState(false);
+  const [delayedLoading, setDelayedLoading] = useState(true);
+
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: brandData } = useGetAllBrandsQuery();
@@ -51,7 +55,8 @@ const AllProducts = ({ searchParams }) => {
   );
 
   const activeProducts = useMemo(
-    () => productData?.results?.filter((item) => item?.status !== "Inactive"),
+    () =>
+      productData?.results?.filter((item) => item?.status !== "Inactive") || [],
     [productData]
   );
 
@@ -64,6 +69,7 @@ const AllProducts = ({ searchParams }) => {
     if (searchParams) {
       debouncedSetSearchFilter(searchParams);
     } else {
+      setSearchFilter("");
       setSelectedBrands([]);
       setSelectedCategories([]);
       setPriceRange([0, 10000]);
@@ -88,35 +94,66 @@ const AllProducts = ({ searchParams }) => {
     }
   }, [searchFilter, activeBrands, activeCategories]);
 
-  const filteredProducts = useMemo(() => {
-    const filtered = activeProducts?.filter((product) => {
-      const isBrandMatch = selectedBrands.length
-        ? selectedBrands.includes(product?.brand?.name)
-        : true;
-      const isCategoryMatch = selectedCategories.length
-        ? selectedCategories.includes(product?.category?.name)
-        : true;
-      const isPriceMatch =
-        product.sellingPrice >= priceRange[0] &&
-        product.sellingPrice <= priceRange[1];
-      const isAvailabilityMatch =
-        availability === "inStock"
-          ? product.stock > 0
-          : availability === "outOfStock"
-          ? product.stock === 0
-          : true;
-      return (
-        isBrandMatch && isCategoryMatch && isPriceMatch && isAvailabilityMatch
-      );
-    });
+  useEffect(() => {
+    const applyFilters = () => {
+      setLoading(true);
 
-    if (sorting === "PriceLowToHigh") {
-      return filtered?.sort((a, b) => a.sellingPrice - b.sellingPrice);
-    }
-    if (sorting === "PriceHighToLow") {
-      return filtered?.sort((a, b) => b.sellingPrice - a.sellingPrice);
-    }
-    return filtered;
+      let filtered = activeProducts?.filter((product) => {
+        if (!product) return false;
+        const isBrandMatch = selectedBrands.length
+          ? selectedBrands.includes(product?.brand?.name)
+          : true;
+        const isCategoryMatch = selectedCategories.length
+          ? selectedCategories.includes(product?.category?.name)
+          : true;
+        const isPriceMatch =
+          product.sellingPrice >= priceRange[0] &&
+          product.sellingPrice <= priceRange[1];
+        const isAvailabilityMatch =
+          availability === "inStock"
+            ? product.stock > 0
+            : availability === "outOfStock"
+            ? product.stock === 0
+            : true;
+
+        const isSearchMatch =
+          searchFilter?.length > 0
+            ? product?.name?.toLowerCase().includes(searchFilter) ||
+              product?.brand?.name?.toLowerCase().includes(searchFilter) ||
+              product?.category?.name?.toLowerCase().includes(searchFilter)
+            : true;
+
+        return (
+          isBrandMatch &&
+          isCategoryMatch &&
+          isPriceMatch &&
+          isAvailabilityMatch &&
+          isSearchMatch
+        );
+      });
+
+      let sorted = [...filtered];
+      if (sorting === "PriceLowToHigh") {
+        sorted = sorted.sort((a, b) => {
+          const offerPriceA = a.offerPrice || a.sellingPrice;
+          const offerPriceB = b.offerPrice || b.sellingPrice;
+          return offerPriceA - offerPriceB;
+        });
+      } else if (sorting === "PriceHighToLow") {
+        sorted = sorted.sort((a, b) => {
+          const offerPriceA = a.offerPrice || a.sellingPrice;
+          const offerPriceB = b.offerPrice || b.sellingPrice;
+          return offerPriceB - offerPriceA;
+        });
+      }
+
+      setTimeout(() => {
+        setFilteredProducts(sorted);
+        setLoading(false);
+      }, 200);
+    };
+
+    applyFilters();
   }, [
     activeProducts,
     selectedBrands,
@@ -124,6 +161,7 @@ const AllProducts = ({ searchParams }) => {
     priceRange,
     sorting,
     availability,
+    searchFilter,
   ]);
 
   const handlePageChange = (page, size) => {
@@ -151,13 +189,22 @@ const AllProducts = ({ searchParams }) => {
     setAvailability(e.target.value);
   };
 
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setDelayedLoading(false);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   return (
-    <section className="py-10 relative lg:mt-10">
+    <section className="py-10 relative bg-white">
       <div className="my-container">
-        <div className="bg-gray-200 flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
+        <div className="bg-grey flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
           <p className="text-xs md:text-base">
             <span className="font-semibold text-lg">
-              {filteredProducts?.length}
+              {loading || delayedLoading ? "..." : filteredProducts?.length}
             </span>{" "}
             products showing.
           </p>
@@ -181,7 +228,7 @@ const AllProducts = ({ searchParams }) => {
           </Button>
         </div>
         <div className="flex flex-col lg:flex-row gap-5 items-start">
-          <div className="w-full lg:w-3/12 p-4 border rounded-lg shadow-sm lg:sticky top-5 hidden lg:block bg-white">
+          <div className="w-full lg:w-3/12 p-4 border rounded-lg shadow-sm lg:sticky top-5 hidden lg:block bg-grey">
             <h2 className="mb-4 text-lg font-semibold">Filter Products</h2>
             <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
               <label className="block mb-2 font-semibold">Brands</label>
@@ -253,7 +300,11 @@ const AllProducts = ({ searchParams }) => {
           </div>
           <div className="w-full">
             <div>
-              {filteredProducts?.length > 0 ? (
+              {loading || delayedLoading ? (
+                <div className="flex justify-center py-10">
+                  <Spin size="large" />
+                </div>
+              ) : filteredProducts?.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-5">
                   {filteredProducts?.map((product) => (
                     <ProductCard key={product?._id} item={product} />
@@ -270,8 +321,6 @@ const AllProducts = ({ searchParams }) => {
                 current={currentPage}
                 onChange={handlePageChange}
                 pageSize={pageSize}
-                showSizeChanger
-                pageSizeOptions={paginationNumbers}
                 simple
               />
             </div>
