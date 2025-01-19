@@ -8,7 +8,7 @@ import {
 } from "@/redux/services/compare/compareApi";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
-import { Button } from "antd";
+import { Button, Rate } from "antd";
 import Image from "next/image";
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
@@ -57,88 +57,169 @@ const CompareList = () => {
   };
 
   return (
-    <section className="my-container lg:my-20 bg-white p-5 rounded-xl">
+    <section className="my-container bg-white p-5 rounded-xl lg:mt-52 relative">
       {compareData?.length === 0 || !compareData || isError ? (
-        <div className="flex items-center justify-center my-10">
-          <h2 className="lg;text-2xl font-bold text-black/80 text-center text-xl">
-            Please add a product to compare to see them here
+        <div className="flex items-center justify-center my-5">
+          <h2 className="lg:text-2xl font-bold text-black/80 text-center text-xl">
+            Please add products to compare.
           </h2>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-10 items-center">
-          <div className="border rounded-xl p-5 mb-10 lg:mb-0">
-            <p className="text-center font-bold text-xl border-b">Summary</p>
-            <div className="space-y-8 mt-4 text-center lg:text-start">
-              {compareData?.[0]?.product?.map((item) => (
-                <div key={item?._id}>
-                  <h2>{item?.name}</h2>
-                  <div className="flex items-center gap-4 justify-center lg:justify-start">
-                    {item?.offerPrice && (
-                      <p className="text-base font-bold line-through text-red-500">
-                        {globalData?.results?.currency +
-                          " " +
-                          item?.sellingPrice}
-                      </p>
-                    )}
-                    {item?.offerPrice ? (
-                      <p className="text-primary text-xl font-bold">
-                        {globalData?.results?.currency + " " + item?.offerPrice}
-                      </p>
-                    ) : (
-                      <p className="text-primary text-xl font-bold">
-                        {globalData?.results?.currency +
-                          " " +
-                          item?.sellingPrice}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="overflow-x-auto">
+          <div
+            className="text-2xl cursor-pointer text-red-500 absolute right-0 top-0 hover:scale-105 duration-300"
+            onClick={() => handleDelete(compareData[0]?._id)}
+          >
+            <MdDelete />
           </div>
-          <div className="border rounded-xl p-5 col-span-2">
-            <div className="flex flex-row items-center justify-between gap-10 border-b pb-2">
-              <div></div>
-              <p className="text-center font-bold text-xl">Products</p>
-              <div
-                className="text-2xl cursor-pointer text-red-500"
-                onClick={() => handleDelete(compareData[0]?._id)}
-              >
-                <MdDelete />
-              </div>
-            </div>
-            <div className="mt-4 flex flex-col lg:flex-row items-center justify-center gap-10 max-w-[400px] mx-auto">
-              {compareData?.[0]?.product?.map((item) => (
-                <div key={item?._id}>
-                  <div className="flex flex-col items-center gap-4 border rounded-xl p-5">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th className="p-4 text-left">
+                  <span className="">Product Comparison</span>
+                </th>
+                {compareData?.[0]?.product?.map((item) => (
+                  <th
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
                     <Image
                       src={formatImagePath(item?.mainImage)}
                       alt={item?.name || "Product Image"}
-                      width={128}
-                      height={128}
-                      className="w-32 h-32 rounded-xl border-2 border-primary"
+                      width={200}
+                      height={200}
+                      className="mx-auto rounded-md mb-4"
                     />
-                    <LinkButton
-                      href={`/products/${item?.slug}`}
-                      className="text-sm font-normal hover:underline text-center"
-                    >
+                    <LinkButton href={`/products/${item?.slug}`}>
                       {item?.name}
                     </LinkButton>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">Model</td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
+                    {item?.model || "N/A"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">
+                  Category
+                </td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
+                    {item?.category?.name || "N/A"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">Brand</td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
+                    {item?.brand?.name || "N/A"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">Price</td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
+                    <span className="flex justify-center gap-4">
+                      {item?.offerPrice && (
+                        <p className="text-sm font-bold line-through text-red-500 ">
+                          {globalData?.results?.currency +
+                            " " +
+                            item?.sellingPrice}
+                        </p>
+                      )}
+                      {item?.offerPrice ? (
+                        <p className="text-primary font-bold">
+                          {globalData?.results?.currency +
+                            " " +
+                            item?.offerPrice}
+                        </p>
+                      ) : (
+                        <p className="text-primary font-bold">
+                          {globalData?.results?.currency +
+                            " " +
+                            item?.sellingPrice}
+                        </p>
+                      )}
+                    </span>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">Stock</td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className={`border border-gray-300 p-4 text-center ${
+                      item?.stock > 0
+                        ? "text-green-500 font-bold"
+                        : "text-red-500 font-bold"
+                    }`}
+                  >
+                    {item?.stock > 0 ? "In Stock" : "Out of Stock"}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold">Rating</td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
+                    <div className="flex justify-center items-center lg:gap-4 font-medium">
+                      <Rate
+                        disabled
+                        value={item?.ratings?.average}
+                        allowHalf
+                        className="text-[10px] lg:text-base"
+                      />
+                      ({item?.ratings?.count})
+                    </div>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-4 font-bold"></td>
+                {compareData?.[0]?.product?.map((item) => (
+                  <td
+                    key={item?._id}
+                    className="border border-gray-300 p-4 text-center"
+                  >
                     <Button
-                      htmlType="submit"
-                      size="large"
+                      size="small"
                       type="primary"
                       icon={<FaCartShopping />}
                       onClick={() => showModal(item?._id)}
-                      className={`bg-primary hover:bg-secondary font-bold px-10 `}
+                      className="mb-2 lg:w-4/6 py-5 font-semibold"
                     >
-                      Add To Cart
+                      Add to Cart
                     </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
       )}
 
