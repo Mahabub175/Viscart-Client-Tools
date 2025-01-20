@@ -17,6 +17,7 @@ import ProductCard from "../Home/Products/ProductCard";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
 import Link from "next/link";
 import AddToCompare from "./AddToCompare";
+import ProductBreadCrumb from "./ProductBreadCrumb";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -152,7 +153,9 @@ const SingleProductDetails = ({ params }) => {
     <section className="py-10 -mt-10">
       <div className="bg-white">
         <div className="flex items-center justify-between my-container pt-5">
-          <div></div>
+          <div>
+            <ProductBreadCrumb params={params} />
+          </div>
           <div></div>
         </div>
         <div className="p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 my-container pt-16 lg:pt-20">

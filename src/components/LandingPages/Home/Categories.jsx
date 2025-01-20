@@ -31,7 +31,7 @@ const Categories = () => {
     .slice(0, 6);
 
   return (
-    <section className="my-container p-5 mt-10 relative">
+    <section className="my-container p-5 -mt-5 lg:mt-10 relative">
       <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5">
         Top Categories
       </h2>
