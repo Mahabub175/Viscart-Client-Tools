@@ -45,10 +45,10 @@ body {
 }
 
 .ant-menu-item-selected {
-  color: var(--primaryColor) !important;
+  color: #fff !important;
 }
 .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: var(--primaryColor) !important;
+  color: #fff !important;
   font-weight: 700 !important;
 }
 

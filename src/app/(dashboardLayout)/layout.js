@@ -2,12 +2,15 @@
 
 import { Layout } from "antd";
 import Sidebar from "@/components/Shared/Sidebar/Sidebar";
-import { Content, Header } from "antd/es/layout/layout";
-import Profile from "@/components/Shared/Header/Profile";
+import { Content } from "antd/es/layout/layout";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "@/redux/store";
 import PrivateRoute from "@/routes/PrivateRoute";
+import LandingHeader from "@/components/Shared/Navbar/LandingHeader";
+import BackToTop from "@/components/Shared/BackToTop";
+import BottomNavigation from "@/components/Shared/Navbar/BottomNavigation";
+import LandingFooter from "@/components/Shared/Footer/LandingFooter";
 
 const DashboardLayout = ({ children }) => {
   return (
@@ -15,20 +18,21 @@ const DashboardLayout = ({ children }) => {
       <PersistGate persistor={persistor}>
         <PrivateRoute>
           <Layout>
-            <Header className="!bg-white border-b-2">
-              <Profile />
-            </Header>
-            <Layout className="relative">
-              <Sidebar />
+            <LandingHeader />
+            <Layout className="relative mt-20 lg:mt-52 xl:mt-40">
               <Content
                 style={{
                   padding: 24,
                   minHeight: 280,
                 }}
               >
+                <Sidebar />
                 {children}
               </Content>
             </Layout>
+            <BackToTop />
+            <BottomNavigation />
+            <LandingFooter />
           </Layout>
         </PrivateRoute>
       </PersistGate>
