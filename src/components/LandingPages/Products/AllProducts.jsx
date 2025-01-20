@@ -2,7 +2,10 @@
 
 import { useGetAllBrandsQuery } from "@/redux/services/brand/brandApi";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import { useGetProductsQuery } from "@/redux/services/product/productApi";
+import {
+  useGetAllProductsQuery,
+  useGetProductsQuery,
+} from "@/redux/services/product/productApi";
 import {
   Pagination,
   Slider,
@@ -38,6 +41,7 @@ const AllProducts = ({ searchParams }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: brandData } = useGetAllBrandsQuery();
   const { data: categoryData } = useGetAllCategoriesQuery();
+  const { data: products } = useGetAllProductsQuery();
   const { data: productData } = useGetProductsQuery({
     page: currentPage,
     limit: pageSize,
@@ -233,10 +237,16 @@ const AllProducts = ({ searchParams }) => {
             <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
               <label className="block mb-2 font-semibold">Brands</label>
               <Checkbox.Group
-                options={activeBrands?.map((brand) => ({
-                  label: brand.name,
-                  value: brand.name,
-                }))}
+                options={activeBrands?.map((brand) => {
+                  const productCount = products?.results?.filter(
+                    (product) => product?.brand?.name === brand.name
+                  ).length;
+
+                  return {
+                    label: `${brand.name} (${productCount || 0})`,
+                    value: brand.name,
+                  };
+                })}
                 value={selectedBrands}
                 onChange={handleBrandChange}
                 className="flex flex-col gap-2"
@@ -245,10 +255,16 @@ const AllProducts = ({ searchParams }) => {
             <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
               <label className="block mb-2 font-semibold">Categories</label>
               <Checkbox.Group
-                options={activeCategories?.map((category) => ({
-                  label: category.name,
-                  value: category.name,
-                }))}
+                options={activeCategories?.map((category) => {
+                  const productCount = products?.results?.filter(
+                    (product) => product.category.name === category.name
+                  ).length;
+
+                  return {
+                    label: `${category.name} (${productCount || 0})`,
+                    value: category.name,
+                  };
+                })}
                 value={selectedCategories}
                 onChange={handleCategoryChange}
                 className="flex flex-col gap-2"

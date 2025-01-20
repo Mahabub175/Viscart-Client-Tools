@@ -87,8 +87,8 @@ const AdminAccountSetting = () => {
           name={"description"}
           type={"textarea"}
           label={"Website Description"}
-          required={false}
         />
+        <CustomInput name={"announcement"} label={"Website Announcement"} />
         <FileUploader
           defaultValue={data?.results?.logo}
           label="Website Logo"
@@ -105,88 +105,60 @@ const AdminAccountSetting = () => {
           <CustomInput
             name={"deliveryChargeInsideDhaka"}
             label={"Delivery Charge Inside Dhaka"}
-            required={false}
             type={"number"}
           />
           <CustomInput
             name={"deliveryChargeOutsideDhaka"}
             label={"Delivery Charge Outside Dhaka"}
-            required={false}
             type={"number"}
           />
           <CustomInput
             name={"deliveryApiKey"}
             label={"Delivery API Key"}
-            required={false}
             type={"password"}
           />
           <CustomInput
             name={"deliverySecretKey"}
             label={"Delivery Secret Key"}
-            required={false}
             type={"password"}
           />
           <CustomInput
             name={"businessNumber"}
             label={"Business Number"}
-            required={false}
             type={"number"}
           />
-          <CustomInput
-            name={"businessAddress"}
-            label={"Business Address"}
-            required={false}
-          />
-          <CustomInput
-            name={"businessLocation"}
-            label={"Business Location"}
-            required={false}
-          />
-          <CustomInput
-            name={"businessSlogan"}
-            label={"Business Slogan"}
-            required={false}
-          />
+          <CustomInput name={"businessAddress"} label={"Business Address"} />
+          <CustomInput name={"businessLocation"} label={"Business Location"} />
+          <CustomInput name={"businessSlogan"} label={"Business Slogan"} />
           <CustomInput
             name={"businessFacebook"}
             label={"Business Facebook URL"}
-            required={false}
           />
           <CustomInput
             name={"businessTwitter"}
             label={"Business Twitter URL"}
-            required={false}
           />
           <CustomInput
             name={"businessInstagram"}
             label={"Business Instagram URL"}
-            required={false}
           />
           <CustomInput
             name={"businessLinkedin"}
             label={"Business Linkedin URL"}
-            required={false}
           />
           <CustomInput
             name={"businessYoutube"}
             label={"Business Youtube URL"}
-            required={false}
           />
-          <CustomInput
-            name={"businessEmail"}
-            label={"Business Email"}
-            required={false}
-          />
+          <CustomInput name={"businessEmail"} label={"Business Email"} />
           <CustomInput
             name={"businessWhatsapp"}
             label={"Business Whatsapp Number"}
-            required={false}
             type={"number"}
           />
           <CustomInput
             name={"businessWorkHours"}
             label={"Business Work Hours"}
-            required={false}
           />
           <CustomSelect
             name={"currency"}
