@@ -3,19 +3,12 @@
 
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
-import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { AutoComplete, Avatar, Button, Drawer, Popover } from "antd";
+import { Avatar, Button, Drawer, Popover } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  FaHeart,
-  FaPhoneAlt,
-  FaSearch,
-  FaShoppingBag,
-  FaUser,
-} from "react-icons/fa";
+import { FaHeart, FaShoppingBag, FaUser } from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,14 +22,14 @@ import { GiCancel } from "react-icons/gi";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
-import { IoMdArrowDropdown, IoMdMail } from "react-icons/io";
+import { IoMdArrowDropdown } from "react-icons/io";
 import CategoryBrandNavigation from "./CategoryBrandNavigation";
+import ProductSearchBar from "./ProductSearchBar";
 
 const LandingHeader = () => {
   const pathname = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [options, setOptions] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
@@ -71,16 +64,10 @@ const LandingHeader = () => {
     Cart: `/${data?.role}/orders/cart`,
   };
 
-  const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY) {
-      setShowNavbar(false);
-    } else {
-      setShowNavbar(true);
-    }
     setLastScrollY(currentScrollY);
   };
 
@@ -126,80 +113,20 @@ const LandingHeader = () => {
     </div>
   );
 
-  const handleSearch = (value) => {
-    if (!value) {
-      setOptions([]);
-      return;
-    }
-
-    const filteredOptions = products?.results?.filter(
-      (product) =>
-        product.name.toLowerCase().includes(value.toLowerCase()) ||
-        product.category.name?.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setOptions(
-      filteredOptions?.map((product) => ({
-        value: product.name,
-        label: (
-          <Link
-            href={`/products/${product?.slug}`}
-            className="flex items-center gap-4 hover:text-primary pb-2 border-b border-b-gray-300"
-          >
-            <Image
-              src={formatImagePath(product?.mainImage)}
-              alt="product"
-              width={80}
-              height={50}
-              className="object-cover rounded-xl"
-            />
-            <div className="ml-2">
-              <p className="text-lg font-medium">{product?.name}</p>
-              <p>
-                Price: {globalData?.results?.currency}{" "}
-                {product?.offerPrice
-                  ? product?.offerPrice
-                  : product?.sellingPrice}
-              </p>
-              <p>Category: {product?.category?.name}</p>
-            </div>
-          </Link>
-        ),
-      })) || []
-    );
-  };
-
   return (
     <header
-      className={`fixed top-0 left-0 w-full bg-[#f8f7f7] shadow-md transition-transform duration-300 z-50 ${
-        showNavbar ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={`fixed top-0 left-0 w-full bg-[#f8f7f7] shadow-md transition-transform duration-300 z-50`}
     >
       <div
-        className={`bg-grey py-2 text-center px-2 text-sm md:text-base text-black ${
-          lastScrollY > 0 ? "hidden" : ""
-        }`}
+        className={`transition-all duration-500 ease-in-out ${
+          lastScrollY > 0
+            ? "-translate-y-full opacity-0 pointer-events-none -my-6"
+            : "translate-y-0 opacity-100"
+        } bg-grey py-2 text-center px-2 text-sm md:text-base text-black`}
       >
-        <div className="my-container flex flex-col lg:flex-row items-center justify-between text-sm">
-          <Link
-            href={"/contact"}
-            className="hover:text-primary border-b border-b-transparent hover:border-b-primary duration-300"
-          >
-            Contact Us
-          </Link>
-          <div className="flex items-center gap-5">
-            <div className="flex items-center gap-2">
-              <FaPhoneAlt />
-              {globalData?.results?.businessWhatsapp}
-            </div>
-            <div className="h-[16px] w-[1px] bg-black"></div>
-            <div className="flex items-center gap-2">
-              <IoMdMail />
-              {globalData?.results?.businessEmail}
-            </div>
-          </div>
-        </div>
+        {globalData?.results?.announcement ?? "Some Announcement"}
       </div>
+
       <nav className="my-container px-2 -my-6 lg:-my-2">
         <div className="flex justify-between items-center gap-10">
           <Button
@@ -217,16 +144,11 @@ const LandingHeader = () => {
             />
           </Link>
 
-          <div className="relative w-full hidden lg:block">
-            <AutoComplete
-              options={options}
-              onSearch={handleSearch}
-              placeholder="Search for Products..."
-              size="large"
-              className="w-full"
-            />
-            <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-primary text-xl" />
-          </div>
+          <ProductSearchBar
+            products={products}
+            globalData={globalData}
+            isMobile
+          />
 
           <div className="flex gap-6 items-center text-lg">
             <Link
@@ -344,16 +266,8 @@ const LandingHeader = () => {
             <GiCancel className="text-xl text-gray-700" />
           </button>
         </div>
-        <div className="relative w-full lg:hidden mb-2">
-          <AutoComplete
-            options={options}
-            onSearch={handleSearch}
-            placeholder="Search for Products..."
-            size="large"
-            className="w-full"
-          />
-          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-primary text-xl" />
-        </div>
+
+        <ProductSearchBar products={products} globalData={globalData} />
         <CategoryBrandNavigation />
       </Drawer>
       <Drawer

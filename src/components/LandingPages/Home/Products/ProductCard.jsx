@@ -121,26 +121,26 @@ const ProductCard = ({ item }) => {
           isHovered ? "lg:-translate-y-[50px]" : "lg:translate-y-0"
         }`}
       >
-        <div className="flex items-center gap-2 lg:gap-4 mb-3">
+        <div className="flex items-center gap-2 lg:gap-3 mb-3">
           {item?.offerPrice && (
-            <p className="text-xs lg:text-base line-through text-black/60">
+            <p className="text-xs lg:text-sm line-through text-black/60">
               {globalData?.results?.currency + " " + item?.sellingPrice}
             </p>
           )}
           {item?.offerPrice ? (
-            <p className="text-black text-xs lg:text-base text-primary">
+            <p className="text-black text-xs lg:text-sm text-primary">
               {globalData?.results?.currency + " " + item?.offerPrice}
             </p>
           ) : (
-            <p className="text-black text-xs lg:text-base text-primary">
+            <p className="text-black text-xs lg:text-sm text-primary">
               {globalData?.results?.currency + " " + item?.sellingPrice}
             </p>
           )}
-          <div className="text-center">
+          <div className="text-center text-[10px]">
             {!item?.stock > 0 ? (
-              <div className="text-xs text-red-500">(Out Of Stock)</div>
+              <div className="text-red-500">(Out Of Stock)</div>
             ) : (
-              <div className="text-xs text-green-500">(In Stock)</div>
+              <div className="text-green-500">(In Stock)</div>
             )}
           </div>
         </div>

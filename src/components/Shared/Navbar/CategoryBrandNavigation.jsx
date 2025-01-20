@@ -1,12 +1,22 @@
 import { useGetAllBrandsQuery } from "@/redux/services/brand/brandApi";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const CategoryBrandNavigation = () => {
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: brands } = useGetAllBrandsQuery();
   const [activeTab, setActiveTab] = useState("categories");
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const fullPath = `${pathname}?${searchParams.toString()}`;
+  const cleanedQuery = fullPath
+    .replace(/filter=/, "")
+    .replace(/=/, "")
+    .replace(/[+]/g, " ");
 
   return (
     <section className="">
@@ -40,7 +50,11 @@ const CategoryBrandNavigation = () => {
               <Link
                 href={`/products?filter=${category.name}`}
                 key={category._id}
-                className="py-4 font-medium odd:border-y text-gray-700 hover:text-blue-500"
+                className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
+                  cleanedQuery === `/products?${category.name}`
+                    ? "text-primary"
+                    : ""
+                }`}
               >
                 {category.name}
               </Link>
@@ -53,7 +67,11 @@ const CategoryBrandNavigation = () => {
               <Link
                 href={`/products?filter=${brand.name}`}
                 key={brand._id}
-                className="py-4 font-medium odd:border-y text-gray-700 hover:text-blue-500"
+                className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
+                  cleanedQuery === `/products?${brand.name}`
+                    ? "text-primary"
+                    : ""
+                }`}
               >
                 {brand.name}
               </Link>

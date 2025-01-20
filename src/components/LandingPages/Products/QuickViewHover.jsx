@@ -78,23 +78,15 @@ const QuickViewHover = ({ item }) => {
 
   return (
     <div className="flex items-center gap-4 px-3 py-2">
-      <div className="bg-primary px-2 lg:px-4 py-2 text-white rounded-full text-xs lg:text-sm">
+      <div className="bg-primary px-2 lg:px-4 py-2 text-white rounded-full text-xs">
         {item?.isVariant || item?.variants?.length > 0 ? (
           <LinkButton href={`/products/${item?.slug}`}>
             <div>Details</div>
           </LinkButton>
         ) : (
-          <button onClick={addToCart}>Add...</button>
+          <button onClick={addToCart}>Add to cart</button>
         )}
       </div>
-      <Tooltip placement="top" title={"Add to Compare"}>
-        <div
-          className="text-sm lg:text-xl cursor-pointer hover:scale-110 duration-300"
-          onClick={() => addToCompare(item?._id)}
-        >
-          <FaCodeCompare className="rotate-90" />
-        </div>
-      </Tooltip>
       <Tooltip placement="top" title={"Quick View"}>
         <div
           className="text-lg lg:text-2xl cursor-pointer hover:scale-110 duration-300"
