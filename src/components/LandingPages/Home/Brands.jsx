@@ -19,7 +19,7 @@ const Brands = () => {
   );
 
   return (
-    <section className="my-container p-5 rounded-xl mt-10 relative">
+    <section className="my-container p-5 rounded-xl mt-10 relative -my-20">
       <h2 className="text-xl lg:text-3xl font-medium text-start mb-10 border-b pb-4">
         Top Brands We Deal With
       </h2>
