@@ -91,7 +91,7 @@ const ProductForm = ({
           loading={isCategoryFetching}
           disabled={isCategoryFetching}
         />
-        <CustomInput label={"Product Model"} name={"model"} />
+        <CustomInput label={"Product Model"} name={"productModel"} />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
 
