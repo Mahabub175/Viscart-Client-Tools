@@ -103,8 +103,8 @@ const ProductCard = ({ item }) => {
           <LinkButton href={`/products/${item?.slug}`}>
             <Tooltip placement="top" title={item?.name}>
               <h2 className="text-sm text-start md:text-base mt-2 lg:mt-3 hover:text-gray-500 duration-300 mb-1">
-                {item?.name.length > 30
-                  ? item.name.slice(0, 30).concat("...")
+                {item?.name.length > 35
+                  ? item.name.slice(0, 35).concat("...")
                   : item.name}
               </h2>
             </Tooltip>

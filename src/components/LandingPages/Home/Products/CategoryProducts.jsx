@@ -41,7 +41,7 @@ const CategoryProducts = () => {
               className={`cursor-pointer px-4 py-2 ${
                 activeCategory === "all-products"
                   ? "border-b-2 border-primary text-primary"
-                  : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500"
+                  : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500 duration-300"
               }`}
               onClick={() => setActiveCategory("all-products")}
             >
@@ -53,7 +53,7 @@ const CategoryProducts = () => {
                 className={`cursor-pointer px-4 py-2 ${
                   activeCategory === category?._id
                     ? "border-b-2 border-primary text-primary"
-                    : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500"
+                    : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500 duration-300"
                 }`}
                 onClick={() => setActiveCategory(category?._id)}
               >

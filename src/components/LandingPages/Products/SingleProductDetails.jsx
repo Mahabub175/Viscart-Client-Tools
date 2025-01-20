@@ -15,6 +15,8 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import ProductCard from "../Home/Products/ProductCard";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
+import Link from "next/link";
+import AddToCompare from "./AddToCompare";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -149,6 +151,10 @@ const SingleProductDetails = ({ params }) => {
   return (
     <section className="py-10 -mt-10">
       <div className="bg-white">
+        <div className="flex items-center justify-between my-container pt-5">
+          <div></div>
+          <div></div>
+        </div>
         <div className="p-5 flex flex-col lg:flex-row items-center justify-center gap-10 mb-10 my-container pt-16 lg:pt-20">
           <div className="relative mx-auto flex flex-col lg:flex-row-reverse items-center lg:gap-5">
             <div className="relative mx-auto lg:w-[300px] xl:w-full">
@@ -233,6 +239,13 @@ const SingleProductDetails = ({ params }) => {
             </div>
             <div className="flex items-center gap-4 text-textColor font-medium my-2">
               Price:{" "}
+              {singleProduct?.offerPrice && (
+                <p className="text-base line-through text-red-500">
+                  {globalData?.results?.currency +
+                    " " +
+                    singleProduct?.sellingPrice}
+                </p>
+              )}
               {singleProduct?.offerPrice ? (
                 <p className="text-primary text-xl">
                   {globalData?.results?.currency +
@@ -242,13 +255,6 @@ const SingleProductDetails = ({ params }) => {
               ) : (
                 <p className="text-primary text-xl">
                   {globalData?.results?.currency + " " + currentPrice}
-                </p>
-              )}
-              {singleProduct?.offerPrice && (
-                <p className="text-base line-through text-red-500">
-                  {globalData?.results?.currency +
-                    " " +
-                    singleProduct?.sellingPrice}
                 </p>
               )}
             </div>
@@ -275,6 +281,10 @@ const SingleProductDetails = ({ params }) => {
                 <p>{businessWhatsapp}</p>
               </div>
             </div>
+
+            <div className="py-5 border-y mt-5">
+              <AddToCompare item={singleProduct} />
+            </div>
           </div>
         </div>
       </div>
@@ -290,10 +300,18 @@ const SingleProductDetails = ({ params }) => {
         <div className="mt-20">
           {activeProducts && activeProducts.length > 0 ? (
             <>
-              <h2 className="text-xl lg:text-3xl font-normal mb-5 border-b pb-2 px-2">
-                Related Products
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-5 lg:gap-5">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg lg:text-3xl font-medium text-center lg:text-start">
+                  Related Products
+                </h2>
+                <Link
+                  href={`/products?filter=${singleProduct?.category?.names}`}
+                  className="text-primary border-b border-primary font-semibold"
+                >
+                  Show All
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap justify-center gap-5">
                 {activeProducts.map((product) => (
                   <ProductCard key={product._id} item={product} />
                 ))}
