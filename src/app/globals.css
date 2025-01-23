@@ -44,7 +44,7 @@ body {
   border: 1px solid var(--primaryColor) !important;
 }
 
-.ant-menu-item-selected {
+/* .ant-menu-item-selected {
   color: #fff !important;
 }
 .ant-menu-submenu-selected > .ant-menu-submenu-title {
@@ -62,7 +62,7 @@ body {
 
 .ant-menu-item-active {
   color: #fff !important;
-}
+} */
 
 .custom-menu .ant-menu-item::after {
   border-bottom: none !important;
