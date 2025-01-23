@@ -13,24 +13,19 @@ const CheckoutInfo = () => {
     {
       value: "bkash",
       label: "Bkash",
-      info: "Bkash Information: Please send payment to 01XXXXXXXXX.",
-    },
-    {
-      value: "nagad",
-      label: "Nagad",
-      info: "Nagad Information: Please send payment to 01XXXXXXXXX.",
+      info: globalData?.results?.bkashMessage,
     },
     {
       value: "cod",
       label: "Cash on Delivery",
-      info: "Cash on Delivery Information: Please make sure to have the exact amount ready during delivery.",
+      info: globalData?.results?.codMessage,
     },
     ...(globalData?.results?.ssl === "Active"
       ? [
           {
             value: "ssl",
-            label: "SSL Commerz",
-            info: "SSL Commerz: You will be redirected to the SSL Commerz payment gateway.",
+            label: "SSLCommerz",
+            info: "SSLCommerz: You will be redirected to the SSLCommerz payment gateway.",
           },
         ]
       : []),

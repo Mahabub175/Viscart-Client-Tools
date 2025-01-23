@@ -160,6 +160,9 @@ const AdminAccountSetting = () => {
             name={"businessWorkHours"}
             label={"Business Work Hours"}
           />
+          {/* <CustomInput name={"bkashNumber"} label={"Business Bkash Number"} /> */}
+          <CustomInput name={"bkashMessage"} label={"Business Bkash Message"} />
+          <CustomInput name={"codMessage"} label={"Business COD MMessage"} />
           <CustomSelect
             name={"currency"}
             label={"Global Currency"}
