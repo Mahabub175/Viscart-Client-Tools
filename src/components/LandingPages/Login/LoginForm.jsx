@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation } from "@/redux/services/auth/authApi";
 import { toast } from "sonner";
 import { setUser } from "@/redux/services/auth/authSlice";
+import ForgotPassword from "./ForgotPassword";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -50,6 +51,7 @@ const LoginForm = () => {
           type={"password"}
           required={true}
         />
+        <ForgotPassword />
         <SubmitButton text={"Log In"} loading={isLoading} fullWidth={true} />
       </CustomForm>
       <div className="flex items-center my-6">
