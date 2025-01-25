@@ -32,7 +32,7 @@ const Categories = () => {
 
   return (
     <section className="my-container p-5 -mt-5 lg:mt-10 relative">
-      <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5">
+      <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5 text-white">
         Top Categories
       </h2>
       <div className="grid grid-cols-2 md:flex md:flex-wrap gap-5">

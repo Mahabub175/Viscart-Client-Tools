@@ -115,134 +115,143 @@ const LandingHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full bg-[#f8f7f7] shadow-md transition-transform duration-300 z-50`}
+      className={`fixed top-0 left-0 w-full shadow-md transition-transform duration-300 z-50`}
     >
       <div
         className={`transition-all duration-500 ease-in-out ${
           lastScrollY > 0
             ? "-translate-y-full opacity-0 pointer-events-none -my-6"
             : "translate-y-0 opacity-100"
-        } bg-grey py-2 text-center px-2 text-sm md:text-base text-black`}
+        } bg-black/60 py-2 text-center px-2 text-sm md:text-base text-white`}
       >
         {globalData?.results?.announcement ?? "Some Announcement"}
       </div>
 
-      <nav className="my-container px-2 -my-6 lg:-my-2">
-        <div className="flex justify-between items-center gap-10">
-          <Button
-            type="text"
-            className="lg:hidden"
-            icon={<MenuOutlined />}
-            onClick={toggleDrawer}
-          />
-          <Link href={"/"} className="flex flex-[1] lg:flex-none ml-10 lg:ml-0">
-            <Image
-              src={globalData?.results?.logo}
-              alt="logo"
-              width={100}
-              height={100}
+      <nav className="bg-black">
+        <div className="my-container px-2 -my-6 lg:-my-2">
+          <div className="flex justify-between items-center gap-10">
+            <Button
+              type="text"
+              className="lg:hidden text-primaryLight"
+              icon={<MenuOutlined />}
+              onClick={toggleDrawer}
             />
-          </Link>
-
-          <ProductSearchBar
-            products={products}
-            globalData={globalData}
-            isMobile
-          />
-
-          <div className="flex gap-6 items-center text-lg">
             <Link
-              href={"/compare"}
-              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+              href={"/"}
+              className="flex flex-[1] lg:flex-none ml-10 lg:ml-0"
             >
-              {compareData?.[0]?.product?.length > 0 ? (
-                <span className="relative">
-                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                    {compareData?.[0]?.product?.length}
+              <Image
+                src={globalData?.results?.logo}
+                alt="logo"
+                width={100}
+                height={100}
+              />
+            </Link>
+
+            <ProductSearchBar
+              products={products}
+              globalData={globalData}
+              isMobile
+            />
+
+            <div className="flex gap-6 items-center text-lg">
+              <Link
+                href={"/compare"}
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+              >
+                {compareData?.[0]?.product?.length > 0 ? (
+                  <span className="relative">
+                    <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                      {compareData?.[0]?.product?.length}
+                    </span>
+                    <FaCodeCompare className="rotate-90" />
                   </span>
+                ) : (
                   <FaCodeCompare className="rotate-90" />
-                </span>
-              ) : (
-                <FaCodeCompare className="rotate-90" />
-              )}
-            </Link>
-            <Link
-              href={"/wishlist"}
-              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
-            >
-              {wishListData?.length > 0 ? (
-                <span className="relative">
-                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                    {wishListData?.length}
+                )}
+              </Link>
+              <Link
+                href={"/wishlist"}
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+              >
+                {wishListData?.length > 0 ? (
+                  <span className="relative">
+                    <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                      {wishListData?.length}
+                    </span>
+                    <FaHeart />
                   </span>
+                ) : (
                   <FaHeart />
-                </span>
+                )}
+              </Link>
+              {user?._id ? (
+                <>
+                  {" "}
+                  <div className="mr-3">
+                    <Popover
+                      placement="bottomRight"
+                      content={content}
+                      className="cursor-pointer flex items-center gap-1 text-primaryLight"
+                    >
+                      {data?.profile_image ? (
+                        <Image
+                          src={data?.profile_image}
+                          alt="profile"
+                          height={40}
+                          width={40}
+                          className="rounded-full w-[35px] h-[35px] border-2 border-primaryLight"
+                        />
+                      ) : (
+                        <Avatar
+                          className=""
+                          size={30}
+                          icon={<UserOutlined />}
+                        />
+                      )}
+                      <h2 className="font-normal text-sm flex items-center mr-2">
+                        {data?.name ?? "User"}
+                        <IoMdArrowDropdown />
+                      </h2>
+                    </Popover>
+                  </div>
+                </>
               ) : (
-                <FaHeart />
-              )}
-            </Link>
-            {user?._id ? (
-              <>
-                {" "}
-                <div className="">
-                  <Popover
-                    placement="bottomRight"
-                    content={content}
-                    className="cursor-pointer flex items-center gap-1"
+                <>
+                  <Link
+                    href={"/sign-in"}
+                    className="bg-white p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
                   >
-                    {data?.profile_image ? (
-                      <Image
-                        src={data?.profile_image}
-                        alt="profile"
-                        height={40}
-                        width={40}
-                        className="rounded-full w-[35px] h-[35px] border-2 border-primary"
-                      />
-                    ) : (
-                      <Avatar className="" size={30} icon={<UserOutlined />} />
-                    )}
-                    <h2 className="font-normal text-sm flex items-center mr-2">
-                      {data?.name ?? "User"}
-                      <IoMdArrowDropdown />
-                    </h2>
-                  </Popover>
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  href={"/sign-in"}
-                  className="bg-redLight p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
-                >
-                  <FaUser />
-                  <span className="text-sm hidden lg:block">
-                    Login / Register
-                  </span>
-                </Link>
-              </>
-            )}
-            <div
-              className="hidden lg:flex bg-redLight p-3 rounded-full cursor-pointer hover:text-primary duration-300"
-              onClick={() => setIsCartOpen(true)}
-            >
-              {cartData?.length > 0 ? (
-                <span className="relative">
-                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                    {cartData?.length}
-                  </span>
-                  <FaShoppingBag />
-                </span>
-              ) : (
-                <FaShoppingBag
-                  className="cursor-pointer hover:text-primary duration-300"
-                  onClick={() => setIsCartOpen(true)}
-                />
+                    <FaUser />
+                    <span className="text-sm hidden lg:block">
+                      Login / Register
+                    </span>
+                  </Link>
+                </>
               )}
+              <div
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+                onClick={() => setIsCartOpen(true)}
+              >
+                {cartData?.length > 0 ? (
+                  <span className="relative">
+                    <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                      {cartData?.length}
+                    </span>
+                    <FaShoppingBag />
+                  </span>
+                ) : (
+                  <FaShoppingBag
+                    className="cursor-pointer hover:text-primary duration-300"
+                    onClick={() => setIsCartOpen(true)}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </nav>
-      <div className="hidden lg:flex gap-6 items-center bg-grey">
+      <div className="hidden lg:flex gap-6 items-center bg-black/70">
         <CategoryNavigation />
       </div>
       <Drawer

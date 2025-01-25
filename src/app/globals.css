@@ -28,7 +28,7 @@
 }
 
 body {
-  background-color: #ededed;
+  background: linear-gradient(135deg, #060606, #101010, #101010);
 }
 
 .ant-btn-primary {

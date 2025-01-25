@@ -151,7 +151,7 @@ const SingleProductDetails = ({ params }) => {
 
   return (
     <section className="py-10 -mt-10">
-      <div className="bg-white">
+      <div className="text-primaryLight">
         <div className="flex items-center justify-between my-container pt-5">
           <div>
             <ProductBreadCrumb params={params} />
@@ -240,7 +240,7 @@ const SingleProductDetails = ({ params }) => {
               />
               ({singleProduct?.ratings?.count})
             </div>
-            <div className="flex items-center gap-4 text-textColor font-medium my-2">
+            <div className="flex items-center gap-4 text-white font-medium my-2">
               Price:{" "}
               {singleProduct?.offerPrice && (
                 <p className="text-base line-through text-red-500">
@@ -250,13 +250,13 @@ const SingleProductDetails = ({ params }) => {
                 </p>
               )}
               {singleProduct?.offerPrice ? (
-                <p className="text-primary text-xl">
+                <p className="text-primaryLight text-xl">
                   {globalData?.results?.currency +
                     " " +
                     singleProduct?.offerPrice}
                 </p>
               ) : (
-                <p className="text-primary text-xl">
+                <p className="text-primaryLight text-xl">
                   {globalData?.results?.currency + " " + currentPrice}
                 </p>
               )}
@@ -275,7 +275,7 @@ const SingleProductDetails = ({ params }) => {
               selectedPreviousAttributes={selectedAttributes}
             />
             <div
-              className="w-full bg-primary px-10 py-2 text-xs lg:text-sm rounded-full shadow-xl mt-10 text-center text-white font-bold cursor-pointer"
+              className="w-full bg-primary px-10 py-2 text-xs lg:text-sm rounded-full shadow mt-10 text-center text-white font-bold cursor-pointer"
               onClick={handleWhatsappClick}
             >
               <p>Click To Place a Order With Just a Phone Call</p>
@@ -292,7 +292,7 @@ const SingleProductDetails = ({ params }) => {
         </div>
       </div>
       <div className="my-container">
-        <div className="rounded-xl p-5 mb-10 shadow-xl bg-white">
+        <div className="rounded-xl p-5 mb-10 shadow bg-white/80">
           <div className="bg-primary mb-10 px-10 py-2 text-white font-bold rounded-xl inline-block">
             Description
           </div>

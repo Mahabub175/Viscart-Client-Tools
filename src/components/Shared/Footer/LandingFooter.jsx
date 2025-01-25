@@ -12,7 +12,7 @@ const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
-    <section className="bg-[#0f0f0f] border-t mt-10 mb-16 lg:mb-0 text-gray-400">
+    <section className="bg-[#0f0f0f] mb-16 lg:mb-0 text-gray-400">
       <footer className="pt-10">
         <div className="my-container">
           <Link href={"/"}>
@@ -33,7 +33,7 @@ const LandingFooter = () => {
               <ul>
                 {item?.links?.map((link, j) => (
                   <Link key={j} href={link?.to}>
-                    <p className="mt-2 hover:underline hover:text-primary duration-300">
+                    <p className="mt-2 hover:underline hover:text-white/70 duration-300">
                       {link?.name}
                     </p>
                   </Link>

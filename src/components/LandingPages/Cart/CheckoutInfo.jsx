@@ -20,6 +20,15 @@ const CheckoutInfo = () => {
       label: "Cash on Delivery",
       info: globalData?.results?.codMessage,
     },
+    ...(globalData?.results?.bank === "Active"
+      ? [
+          {
+            value: "bank",
+            label: "EFT/RTGS",
+            info: globalData?.results?.bankMessage,
+          },
+        ]
+      : []),
     ...(globalData?.results?.ssl === "Active"
       ? [
           {
@@ -38,7 +47,7 @@ const CheckoutInfo = () => {
       <CustomInput type="textarea" name="address" label="Address" required />
 
       <Form.Item name="paymentMethod" label="Payment Method" required>
-        <Radio.Group className="flex flex-col gap-2">
+        <Radio.Group className="flex flex-col gap-4">
           {paymentOptions.map((option) => (
             <div key={option.value} className="flex flex-col">
               <Radio value={option.value}>{option.label}</Radio>

@@ -34,16 +34,16 @@ const BottomNavigation = () => {
     {
       name: "Product",
       href: "/products",
-      icon: <AppstoreOutlined />,
+      icon: <AppstoreOutlined className="mb-1 mt-2.5" />,
     },
     {
       name: "Wishlist",
       href: "/wishlist",
       icon: (
         <div className="relative">
-          <HeartOutlined />
+          <HeartOutlined className="mb-1 mt-2.5" />
           {wishListData?.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {wishListData.length}
             </span>
           )}

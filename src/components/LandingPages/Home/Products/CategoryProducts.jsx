@@ -32,16 +32,16 @@ const CategoryProducts = () => {
   return (
     <section className="my-container mt-10">
       <div className="flex flex-col lg:flex-row items-center justify-between border-b">
-        <h2 className="text-xl lg:text-3xl font-medium text-center mb-5">
+        <h2 className="text-xl lg:text-3xl font-medium text-center mb-5 text-white">
           Top Featured Products
         </h2>
         <div className="overflow-auto max-w-[350px] md:max-w-full whitespace-nowrap">
-          <ul className="flex gap-4 border-b pb-2">
+          <ul className="flex gap-4 pb-2">
             <li
               className={`cursor-pointer px-4 py-2 ${
                 activeCategory === "all-products"
-                  ? "border-b-2 border-primary text-primary"
-                  : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500 duration-300"
+                  ? "border-b-2 border-white text-white"
+                  : "border-b-2 border-transparent text-white/70 hover:border-gray-300 hover:text-gray-500 duration-300"
               }`}
               onClick={() => setActiveCategory("all-products")}
             >
@@ -52,8 +52,8 @@ const CategoryProducts = () => {
                 key={category?._id}
                 className={`cursor-pointer px-4 py-2 ${
                   activeCategory === category?._id
-                    ? "border-b-2 border-primary text-primary"
-                    : "border-b-2 border-transparent hover:border-gray-300 hover:text-gray-500 duration-300"
+                    ? "border-b-2 border-white text-white"
+                    : "border-b-2 border-transparent text-white/70 hover:border-gray-300 hover:text-gray-500 duration-300"
                 }`}
                 onClick={() => setActiveCategory(category?._id)}
               >

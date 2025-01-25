@@ -174,7 +174,7 @@ const CartDetails = () => {
   };
 
   return (
-    <section className="container mx-auto px-5 lg:py-10 relative">
+    <section className="container mx-auto px-5 lg:py-10 relative bg-white/95 rounded-lg">
       <h2 className="font-normal text-2xl">Order List</h2>
       <div>
         {cartData?.length === 0 || !cartData || isError ? (

@@ -57,7 +57,7 @@ const CompareList = () => {
   };
 
   return (
-    <section className="my-container bg-white p-5 rounded-xl lg:mt-52 relative">
+    <section className="my-container text-white p-5 rounded-xl lg:mt-52 relative my-20">
       {compareData?.length === 0 || !compareData || isError ? (
         <div className="flex items-center justify-center my-5">
           <h2 className="lg:text-2xl font-bold text-black/80 text-center text-xl">
@@ -149,13 +149,13 @@ const CompareList = () => {
                         </p>
                       )}
                       {item?.offerPrice ? (
-                        <p className="text-primary font-bold">
+                        <p className="text-primaryLight font-bold">
                           {globalData?.results?.currency +
                             " " +
                             item?.offerPrice}
                         </p>
                       ) : (
-                        <p className="text-primary font-bold">
+                        <p className="text-primaryLight font-bold">
                           {globalData?.results?.currency +
                             " " +
                             item?.sellingPrice}

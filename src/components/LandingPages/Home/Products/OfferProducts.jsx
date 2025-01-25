@@ -17,13 +17,13 @@ const OfferProducts = () => {
   return (
     <section className="my-container mt-10">
       <div className="py-10">
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-5 text-primaryLight">
           <h2 className="text-lg lg:text-3xl font-medium text-center lg:text-start">
             Offer Products
           </h2>
           <Link
             href={`/offers`}
-            className="text-primary border-b border-primary font-semibold"
+            className="text-primaryLight border-b border-primaryLight font-semibold"
           >
             Show All
           </Link>

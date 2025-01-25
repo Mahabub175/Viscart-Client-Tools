@@ -12,7 +12,7 @@ const AllOffers = () => {
 
   return (
     <section className="my-container relative border p-2 rounded-xl mt-32 lg:mt-52">
-      <h2 className="my-5 lg:my-10 text-3xl font-bold text-center">
+      <h2 className="my-5 lg:my-10 text-3xl font-bold text-center text-primaryLight">
         Offer Products
       </h2>
       {filteredProducts?.length > 0 ? (
@@ -24,7 +24,7 @@ const AllOffers = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-xl font-semibold my-10">
+        <div className="text-center text-xl font-semibold my-10 text-primaryLight">
           No offer products found.
         </div>
       )}
