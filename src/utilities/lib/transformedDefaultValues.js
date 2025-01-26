@@ -25,6 +25,7 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
         if (value === "true") {
           value = true;
         } else if (
+          key.includes("publishedAt") ||
           key.includes("expiredDate") ||
           key.includes("startDate") ||
           key.includes("endDate")

@@ -46,15 +46,16 @@ const ForgotPassword = () => {
       }
     } else {
       try {
-        const response = await forgotPassword({
+        const res = await forgotPassword({
           number: values.number,
-        }).unwrap();
-        if (response.success) {
-          const decodedToken = verifyToken(response.data.otp);
+        });
+        if (res.error) {
+          toast.error(res?.error?.data?.errorMessage);
+        }
+        if (res.data.success) {
+          toast.success(res.data.message);
+          const decodedToken = verifyToken(res.data.data.otp);
           setOtp(decodedToken?.otp);
-          toast.success("OTP sent successfully!");
-        } else {
-          toast.error("Failed to send OTP. Please try again.");
         }
       } catch (error) {
         toast.error(

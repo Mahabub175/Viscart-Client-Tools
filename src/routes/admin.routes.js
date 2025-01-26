@@ -2,7 +2,7 @@ import { AiFillProduct } from "react-icons/ai";
 import { BiCategoryAlt } from "react-icons/bi";
 import { BsFillCartCheckFill, BsFillCartFill } from "react-icons/bs";
 import { CiGift } from "react-icons/ci";
-import { FaUser, FaImage } from "react-icons/fa";
+import { FaUser, FaImage, FaPager } from "react-icons/fa";
 import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
 import {
@@ -63,11 +63,11 @@ export const adminSidebarRoutes = [
       { name: "Coupon", path: "orders/coupon", icon: RiCoupon3Line },
     ],
   },
-  // {
-  //   name: "Offers",
-  //   path: "offer",
-  //   icon: MdLocalOffer,
-  // },
+  {
+    name: "Blog",
+    path: "blog",
+    icon: FaPager,
+  },
   {
     name: "Reviews",
     path: "review",

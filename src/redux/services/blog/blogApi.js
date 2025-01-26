@@ -1,20 +1,20 @@
 import { baseApi } from "@/redux/api/baseApi";
 
-const brandApi = baseApi.injectEndpoints({
+const blogApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    addBrand: build.mutation({
+    addBlog: build.mutation({
       query: (data) => {
         return {
-          url: "/brand/",
+          url: "/blog/",
           method: "POST",
           body: data,
         };
       },
-      invalidatesTags: ["brand"],
+      invalidatesTags: ["blog"],
     }),
-    getBrands: build.query({
+    getBlogs: build.query({
       query: ({ page = 1, limit = 5, search }) => ({
-        url: `/brand?page=${page}&limit=${limit}&searchText=${search}`,
+        url: `/blog?page=${page}&limit=${limit}&searchText=${search}`,
         method: "GET",
       }),
       transformResponse: (response) => {
@@ -23,64 +23,64 @@ const brandApi = baseApi.injectEndpoints({
           results: response.data?.results,
         };
       },
-      providesTags: ["brand"],
+      providesTags: ["blog"],
     }),
-    getAllBrands: build.query({
+    getAllBlogs: build.query({
       query: () => ({
-        url: `/brand/`,
+        url: `/blog/`,
         method: "GET",
       }),
       transformResponse: (response) => {
         return { results: response.data?.results };
       },
-      providesTags: ["brand"],
+      providesTags: ["blog"],
     }),
-    getSingleBrand: build.query({
+    getSingleBlog: build.query({
       query: (id) => ({
-        url: `/brand/${id}/`,
+        url: `/blog/${id}/`,
         method: "GET",
       }),
       transformResponse: (response) => {
         return response.data;
       },
-      providesTags: ["brand"],
+      providesTags: ["blog"],
     }),
-    updateBrand: build.mutation({
+    updateBlog: build.mutation({
       query: (payload) => ({
-        url: `/brand/${payload.id}/`,
+        url: `/blog/${payload.id}/`,
         method: "PATCH",
         body: payload.data,
       }),
-      invalidatesTags: ["brand"],
+      invalidatesTags: ["blog"],
     }),
-    deleteBrand: build.mutation({
+    deleteBlog: build.mutation({
       query: (id) => ({
-        url: `/brand/${id}/`,
+        url: `/blog/${id}/`,
         method: "Delete",
         body: {},
       }),
-      invalidatesTags: ["brand"],
+      invalidatesTags: ["blog"],
     }),
-    deleteBulkBrand: build.mutation({
+    deleteBulkBlog: build.mutation({
       query: (payload) => {
         return {
-          url: `/brand/bulk-delete/`,
+          url: `/blog/bulk-delete/`,
           method: "POST",
           body: payload,
         };
       },
-      invalidatesTags: ["brand"],
+      invalidatesTags: ["blog"],
     }),
   }),
   overrideExisting: true,
 });
 
 export const {
-  useAddBrandMutation,
-  useGetBrandsQuery,
-  useGetAllBrandsQuery,
-  useGetSingleBrandQuery,
-  useUpdateBrandMutation,
-  useDeleteBrandMutation,
-  useDeleteBulkBrandMutation,
-} = brandApi;
+  useAddBlogMutation,
+  useGetBlogsQuery,
+  useGetAllBlogsQuery,
+  useGetSingleBlogQuery,
+  useUpdateBlogMutation,
+  useDeleteBlogMutation,
+  useDeleteBulkBlogMutation,
+} = blogApi;
