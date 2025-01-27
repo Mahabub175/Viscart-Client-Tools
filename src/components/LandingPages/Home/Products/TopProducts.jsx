@@ -43,12 +43,12 @@ const TopProducts = () => {
         ? sortedCategories?.slice(0, 7)?.map(({ category, products }) => (
             <div key={category?._id} className="py-10">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg lg:text-3xl font-medium text-center lg:text-start text-white">
+                <h2 className="text-lg lg:text-3xl font-medium text-center lg:text-start">
                   {category?.name}
                 </h2>
                 <Link
                   href={`/products?filter=${category?.name}`}
-                  className="text-white border-b border-white font-semibold"
+                  className="text-primary border-b border-primary font-semibold"
                 >
                   Show All
                 </Link>

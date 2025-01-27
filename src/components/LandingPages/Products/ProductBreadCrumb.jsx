@@ -29,10 +29,7 @@ const ProductBreadCrumb = ({ params }) => {
       if (!category) return;
       hierarchy.unshift({
         title: (
-          <Link
-            href={`/products?filter=${category.name}`}
-            className="breadcrumb-link"
-          >
+          <Link href={`/products?filter=${category.name}`}>
             {category.name}
           </Link>
         ),
@@ -48,30 +45,16 @@ const ProductBreadCrumb = ({ params }) => {
 
     setBreadcrumbItems([
       {
-        title: (
-          <Link href="/" className="breadcrumb-link">
-            Home
-          </Link>
-        ),
+        title: <Link href="/">Home</Link>,
       },
       {
-        title: (
-          <Link href="/products" className="breadcrumb-link">
-            Products
-          </Link>
-        ),
+        title: <Link href="/products">Products</Link>,
       },
       ...hierarchy,
     ]);
   }, [singleProduct, categories]);
 
-  return (
-    <Breadcrumb
-      separator=">"
-      items={breadcrumbItems}
-      className="breadcrumb-custom"
-    />
-  );
+  return <Breadcrumb separator=">" items={breadcrumbItems} />;
 };
 
 export default ProductBreadCrumb;

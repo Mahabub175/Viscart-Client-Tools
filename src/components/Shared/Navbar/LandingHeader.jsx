@@ -118,35 +118,35 @@ const LandingHeader = () => {
       className={`fixed top-0 left-0 w-full shadow-md transition-transform duration-300 z-50`}
     >
       <div
-        className={`transition-all duration-500 ease-in-out ${
+        className={`transition-all duration-300 ease-in-out lg:pb-4 ${
           lastScrollY > 0
-            ? "-translate-y-full opacity-0 pointer-events-none -my-6"
+            ? "-translate-y-full opacity-0 pointer-events-none -my-6 lg:-my-6"
             : "translate-y-0 opacity-100"
-        } bg-black/60 py-2 text-center px-2 text-sm md:text-base text-white`}
+        } bg-black/90 py-2 text-center px-2 text-sm md:text-base text-white`}
       >
         {globalData?.results?.announcement ?? "Some Announcement"}
       </div>
 
       <nav className="bg-black">
-        <div className="my-container px-2 -my-6 lg:-my-2">
+        <div className="my-container px-2 lg:-my-2">
           <div className="flex justify-between items-center gap-10">
-            <Button
-              type="text"
-              className="lg:hidden text-primaryLight"
-              icon={<MenuOutlined />}
-              onClick={toggleDrawer}
-            />
-            <Link
-              href={"/"}
-              className="flex flex-[1] lg:flex-none ml-10 lg:ml-0"
-            >
-              <Image
-                src={globalData?.results?.logo}
-                alt="logo"
-                width={100}
-                height={100}
+            <div className="flex items-center gap-2">
+              <Button
+                type="text"
+                className="lg:hidden text-primaryLight"
+                icon={<MenuOutlined />}
+                onClick={toggleDrawer}
               />
-            </Link>
+              <Link href={"/"}>
+                <Image
+                  src={globalData?.results?.logo}
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  className="h-16 lg:h-full w-full object-contain"
+                />
+              </Link>
+            </div>
 
             <ProductSearchBar
               products={products}
@@ -251,7 +251,7 @@ const LandingHeader = () => {
           </div>
         </div>
       </nav>
-      <div className="hidden lg:flex gap-6 items-center bg-black/70">
+      <div className="hidden lg:flex gap-6 items-center bg-black/95">
         <CategoryNavigation />
       </div>
       <Drawer

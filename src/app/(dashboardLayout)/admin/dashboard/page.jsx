@@ -72,6 +72,16 @@ const AdminDashboard = () => {
           data={dashboardData?.results?.sliders}
           href={"/admin/slider"}
         />
+        <DashboardCards
+          icon={TbBrandAirtable}
+          title="Account Setting"
+          href={"/admin/account-setting"}
+        />
+        <DashboardCards
+          icon={TbBrandAirtable}
+          title="Global Settings"
+          href={"/admin/global-setting"}
+        />
       </div>
     </>
   );

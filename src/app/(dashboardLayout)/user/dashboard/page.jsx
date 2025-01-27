@@ -21,7 +21,7 @@ const UserDashboard = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-10">
         <DashboardCards
           icon={TbBrandAirtable}
           title="Wishlists"
@@ -31,14 +31,19 @@ const UserDashboard = () => {
         <DashboardCards
           icon={TbBrandAirtable}
           title="Carts"
-          data={dashboardData?.carts}
-          href={"/user/orders/carts"}
+          data={dashboardData?.carts || 0}
+          href={"/user/orders/cart"}
         />
         <DashboardCards
           icon={TbBrandAirtable}
           title="Orders"
-          data={dashboardData?.orders}
+          data={dashboardData?.orders || 0}
           href={"/user/orders/order"}
+        />
+        <DashboardCards
+          icon={TbBrandAirtable}
+          title="Account Setting"
+          href={"/user/account-setting"}
         />
       </div>
     </>

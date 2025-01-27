@@ -151,7 +151,7 @@ const SingleProductDetails = ({ params }) => {
 
   return (
     <section className="py-10 -mt-10">
-      <div className="text-primaryLight">
+      <div className="">
         <div className="flex items-center justify-between my-container pt-5">
           <div>
             <ProductBreadCrumb params={params} />

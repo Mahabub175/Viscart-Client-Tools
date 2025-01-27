@@ -27,9 +27,9 @@
   height: 3px;
 }
 
-body {
+/* body {
   background: linear-gradient(135deg, #060606, #101010, #101010);
-}
+} */
 
 .ant-btn-primary {
   background-color: var(--primaryColor) !important;
@@ -45,15 +45,15 @@ body {
 }
 
 .breadcrumb-custom {
-  color: var(--primaryLightColor) !important;
+  color: #000 !important;
 }
 
 .breadcrumb-custom .ant-breadcrumb-separator {
-  color: var(--primaryLightColor) !important;
+  color: #000 !important;
 }
 
 .breadcrumb-link {
-  color: var(--primaryLightColor) !important;
+  color: #000 !important;
   text-decoration: none;
 }
 
