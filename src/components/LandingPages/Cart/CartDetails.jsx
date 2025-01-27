@@ -2,35 +2,30 @@
 
 import deleteImage from "@/assets/images/Trash-can.png";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
-import {
-  useLoginMutation,
-  useSignUpMutation,
-} from "@/redux/services/auth/authApi";
-import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
+import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
   useDeleteBulkCartMutation,
   useDeleteCartMutation,
   useGetSingleCartByUserQuery,
 } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useAddOrderMutation } from "@/redux/services/order/orderApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { formatImagePath } from "@/utilities/lib/formatImagePath";
-import { useRouter } from "next/navigation";
 
 const CartDetails = () => {
   const router = useRouter();
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
-  const dispatch = useDispatch();
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const { data: cartData, isError } = useGetSingleCartByUserQuery(
@@ -41,8 +36,6 @@ const CartDetails = () => {
   const [deleteBulkCart] = useDeleteBulkCartMutation();
 
   const [addOrder] = useAddOrderMutation();
-  const [signUp] = useSignUpMutation();
-  const [login] = useLoginMutation();
 
   const [counts, setCounts] = useState({});
   const [subTotal, setSubTotal] = useState(0);
@@ -77,34 +70,37 @@ const CartDetails = () => {
 
     try {
       if (!user) {
-        const signUpData = {
-          name: values?.name,
-          number: values?.number,
-          password: values?.number,
-        };
+        // const signUpData = {
+        //   name: values?.name,
+        //   number: values?.number,
+        //   password: values?.number,
+        // };
 
-        try {
-          signUpResponse = await signUp(signUpData).unwrap();
+        // try {
+        //   signUpResponse = await signUp(signUpData).unwrap();
 
-          const loginData = {
-            emailNumber: values?.number,
-            password: values?.number,
-          };
+        //   const loginData = {
+        //     emailNumber: values?.number,
+        //     password: values?.number,
+        //   };
 
-          const loginResponse = await login(loginData).unwrap();
-          if (loginResponse.success) {
-            dispatch(
-              setUser({
-                user: loginResponse.data.user,
-                token: loginResponse.data.token,
-              })
-            );
-          }
-        } catch (error) {
-          if (error?.data?.errorMessage === "number already exists") {
-            toast.error("Number already exists");
-          }
-        }
+        //   const loginResponse = await login(loginData).unwrap();
+        //   if (loginResponse.success) {
+        //     dispatch(
+        //       setUser({
+        //         user: loginResponse.data.user,
+        //         token: loginResponse.data.token,
+        //       })
+        //     );
+        //   }
+        // } catch (error) {
+        //   if (error?.data?.errorMessage === "number already exists") {
+        //     toast.error("Number already exists");
+        //   }
+        // }
+
+        toast.error("Please login to continue!", { id: toastId });
+        return;
       }
 
       setTimeout(async () => {

@@ -46,7 +46,12 @@ const CheckoutInfo = () => {
       <CustomInput type="number" name="number" label="Number" required />
       <CustomInput type="textarea" name="address" label="Address" required />
 
-      <Form.Item name="paymentMethod" label="Payment Method" required>
+      <Form.Item
+        name="paymentMethod"
+        label="Payment Method"
+        required
+        rules={[{ required: true, message: `Payment Method is required` }]}
+      >
         <Radio.Group className="flex flex-col gap-4">
           {paymentOptions.map((option) => (
             <div key={option.value} className="flex flex-col">

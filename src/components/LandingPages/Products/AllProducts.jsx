@@ -2,10 +2,7 @@
 
 import { useGetAllBrandsQuery } from "@/redux/services/brand/brandApi";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
-import {
-  useGetAllProductsQuery,
-  useGetProductsQuery,
-} from "@/redux/services/product/productApi";
+import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import {
   Pagination,
   Slider,
@@ -41,12 +38,13 @@ const AllProducts = ({ searchParams }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: brandData } = useGetAllBrandsQuery();
   const { data: categoryData } = useGetAllCategoriesQuery();
-  const { data: products } = useGetAllProductsQuery();
-  const { data: productData } = useGetProductsQuery({
-    page: currentPage,
-    limit: pageSize,
-    search: "",
-  });
+  const { data: productData } = useGetAllProductsQuery();
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return filteredProducts.slice(startIndex, endIndex);
+  }, [filteredProducts, currentPage, pageSize]);
 
   const activeBrands = useMemo(
     () => brandData?.results?.filter((item) => item?.status !== "Inactive"),
@@ -238,7 +236,7 @@ const AllProducts = ({ searchParams }) => {
               <label className="block mb-2 font-semibold">Brands</label>
               <Checkbox.Group
                 options={activeBrands?.map((brand) => {
-                  const productCount = products?.results?.filter(
+                  const productCount = productData?.results?.filter(
                     (product) => product?.brand?.name === brand.name
                   ).length;
 
@@ -256,7 +254,7 @@ const AllProducts = ({ searchParams }) => {
               <label className="block mb-2 font-semibold">Categories</label>
               <Checkbox.Group
                 options={activeCategories?.map((category) => {
-                  const productCount = products?.results?.filter(
+                  const productCount = productData?.results?.filter(
                     (product) => product.category.name === category.name
                   ).length;
 
@@ -320,9 +318,9 @@ const AllProducts = ({ searchParams }) => {
                 <div className="flex justify-center py-10">
                   <Spin size="large" />
                 </div>
-              ) : filteredProducts?.length > 0 ? (
+              ) : paginatedProducts?.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-5">
-                  {filteredProducts?.map((product) => (
+                  {paginatedProducts?.map((product) => (
                     <ProductCard key={product?._id} item={product} />
                   ))}
                 </div>
@@ -331,14 +329,16 @@ const AllProducts = ({ searchParams }) => {
                   No products found.
                 </p>
               )}
-              <Pagination
-                className="flex justify-end items-center !mt-10"
-                total={productData?.meta?.totalCount}
-                current={currentPage}
-                onChange={handlePageChange}
-                pageSize={pageSize}
-                simple
-              />
+              <div className="flex justify-end pt-10">
+                <Pagination
+                  current={currentPage}
+                  total={filteredProducts.length}
+                  pageSize={pageSize}
+                  showSizeChanger
+                  pageSizeOptions={["10", "20", "50", "100"]}
+                  onChange={handlePageChange}
+                />
+              </div>
             </div>
           </div>
         </div>

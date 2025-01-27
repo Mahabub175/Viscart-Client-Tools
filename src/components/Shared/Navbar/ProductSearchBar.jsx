@@ -17,13 +17,15 @@ const ProductSearchBar = ({ products, globalData, isMobile }) => {
       return;
     }
 
-    const results = products?.results?.filter(
-      (product) =>
-        product.name.toLowerCase().includes(value.toLowerCase()) ||
-        product.category.name?.toLowerCase().includes(value.toLowerCase())
-    );
+    const results =
+      Array.isArray(products?.results) &&
+      products?.results?.filter(
+        (product) =>
+          product?.name?.toLowerCase().includes(value.toLowerCase()) ||
+          product?.category?.name?.toLowerCase().includes(value.toLowerCase())
+      );
 
-    setFilteredOptions(results);
+    setFilteredOptions(results || []);
   };
 
   const handleBlur = () => {
@@ -66,7 +68,7 @@ const ProductSearchBar = ({ products, globalData, isMobile }) => {
                   <p className="flex items-center gap-4">
                     Price:{" "}
                     {product?.offerPrice && (
-                      <span className="text-xs lg:text-sm line-through text-red-500">
+                      <span className="text-xs line-through text-red-500">
                         {globalData?.results?.currency +
                           " " +
                           product?.sellingPrice}
