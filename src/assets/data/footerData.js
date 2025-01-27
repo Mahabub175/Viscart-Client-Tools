@@ -14,7 +14,7 @@ export const footerData = [
       { name: "About Us", to: "/" },
       { name: "Contact Us", to: "/contact" },
       { name: "Hot Deals", to: "/offers" },
-      { name: "Promotions", to: "/offers" },
+      { name: "Blog", to: "/blog" },
       { name: "New products", to: "/products" },
     ],
   },

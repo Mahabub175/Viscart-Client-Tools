@@ -45,6 +45,16 @@ const blogApi = baseApi.injectEndpoints({
       },
       providesTags: ["blog"],
     }),
+    getSingleBlogBySlug: build.query({
+      query: (slug) => ({
+        url: `/blog/slug/${slug}/`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return response.data;
+      },
+      providesTags: ["blog"],
+    }),
     updateBlog: build.mutation({
       query: (payload) => ({
         url: `/blog/${payload.id}/`,
@@ -80,6 +90,7 @@ export const {
   useGetBlogsQuery,
   useGetAllBlogsQuery,
   useGetSingleBlogQuery,
+  useGetSingleBlogBySlugQuery,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
   useDeleteBulkBlogMutation,
