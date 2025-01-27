@@ -3,20 +3,24 @@ import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import {
   useForgotPasswordMutation,
-  useResetPasswordMutation,
+  useLoginMutation,
 } from "@/redux/services/auth/authApi";
+import { setUser } from "@/redux/services/auth/authSlice";
 import { verifyToken } from "@/utilities/lib/verifyToken";
 import { Modal } from "antd";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
-const ForgotPassword = () => {
+const LoginWithOtp = () => {
   const [openModal, setOpenModal] = useState(false);
   const [otp, setOtp] = useState("");
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const [resetPassword, { isLoading: isResetLoading }] =
-    useResetPasswordMutation();
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
 
   const onSubmit = async (values) => {
     if (otp) {
@@ -25,29 +29,22 @@ const ForgotPassword = () => {
         return;
       }
       try {
-        const response = await resetPassword({
-          number: values.number,
-          otp: values.otp,
-          newPassword: values.newPassword,
-        }).unwrap();
-        if (response.success) {
-          toast.success("Password reset successfully!");
+        const res = await login(values).unwrap();
+        if (res.success) {
+          dispatch(setUser({ user: res.data.user, token: res.data.token }));
           setOpenModal(false);
           setOtp("");
-        } else {
-          toast.error("Failed to reset password. Please try again!");
-          setOtp("");
+          toast.success("Logged in Successfully!");
+          router.push("/");
         }
       } catch (error) {
-        toast.error(
-          error.data?.message || "Error resetting password. Please try again."
-        );
+        toast.error("Invalid credentials. Please try again!");
         setOtp("");
       }
     } else {
       try {
         const res = await forgotPassword({
-          number: values.number,
+          number: values.emailNumber,
         });
         if (res.error) {
           toast.error(res?.error?.data?.errorMessage);
@@ -71,7 +68,7 @@ const ForgotPassword = () => {
         className="hover:underline hover:text-blue-500 duration-300 inline-flex"
         onClick={() => setOpenModal(true)}
       >
-        Forgot Password?
+        Log in with OTP!
       </p>
 
       <Modal
@@ -83,16 +80,10 @@ const ForgotPassword = () => {
         keyboard
       >
         <CustomForm onSubmit={onSubmit}>
-          <CustomInput name={"number"} label={"Phone Number"} required />
+          <CustomInput name={"emailNumber"} label={"Phone Number"} required />
           {otp && (
             <>
               <CustomInput name={"otp"} label={"OTP"} required />
-              <CustomInput
-                name={"newPassword"}
-                label={"New Password"}
-                type="password"
-                required
-              />
               <p
                 className="hover:underline hover:text-blue-500 duration-300 -mt-2 mb-4"
                 onClick={() => setOtp("")}
@@ -102,8 +93,8 @@ const ForgotPassword = () => {
             </>
           )}
           <SubmitButton
-            text={otp ? "Reset Password" : "Send OTP"}
-            loading={isLoading || isResetLoading}
+            text={otp ? "Log in" : "Send OTP"}
+            loading={isLoading || isLoginLoading}
             fullWidth
           />
         </CustomForm>
@@ -112,4 +103,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default LoginWithOtp;
