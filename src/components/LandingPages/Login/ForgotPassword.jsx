@@ -68,7 +68,7 @@ const ForgotPassword = () => {
   return (
     <div className="-mt-2 mb-4">
       <p
-        className="hover:underline hover:text-blue-500 duration-300 inline-flex"
+        className="hover:underline hover:text-blue-500 duration-300 inline-flex cursor-pointer"
         onClick={() => setOpenModal(true)}
       >
         Forgot Password?
