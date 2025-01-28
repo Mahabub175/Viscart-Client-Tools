@@ -49,7 +49,7 @@ const ProductSearchBar = ({ products, globalData, isMobile }) => {
 
         {/* Search Results */}
         {isFocused && searchValue && filteredOptions.length > 0 && (
-          <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-2 max-h-[35rem] overflow-y-auto">
+          <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto">
             {filteredOptions.slice(0, 10).map((product) => (
               <Link
                 key={product.slug}

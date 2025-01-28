@@ -57,7 +57,7 @@ const CompareList = () => {
   };
 
   return (
-    <section className="my-container p-5 rounded-xl lg:mt-52 relative my-20">
+    <section className="my-container p-5 rounded-xl mt-28 lg:mt-52 relative my-20">
       {compareData?.length === 0 || !compareData || isError ? (
         <div className="flex items-center justify-center my-5">
           <h2 className="lg:text-2xl font-bold text-black/80 text-center text-xl">

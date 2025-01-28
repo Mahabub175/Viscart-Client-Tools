@@ -1,9 +1,15 @@
 "use client";
 
 import DashboardCards from "@/components/Dashboard/DashboardCards";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetAdminDashboardQuery } from "@/redux/services/dashboard/dashboardApi";
+import { Avatar } from "antd";
+import Image from "next/image";
 import { useEffect } from "react";
 import { TbBrandAirtable } from "react-icons/tb";
+import { useSelector } from "react-redux";
+import { UserOutlined } from "@ant-design/icons";
 
 const AdminDashboard = () => {
   useEffect(() => {
@@ -13,11 +19,37 @@ const AdminDashboard = () => {
     });
   });
 
+  const user = useSelector(useCurrentUser);
+  const { data } = useGetSingleUserQuery(user?._id);
+
   const { data: dashboardData } = useGetAdminDashboardQuery();
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
+    <section>
+      <div className="mb-10 flex items-center gap-5">
+        <div>
+          {data?.profile_image ? (
+            <Image
+              src={data?.profile_image}
+              alt="profile"
+              height={100}
+              width={100}
+              className="rounded-full w-[100px] h-[100px] border-2 border-primaryLight object-contain"
+            />
+          ) : (
+            <Avatar
+              className="rounded-full w-[100px] h-[100px] border-2 border-primaryLight"
+              size={100}
+              icon={<UserOutlined />}
+            />
+          )}
+        </div>
+        <div>
+          <p>Hello,</p>
+          <p className="text-base lg:text-4xl font-medium">{data?.name}</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-10">
         <DashboardCards
           icon={TbBrandAirtable}
           title="Brands"
@@ -83,7 +115,7 @@ const AdminDashboard = () => {
           href={"/admin/global-setting"}
         />
       </div>
-    </>
+    </section>
   );
 };
 

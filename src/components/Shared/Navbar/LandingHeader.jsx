@@ -8,7 +8,7 @@ import { Avatar, Button, Drawer, Popover } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaHeart, FaShoppingBag, FaUser } from "react-icons/fa";
+import { FaHeart, FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +29,7 @@ import ProductSearchBar from "./ProductSearchBar";
 const LandingHeader = () => {
   const pathname = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(useCurrentUser);
@@ -77,6 +78,10 @@ const LandingHeader = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
+
+  const toggleSearchBar = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
 
   const content = (
     <div>
@@ -143,7 +148,7 @@ const LandingHeader = () => {
                   alt="logo"
                   width={100}
                   height={100}
-                  className="h-16 lg:h-full w-full object-contain"
+                  className="h-[70px] lg:h-full w-full object-contain -my-1.5 lg:my-0"
                 />
               </Link>
             </div>
@@ -185,10 +190,16 @@ const LandingHeader = () => {
                   <FaHeart />
                 )}
               </Link>
+              <div className="lg:hidden">
+                <FaSearch
+                  className="text-xl cursor-pointer text-primaryLight"
+                  onClick={toggleSearchBar}
+                />
+              </div>
               {user?._id ? (
                 <>
                   {" "}
-                  <div className="mr-3">
+                  <div className="-ml-2">
                     <Popover
                       placement="bottomRight"
                       content={content}
@@ -200,17 +211,17 @@ const LandingHeader = () => {
                           alt="profile"
                           height={40}
                           width={40}
-                          className="rounded-full w-[35px] h-[35px] border-2 border-primaryLight"
+                          className="rounded-full w-[30px] h-[30px] lg:w-[90px] lg:h-[35px] border-2 border-primaryLight object-contain"
                         />
                       ) : (
                         <Avatar
-                          className=""
+                          className="rounded-full w-[35px] h-[35px] border-2 border-primaryLight"
                           size={30}
                           icon={<UserOutlined />}
                         />
                       )}
                       <h2 className="font-normal text-sm flex items-center mr-2">
-                        {data?.name ?? "User"}
+                        {/* {data?.name ?? "User"} */}
                         <IoMdArrowDropdown />
                       </h2>
                     </Popover>
@@ -251,6 +262,9 @@ const LandingHeader = () => {
           </div>
         </div>
       </nav>
+      {isSearchOpen && (
+        <ProductSearchBar products={products} globalData={globalData} />
+      )}
       <div className="hidden lg:flex gap-6 items-center bg-black/95">
         <CategoryNavigation />
       </div>
