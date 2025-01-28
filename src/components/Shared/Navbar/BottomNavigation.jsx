@@ -96,13 +96,13 @@ const BottomNavigation = () => {
 
   return (
     <div>
-      <div className="fixed -bottom-[1px] left-0 z-50 w-full bg-white border-t border-gray-300 shadow-md lg:hidden">
-        <div className="flex justify-around items-center py-1">
+      <div className="fixed -bottom-[1px] left-0 z-50 w-full bg-primary border-t border-gray-300 shadow-md lg:hidden">
+        <div className="flex justify-around items-center">
           {navItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center text-gray-600 hover:text-primary transition relative"
+              className="flex flex-col items-center text-primaryLight relative"
             >
               <span className="text-2xl">{item.icon}</span>
               <span className="text-sm mt-1">{item.name}</span>
@@ -127,7 +127,7 @@ const BottomNavigation = () => {
             <GiCancel className="text-xl text-gray-700" />
           </button>
         </div>
-        <DrawerCart data={cartData} />
+        <DrawerCart data={cartData} setDrawer={setIsCartOpen} />
       </Drawer>
     </div>
   );

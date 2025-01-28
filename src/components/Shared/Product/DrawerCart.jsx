@@ -12,12 +12,14 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
-const DrawerCart = ({ data }) => {
+const DrawerCart = ({ data, setDrawer }) => {
   const [counts, setCounts] = useState({});
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const [deleteCart] = useDeleteCartMutation();
   const [updateCart] = useUpdateCartMutation();
+  const router = useRouter();
 
   useEffect(() => {
     if (data?.length) {
@@ -65,6 +67,11 @@ const DrawerCart = ({ data }) => {
       toast.error("Failed to delete item!");
       console.error("Error deleting cart:", error);
     }
+  };
+
+  const proceedToCheckout = () => {
+    router.push("/cart");
+    setDrawer(false);
   };
 
   return (
@@ -160,8 +167,8 @@ const DrawerCart = ({ data }) => {
       )}
 
       {data?.length > 0 && (
-        <Link
-          href="/cart"
+        <div
+          onClick={proceedToCheckout}
           className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-10 w-5/6 mx-auto"
         >
           <div className="flex items-center justify-between bg-primary gap-5 px-5 py-4 rounded-xl">
@@ -170,7 +177,7 @@ const DrawerCart = ({ data }) => {
               {globalData?.results?.currency} {subtotal?.toFixed(2)}
             </p>
           </div>
-        </Link>
+        </div>
       )}
     </div>
   );
