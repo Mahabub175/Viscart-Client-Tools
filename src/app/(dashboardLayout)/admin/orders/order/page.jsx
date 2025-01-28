@@ -6,6 +6,8 @@ import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import DetailsModal from "@/components/Reusable/Modal/DetailsModal";
+import OrderInvoice from "@/components/Reusable/OrderInvoice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import {
   useDeleteOrderMutation,
   useGetOrdersQuery,
@@ -27,12 +29,11 @@ import {
 } from "antd";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
+import { IoIosRefresh } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 import { toast } from "sonner";
-import { IoIosRefresh } from "react-icons/io";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { FaSearch } from "react-icons/fa";
 
 const Orders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -164,12 +165,6 @@ const Orders = () => {
       align: "center",
     },
     {
-      title: "Invoice",
-      dataIndex: "invoice",
-      key: "invoice",
-      align: "center",
-    },
-    {
       title: "Tracking Code",
       dataIndex: "trackingCode",
       key: "trackingCode",
@@ -240,25 +235,32 @@ const Orders = () => {
             color = "orange";
             text = "Pending";
             break;
-          case "delivered":
+          case "confirmed":
             color = "green";
-            text = "delivered";
+            text = "Confirmed";
             break;
-          case "returned":
-            color = "red";
-            text = "Returned";
+          case "packaging":
+            color = "purple";
+            text = "Packaging";
             break;
-          case "processing":
+          case "out for delivery":
             color = "blue";
-            text = "Processing";
+            text = "Out For Delivery";
             break;
           case "cancelled":
             color = "red";
             text = "Cancelled";
             break;
-          case "received":
+          case "delivered":
             color = "blue";
-            text = "Received";
+            text = "Delivered";
+            break;
+          case "failed to deliver":
+            color = "red";
+            text = "Failed To Deliver";
+          case "returned":
+            color = "red";
+            text = "Returned";
             break;
           default:
             color = "gray";
@@ -365,21 +367,13 @@ const Orders = () => {
         );
       },
     },
-    // {
-    //   title: "Fraud Detection",
-    //   dataIndex: "fraudDetection",
-    //   key: "fraudDetection",
-    //   align: "center",
-    //   render: () => (
-    //     <div
-    //       onClick={() => {
-    //         toast.info("Fraud Detection is not available in demo version.");
-    //       }}
-    //     >
-    //       <Progress type="circle" percent={0} size={40} />
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "Invoice",
+      dataIndex: "invoice",
+      key: "invoice",
+      align: "center",
+      render: (_, record) => <OrderInvoice order={record} />,
+    },
     {
       title: "Auto Delivery",
       dataIndex: "autoDelivery",
@@ -446,7 +440,6 @@ const Orders = () => {
     key: item._id,
     orderId: item.orderId,
     tranId: item.tranId ?? "N/A",
-    invoice: item.invoice ?? "N/A",
     trackingCode: item.trackingCode,
     name: item?.name,
     email: item?.email,
@@ -559,11 +552,12 @@ const Orders = () => {
             label={"Order Status"}
             options={[
               { label: "Pending", value: "pending" },
-              { label: "Received", value: "received" },
+              { label: "Confirmed", value: "confirmed" },
+              { label: "Packaging", value: "packaging" },
+              { label: "Out For Delivery", value: "out for delivery" },
               { label: "Delivered", value: "delivered" },
               { label: "Returned", value: "returned" },
-              { label: "Cancelled", value: "cancelled" },
-              { label: "Processing", value: "processing" },
+              { label: "Failed To Deliver", value: "failed to deliver" },
             ]}
           />
           <SubmitButton fullWidth text={"Update"} loading={isLoading} />

@@ -240,7 +240,7 @@ const SingleProductDetails = ({ params }) => {
               />
               ({singleProduct?.ratings?.count})
             </div>
-            <div className="flex items-center gap-4 text-white font-medium my-2">
+            <div className="flex items-center gap-4 font-medium my-2">
               Price:{" "}
               {singleProduct?.offerPrice && (
                 <p className="text-base line-through text-red-500">
@@ -250,13 +250,13 @@ const SingleProductDetails = ({ params }) => {
                 </p>
               )}
               {singleProduct?.offerPrice ? (
-                <p className="text-primaryLight text-xl">
+                <p className="text-primary text-xl">
                   {globalData?.results?.currency +
                     " " +
                     singleProduct?.offerPrice}
                 </p>
               ) : (
-                <p className="text-primaryLight text-xl">
+                <p className="text-primary text-xl">
                   {globalData?.results?.currency + " " + currentPrice}
                 </p>
               )}

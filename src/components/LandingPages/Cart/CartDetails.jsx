@@ -2,7 +2,7 @@
 
 import deleteImage from "@/assets/images/Trash-can.png";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
-import { useCurrentUser } from "@/redux/services/auth/authSlice";
+import { setUser, useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
   useDeleteBulkCartMutation,
   useDeleteCartMutation,
@@ -17,14 +17,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
+import { useLoginMutation } from "@/redux/services/auth/authApi";
 
 const CartDetails = () => {
   const router = useRouter();
   const user = useSelector(useCurrentUser);
+  const dispatch = useDispatch();
   const deviceId = useSelector(useDeviceId);
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -34,7 +36,7 @@ const CartDetails = () => {
 
   const [deleteCart] = useDeleteCartMutation();
   const [deleteBulkCart] = useDeleteBulkCartMutation();
-
+  const [login] = useLoginMutation();
   const [addOrder] = useAddOrderMutation();
 
   const [counts, setCounts] = useState({});
@@ -66,48 +68,37 @@ const CartDetails = () => {
 
   const onSubmit = async (values) => {
     const toastId = toast.loading("Creating Order...");
-    let signUpResponse;
-
+    let loginResponse;
     try {
       if (!user) {
-        // const signUpData = {
-        //   name: values?.name,
-        //   number: values?.number,
-        //   password: values?.number,
-        // };
+        try {
+          const loginData = {
+            emailNumber: values?.number,
+            defaultPassword: values?.number,
+          };
 
-        // try {
-        //   signUpResponse = await signUp(signUpData).unwrap();
-
-        //   const loginData = {
-        //     emailNumber: values?.number,
-        //     password: values?.number,
-        //   };
-
-        //   const loginResponse = await login(loginData).unwrap();
-        //   if (loginResponse.success) {
-        //     dispatch(
-        //       setUser({
-        //         user: loginResponse.data.user,
-        //         token: loginResponse.data.token,
-        //       })
-        //     );
-        //   }
-        // } catch (error) {
-        //   if (error?.data?.errorMessage === "number already exists") {
-        //     toast.error("Number already exists");
-        //   }
-        // }
-
-        toast.error("Please login to continue!", { id: toastId });
-        return;
+          loginResponse = await login(loginData).unwrap();
+          if (loginResponse.success) {
+            dispatch(
+              setUser({
+                user: loginResponse.data.user,
+                token: loginResponse.data.token,
+              })
+            );
+          }
+        } catch (error) {
+          toast.error(error?.message || "Please Register First!", {
+            id: toastId,
+          });
+          return;
+        }
       }
 
       setTimeout(async () => {
         try {
           const submittedData = {
             ...values,
-            user: signUpResponse?.data?._id ?? user?._id,
+            user: loginResponse?.data?.user?._id ?? user?._id,
             deviceId,
             products: cartData?.map((item) => ({
               product: item?.productId,
@@ -163,7 +154,7 @@ const CartDetails = () => {
           });
           console.error("Error preparing Order data:", error);
         }
-      }, 2000);
+      }, 1000);
     } catch (error) {
       toast.error("Error in order creation process!");
     }
