@@ -231,7 +231,7 @@ const LandingHeader = () => {
                 <>
                   <Link
                     href={"/sign-in"}
-                    className="bg-white p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
+                    className="bg-white p-1.5 lg:p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
                   >
                     <FaUser />
                     <span className="text-sm hidden lg:block">
