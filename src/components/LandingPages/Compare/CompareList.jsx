@@ -4,6 +4,7 @@ import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
   useDeleteCompareMutation,
+  useDeleteCompareProductMutation,
   useGetSingleCompareByUserQuery,
 } from "@/redux/services/compare/compareApi";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
@@ -18,6 +19,7 @@ import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { toast } from "sonner";
 import LinkButton from "@/components/Shared/LinkButton";
+import CompareCreate from "./CompareCreate";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -27,16 +29,14 @@ const CompareList = () => {
   const deviceId = useSelector(useDeviceId);
   const { data: globalData, isLoading: isGlobalDataLoading } =
     useGetAllGlobalSettingQuery();
-  const {
-    data: compareData,
-    isLoading: isCompareDataLoading,
-    isError,
-  } = useGetSingleCompareByUserQuery(user?._id ?? deviceId);
+  const { data: compareData, isLoading: isCompareDataLoading } =
+    useGetSingleCompareByUserQuery(user?._id ?? deviceId);
   const { data: productData, isLoading: isProductDataLoading } =
     useGetSingleProductQuery(productId, {
       skip: !productId,
     });
   const [deleteCompare] = useDeleteCompareMutation();
+  const [deleteCompareProduct] = useDeleteCompareProductMutation();
 
   if (isGlobalDataLoading || isCompareDataLoading || isProductDataLoading) {
     return <div>Loading...</div>;
@@ -53,16 +53,25 @@ const CompareList = () => {
 
   const handleDelete = (itemId) => {
     deleteCompare(itemId);
+    toast.success("Products deleted from compare list");
+  };
+
+  const handleDeleteProduct = (itemId) => {
+    const data = {
+      id: compareData?.[0]?._id,
+      data: {
+        product: itemId,
+      },
+    };
+    deleteCompareProduct(data);
     toast.success("Product deleted from compare list");
   };
 
   return (
     <section className="my-container p-5 rounded-xl mt-28 lg:mt-52 relative my-20">
-      {compareData?.length === 0 || !compareData || isError ? (
-        <div className="flex items-center justify-center my-5">
-          <h2 className="lg:text-2xl font-bold text-black/80 text-center text-xl">
-            Please add products to compare.
-          </h2>
+      {compareData?.[0]?.product?.length === 0 || compareData?.length === 0 ? (
+        <div className="flex flex-col items-center justify-center my-5">
+          <CompareCreate />
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -93,6 +102,12 @@ const CompareList = () => {
                     <LinkButton href={`/products/${item?.slug}`}>
                       {item?.name}
                     </LinkButton>
+                    <div
+                      className="text-2xl cursor-pointer text-red-500 flex justify-center mt-5 hover:scale-105 duration-300"
+                      onClick={() => handleDeleteProduct(item?._id)}
+                    >
+                      <MdDelete />
+                    </div>
                   </th>
                 ))}
               </tr>
