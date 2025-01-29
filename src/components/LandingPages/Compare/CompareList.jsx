@@ -6,20 +6,19 @@ import {
   useDeleteCompareMutation,
   useDeleteCompareProductMutation,
   useGetSingleCompareByUserQuery,
+  useUpdateCompareMutation,
 } from "@/redux/services/compare/compareApi";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { useGetSingleProductQuery } from "@/redux/services/product/productApi";
-import { Button, Rate } from "antd";
-import Image from "next/image";
-import { useState } from "react";
-import { FaCartShopping } from "react-icons/fa6";
-import { useSelector } from "react-redux";
-import { MdDelete } from "react-icons/md";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
-import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import {
+  useGetAllProductsQuery,
+  useGetSingleProductQuery,
+} from "@/redux/services/product/productApi";
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import LinkButton from "@/components/Shared/LinkButton";
 import CompareCreate from "./CompareCreate";
+import CompareTable from "./CompareTable";
 
 const CompareList = () => {
   const [productId, setProductId] = useState(null);
@@ -37,6 +36,69 @@ const CompareList = () => {
     });
   const [deleteCompare] = useDeleteCompareMutation();
   const [deleteCompareProduct] = useDeleteCompareProductMutation();
+  const [updateCompare] = useUpdateCompareMutation();
+
+  const { data: products } = useGetAllProductsQuery();
+
+  const activeProducts = products?.results?.filter(
+    (item) => item?.status !== "Inactive"
+  );
+
+  const [selectedProducts, setSelectedProducts] = useState([null, null]);
+  const [searchQuery1, setSearchQuery1] = useState("");
+  const [searchQuery2, setSearchQuery2] = useState("");
+  const searchBar1Ref = useRef(null);
+  const searchBar2Ref = useRef(null);
+
+  const handleSearch1 = (query) => {
+    setSearchQuery1(query);
+  };
+
+  const handleSearch2 = (query) => {
+    setSearchQuery2(query);
+  };
+
+  const filteredProducts1 = activeProducts?.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchQuery1.toLowerCase()) &&
+      product._id !== selectedProducts[1]?._id
+  );
+
+  const filteredProducts2 = activeProducts?.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchQuery2.toLowerCase()) &&
+      product._id !== selectedProducts[0]?._id
+  );
+
+  const handleProductSelect1 = (product) => {
+    setSelectedProducts((prev) => {
+      const newSelectedProducts = [...prev];
+      newSelectedProducts[0] = product;
+      return newSelectedProducts;
+    });
+    setSearchQuery1("");
+
+    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+      updateCompareProduct({
+        productIds: [product._id, selectedProducts[1]?._id],
+      });
+    }
+  };
+
+  const handleProductSelect2 = (product) => {
+    setSelectedProducts((prev) => {
+      const newSelectedProducts = [...prev];
+      newSelectedProducts[1] = product;
+      return newSelectedProducts;
+    });
+    setSearchQuery2("");
+
+    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+      updateCompareProduct({
+        productIds: [selectedProducts[0]?._id, product._id],
+      });
+    }
+  };
 
   if (isGlobalDataLoading || isCompareDataLoading || isProductDataLoading) {
     return <div>Loading...</div>;
@@ -67,175 +129,109 @@ const CompareList = () => {
     toast.success("Product deleted from compare list");
   };
 
+  const updateCompareProduct = async ({ productIds }) => {
+    if (!compareData?.[0]?._id) {
+      return;
+    }
+    const toastId = toast.loading("Updating Compare...");
+    try {
+      const submittedData = {
+        product: productIds,
+      };
+
+      const updatedData = {
+        id: compareData?.[0]?._id,
+        data: submittedData,
+      };
+
+      const res = await updateCompare(updatedData);
+
+      if (res?.error) {
+        toast.error(res.error.data.errorMessage, { id: toastId });
+        return;
+      }
+
+      if (res.data.success) {
+        toast.success(res.data.message, { id: toastId });
+      }
+    } catch (error) {
+      console.error("Error updating compare:", error);
+      toast.error("An error occurred while updating the compare.", {
+        id: toastId,
+      });
+    }
+  };
+
+  const handleClear1 = () => {
+    setSelectedProducts((prev) => {
+      const newSelectedProducts = [...prev];
+      newSelectedProducts[0] = null;
+      setSearchQuery1("");
+      return newSelectedProducts;
+    });
+
+    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+      updateCompareProduct({ productIds: [null, selectedProducts[1]?._id] });
+    }
+  };
+
+  const handleClear2 = () => {
+    setSelectedProducts((prev) => {
+      const newSelectedProducts = [...prev];
+      newSelectedProducts[1] = null;
+      setSearchQuery2("");
+      return newSelectedProducts;
+    });
+
+    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+      updateCompareProduct({ productIds: [selectedProducts[0]?._id, null] });
+    }
+  };
+
   return (
     <section className="my-container p-5 rounded-xl mt-28 lg:mt-52 relative my-20">
       {compareData?.[0]?.product?.length === 0 || compareData?.length === 0 ? (
         <div className="flex flex-col items-center justify-center my-5">
-          <CompareCreate />
+          <CompareCreate
+            selectedProducts={selectedProducts}
+            globalData={globalData}
+            user={user}
+            deviceId={deviceId}
+            searchBar1Ref={searchBar1Ref}
+            searchBar2Ref={searchBar2Ref}
+            handleSearch1={handleSearch1}
+            handleSearch2={handleSearch2}
+            handleClear1={handleClear1}
+            handleClear2={handleClear2}
+            searchQuery1={searchQuery1}
+            searchQuery2={searchQuery2}
+            filteredProducts1={filteredProducts1}
+            filteredProducts2={filteredProducts2}
+            handleProductSelect1={handleProductSelect1}
+            handleProductSelect2={handleProductSelect2}
+          />
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <div
-            className="text-2xl cursor-pointer text-red-500 absolute right-0 top-0 hover:scale-105 duration-300"
-            onClick={() => handleDelete(compareData[0]?._id)}
-          >
-            <MdDelete />
-          </div>
-          <table className="w-full table-auto border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="p-4 text-left">
-                  <span className="">Product Comparison</span>
-                </th>
-                {compareData?.[0]?.product?.map((item) => (
-                  <th
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    <Image
-                      src={formatImagePath(item?.mainImage)}
-                      alt={item?.name || "Product Image"}
-                      width={200}
-                      height={200}
-                      className="mx-auto rounded-md mb-4"
-                    />
-                    <LinkButton href={`/products/${item?.slug}`}>
-                      {item?.name}
-                    </LinkButton>
-                    <div
-                      className="text-2xl cursor-pointer text-red-500 flex justify-center mt-5 hover:scale-105 duration-300"
-                      onClick={() => handleDeleteProduct(item?._id)}
-                    >
-                      <MdDelete />
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">Model</td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    {item?.model || "N/A"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">
-                  Category
-                </td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    {item?.category?.name || "N/A"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">Brand</td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    {item?.brand?.name || "N/A"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">Price</td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    <span className="flex justify-center gap-4">
-                      {item?.offerPrice && (
-                        <p className="text-sm font-bold line-through text-red-500 ">
-                          {globalData?.results?.currency +
-                            " " +
-                            item?.sellingPrice}
-                        </p>
-                      )}
-                      {item?.offerPrice ? (
-                        <p className="text-primary font-bold">
-                          {globalData?.results?.currency +
-                            " " +
-                            item?.offerPrice}
-                        </p>
-                      ) : (
-                        <p className="text-primary font-bold">
-                          {globalData?.results?.currency +
-                            " " +
-                            item?.sellingPrice}
-                        </p>
-                      )}
-                    </span>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">Stock</td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className={`border border-gray-300 p-4 text-center ${
-                      item?.stock > 0
-                        ? "text-green-500 font-bold"
-                        : "text-red-500 font-bold"
-                    }`}
-                  >
-                    {item?.stock > 0 ? "In Stock" : "Out of Stock"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold">Rating</td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    <div className="flex justify-center items-center lg:gap-4 font-medium">
-                      <Rate
-                        disabled
-                        value={item?.ratings?.average}
-                        allowHalf
-                        className="text-[10px] lg:text-base"
-                      />
-                      ({item?.ratings?.count})
-                    </div>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-4 font-bold"></td>
-                {compareData?.[0]?.product?.map((item) => (
-                  <td
-                    key={item?._id}
-                    className="border border-gray-300 p-4 text-center"
-                  >
-                    <Button
-                      size="small"
-                      type="primary"
-                      icon={<FaCartShopping />}
-                      onClick={() => showModal(item?._id)}
-                      className="mb-2 lg:w-4/6 py-5 font-semibold"
-                    >
-                      Add to Cart
-                    </Button>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <CompareTable
+          compareData={compareData}
+          handleDelete={handleDelete}
+          selectedProducts={selectedProducts}
+          searchBar1Ref={searchBar1Ref}
+          searchBar2Ref={searchBar2Ref}
+          handleSearch1={handleSearch1}
+          handleSearch2={handleSearch2}
+          handleClear1={handleClear1}
+          handleClear2={handleClear2}
+          searchQuery1={searchQuery1}
+          searchQuery2={searchQuery2}
+          filteredProducts1={filteredProducts1}
+          filteredProducts2={filteredProducts2}
+          handleProductSelect1={handleProductSelect1}
+          handleProductSelect2={handleProductSelect2}
+          globalData={globalData}
+          handleDeleteProduct={handleDeleteProduct}
+          showModal={showModal}
+        />
       )}
 
       <QuickProductView

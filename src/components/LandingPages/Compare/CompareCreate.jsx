@@ -1,72 +1,31 @@
-import { useState, useRef } from "react";
-import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCompareMutation } from "@/redux/services/compare/compareApi";
-import { useDeviceId } from "@/redux/services/device/deviceSlice";
-import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { Input, Button, List, Typography } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import Image from "next/image";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input, List, Typography } from "antd";
+import Image from "next/image";
+import { toast } from "sonner";
 
 const { Title } = Typography;
 
-const CompareCreate = () => {
-  const user = useSelector(useCurrentUser);
-  const deviceId = useSelector(useDeviceId);
-  const { data: productData } = useGetAllProductsQuery();
-  const { data: globalData } = useGetAllGlobalSettingQuery();
-
-  const activeProducts = productData?.results?.filter(
-    (item) => item?.status !== "Inactive"
-  );
-
-  const [selectedProducts, setSelectedProducts] = useState([null, null]);
-  const [searchQuery1, setSearchQuery1] = useState("");
-  const [searchQuery2, setSearchQuery2] = useState("");
+const CompareCreate = ({
+  searchBar1Ref,
+  selectedProducts,
+  handleSearch1,
+  handleClear1,
+  searchQuery1,
+  filteredProducts1,
+  handleProductSelect1,
+  globalData,
+  user,
+  deviceId,
+  searchBar2Ref,
+  handleProductSelect2,
+  handleClear2,
+  searchQuery2,
+  handleSearch2,
+  filteredProducts2,
+}) => {
   const [addCompare] = useAddCompareMutation();
-  const searchBar1Ref = useRef(null);
-  const searchBar2Ref = useRef(null);
-
-  const handleSearch1 = (query) => {
-    setSearchQuery1(query);
-  };
-
-  const handleSearch2 = (query) => {
-    setSearchQuery2(query);
-  };
-
-  const filteredProducts1 = activeProducts?.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchQuery1.toLowerCase()) &&
-      product._id !== selectedProducts[1]?._id
-  );
-
-  const filteredProducts2 = activeProducts?.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchQuery2.toLowerCase()) &&
-      product._id !== selectedProducts[0]?._id
-  );
-
-  const handleProductSelect1 = (product) => {
-    setSelectedProducts((prev) => {
-      const newSelectedProducts = [...prev];
-      newSelectedProducts[0] = product;
-      return newSelectedProducts;
-    });
-    setSearchQuery1("");
-  };
-
-  const handleProductSelect2 = (product) => {
-    setSelectedProducts((prev) => {
-      const newSelectedProducts = [...prev];
-      newSelectedProducts[1] = product;
-      return newSelectedProducts;
-    });
-    setSearchQuery2("");
-  };
 
   const addToCompare = async () => {
     if (selectedProducts.filter((product) => product !== null).length !== 2) {
@@ -93,24 +52,6 @@ const CompareCreate = () => {
       console.error("Failed to add item to Compare:", error);
       toast.error("Failed to add item to Compare.", { id: toastId });
     }
-  };
-
-  const handleClear1 = () => {
-    setSelectedProducts((prev) => {
-      const newSelectedProducts = [...prev];
-      newSelectedProducts[0] = null;
-      setSearchQuery1("");
-      return newSelectedProducts;
-    });
-  };
-
-  const handleClear2 = () => {
-    setSelectedProducts((prev) => {
-      const newSelectedProducts = [...prev];
-      newSelectedProducts[1] = null;
-      setSearchQuery2("");
-      return newSelectedProducts;
-    });
   };
 
   return (
