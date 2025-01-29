@@ -38,7 +38,7 @@ const CompareTable = ({
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead>
             <tr>
-              <th className="p-4 text-left">
+              <th className="p-4 text-left hidden lg:table-cell">
                 <span className="">Product Comparison</span>
               </th>
               {compareData?.[0]?.product?.map((item, index) => (
@@ -75,10 +75,10 @@ const CompareTable = ({
                                     alt="product"
                                     width={80}
                                     height={50}
-                                    className="object-cover rounded-xl"
+                                    className="object-cover rounded-xl w-[50px] h-[50px] lg:w-[80px] lg:h-[80px]"
                                   />
-                                  <div>
-                                    <p className="text-lg font-medium">
+                                  <div className="text-start">
+                                    <p className="text-xs lg:text-lg font-medium">
                                       {product?.name}
                                     </p>
                                     <p className="flex items-center gap-4">
@@ -97,7 +97,9 @@ const CompareTable = ({
                                             product?.sellingPrice)}
                                       </span>
                                     </p>
-                                    <p>Category: {product?.category?.name}</p>
+                                    <p className="text-xs lg:text-base">
+                                      Category: {product?.category?.name}
+                                    </p>
                                   </div>
                                 </div>
                               </List.Item>
@@ -146,10 +148,10 @@ const CompareTable = ({
                                     alt="product"
                                     width={80}
                                     height={50}
-                                    className="object-cover rounded-xl"
+                                    className="object-cover rounded-xl w-[50px] h-[50px] lg:w-[80px] lg:h-[80px]"
                                   />
-                                  <div>
-                                    <p className="text-lg font-medium">
+                                  <div className="text-start">
+                                    <p className="text-xs lg:text-lg font-medium">
                                       {product?.name}
                                     </p>
                                     <p className="flex items-center gap-4">
@@ -168,7 +170,9 @@ const CompareTable = ({
                                             product?.sellingPrice)}
                                       </span>
                                     </p>
-                                    <p>Category: {product?.category?.name}</p>
+                                    <p className="text-xs lg:text-base">
+                                      Category: {product?.category?.name}
+                                    </p>
                                   </div>
                                 </div>
                               </List.Item>
@@ -212,45 +216,66 @@ const CompareTable = ({
           </thead>
           <tbody>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Model</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Model
+              </td>
+
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
                   className="border border-gray-300 p-4 text-center"
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Model
+                  </div>
                   {item?.model || "N/A"}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Category</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Category
+              </td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
                   className="border border-gray-300 p-4 text-center"
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Category
+                  </div>
                   {item?.category?.name || "N/A"}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Brand</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Brand
+              </td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
                   className="border border-gray-300 p-4 text-center"
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Brand
+                  </div>
                   {item?.brand?.name || "N/A"}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Price</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Price
+              </td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
                   className="border border-gray-300 p-4 text-center"
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Price
+                  </div>
                   <span className="flex justify-center gap-4">
                     {item?.offerPrice && (
                       <p className="text-sm font-bold line-through text-red-500 ">
@@ -275,7 +300,9 @@ const CompareTable = ({
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Stock</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Stock
+              </td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
@@ -285,17 +312,25 @@ const CompareTable = ({
                       : "text-red-500 font-bold"
                   }`}
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Stock
+                  </div>
                   {item?.stock > 0 ? "In Stock" : "Out of Stock"}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold">Rating</td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Rating
+              </td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
                   className="border border-gray-300 p-4 text-center"
                 >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Rating
+                  </div>
                   <div className="flex justify-center items-center lg:gap-4 font-medium">
                     <Rate
                       disabled
@@ -309,7 +344,7 @@ const CompareTable = ({
               ))}
             </tr>
             <tr>
-              <td className="border border-gray-300 p-4 font-bold"></td>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell"></td>
               {compareData?.[0]?.product?.map((item) => (
                 <td
                   key={item?._id}
