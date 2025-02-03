@@ -4,7 +4,6 @@ import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
-import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import FileUploader from "@/components/Reusable/Form/FileUploader";
 import {
   useGetAllGlobalSettingQuery,
@@ -16,6 +15,14 @@ import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues
 import { Divider, Form } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import dynamic from "next/dynamic";
+
+const DynamicEditor = dynamic(
+  () => import("@/components/Reusable/Form/CustomTextEditor"),
+  {
+    ssr: false,
+  }
+);
 
 const AdminAccountSetting = () => {
   const [fields, setFields] = useState([]);
@@ -209,17 +216,17 @@ const AdminAccountSetting = () => {
           </Form.Item> */}
         </div>
         <Form.Item label={"About Us"} name={"aboutUs"} required>
-          <CustomTextEditor />
+          <DynamicEditor />
         </Form.Item>
         <Form.Item
           label={"Terms & Condition"}
           name={"termsAndConditions"}
           required
         >
-          <CustomTextEditor />
+          <DynamicEditor />
         </Form.Item>
         <Form.Item label={"Privacy Policy"} name={"privacyPolicy"} required>
-          <CustomTextEditor />
+          <DynamicEditor />
         </Form.Item>
 
         <div className="flex justify-center my-10">
