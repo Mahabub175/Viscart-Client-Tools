@@ -4,6 +4,7 @@ import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import CustomSelect from "@/components/Reusable/Form/CustomSelect";
+import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
 import FileUploader from "@/components/Reusable/Form/FileUploader";
 import {
   useGetAllGlobalSettingQuery,
@@ -12,8 +13,7 @@ import {
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import { compressImage } from "@/utilities/lib/compressImage";
 import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues";
-import { ColorPicker, Divider, Form } from "antd";
-import { currencies } from "currencies.json";
+import { Divider, Form } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -72,10 +72,6 @@ const AdminAccountSetting = () => {
     setFields(transformDefaultValues(data?.results));
   }, [data]);
 
-  const currenciesOptions = currencies.map(({ name, symbol, code }) => {
-    return { label: `${name} (${symbol})`, value: code };
-  });
-
   return (
     <section className="w-4/6 mx-auto">
       <Divider orientation="left" orientationMargin={0}>
@@ -112,7 +108,7 @@ const AdminAccountSetting = () => {
             label={"Delivery Charge Outside Dhaka"}
             type={"number"}
           />
-          <CustomInput
+          {/* <CustomInput
             name={"deliveryApiKey"}
             label={"Delivery API Key"}
             type={"password"}
@@ -121,7 +117,7 @@ const AdminAccountSetting = () => {
             name={"deliverySecretKey"}
             label={"Delivery Secret Key"}
             type={"password"}
-          />
+          /> */}
           <CustomInput
             name={"businessNumber"}
             label={"Business Number"}
@@ -130,9 +126,14 @@ const AdminAccountSetting = () => {
           <CustomInput name={"businessAddress"} label={"Business Address"} />
           <CustomInput name={"businessLocation"} label={"Business Location"} />
           <CustomInput name={"businessSlogan"} label={"Business Slogan"} />
+          <CustomInput name={"complaintLink"} label={"Complaint From Link"} />
           <CustomInput
             name={"businessFacebook"}
             label={"Business Facebook URL"}
+          />
+          <CustomInput
+            name={"messengerUsername"}
+            label={"Messenger Username"}
           />
           <CustomInput
             name={"businessTwitter"}
@@ -183,12 +184,6 @@ const AdminAccountSetting = () => {
             type={"textarea"}
             label={"Business Bank Message"}
           />
-          <CustomSelect
-            name={"currency"}
-            label={"Global Currency"}
-            options={currenciesOptions}
-            required={true}
-          />
 
           <CustomSelect
             name={"ssl"}
@@ -198,7 +193,7 @@ const AdminAccountSetting = () => {
               { value: "Inactive", label: "Inactive" },
             ]}
           />
-          <Form.Item
+          {/* <Form.Item
             name="primaryColor"
             label="Website Primary Color"
             required={true}
@@ -211,8 +206,21 @@ const AdminAccountSetting = () => {
             required={true}
           >
             <ColorPicker showText />
-          </Form.Item>
+          </Form.Item> */}
         </div>
+        <Form.Item label={"About Us"} name={"aboutUs"} required>
+          <CustomTextEditor />
+        </Form.Item>
+        <Form.Item
+          label={"Terms & Condition"}
+          name={"termsAndConditions"}
+          required
+        >
+          <CustomTextEditor />
+        </Form.Item>
+        <Form.Item label={"Privacy Policy"} name={"privacyPolicy"} required>
+          <CustomTextEditor />
+        </Form.Item>
 
         <div className="flex justify-center my-10">
           <SubmitButton text={"Save"} loading={isLoading} fullWidth={true} />

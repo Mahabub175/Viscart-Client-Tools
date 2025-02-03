@@ -25,7 +25,7 @@ const LandingFooter = () => {
       name: "Get Quote",
       description: "Get A Quote For Your Products",
       icon: RiChatQuoteFill,
-      to: "mailto:someone@example.com",
+      to: `mailto:${globalData?.results?.businessEmail}`,
     },
     {
       name: "Contact",
@@ -37,7 +37,7 @@ const LandingFooter = () => {
       name: "Complaint Box",
       description: "If You Have Any Complaint",
       icon: FaBoxArchive,
-      to: "https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_link_mailto",
+      to: globalData?.results?.complaintLink,
     },
   ];
 
