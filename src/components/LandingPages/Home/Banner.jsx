@@ -11,13 +11,14 @@ const Banner = () => {
   const { data: sliders } = useGetAllSlidersQuery();
 
   const activeSliders = sliders?.results?.filter(
-    (item) => item.status === "Active"
+    (item) => item.status === "Active" && !item?.bottomBanner
   );
 
   return (
     <section className="relative mb-10">
       <Swiper
         modules={[Autoplay]}
+        loop={true}
         slidesPerView={1}
         autoplay={{
           delay: 3000,
