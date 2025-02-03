@@ -18,6 +18,7 @@ import AttributeOptionSelector from "@/components/Shared/Product/AttributeOption
 import Link from "next/link";
 import AddToCompare from "./AddToCompare";
 import ProductBreadCrumb from "./ProductBreadCrumb";
+import ProductReview from "./ProductReview";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -298,13 +299,19 @@ const SingleProductDetails = ({ params }) => {
         </div>
       </div>
       <div className="my-container">
-        <div className="rounded-xl p-5 mb-10 shadow bg-white/80">
+        <div className="rounded-xl p-5 mb-10 shadow bg-white/80 border">
           <div className="bg-primary mb-10 px-10 py-2 text-white font-bold rounded-xl inline-block">
             Description
           </div>
           <div
             dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
           ></div>
+        </div>
+        <div className="rounded-xl p-5 mb-10 shadow bg-white/80 border">
+          <div className="bg-primary px-10 py-2 text-white font-bold rounded-xl inline-block">
+            Reviews
+          </div>
+          <ProductReview productId={singleProduct?._id} />
         </div>
         <div className="mt-20">
           {activeProducts && activeProducts.length > 0 ? (

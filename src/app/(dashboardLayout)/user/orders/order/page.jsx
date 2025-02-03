@@ -205,7 +205,7 @@ const UserOrders = () => {
       const submittedData = {
         ...values,
         user: user?._id,
-        product: singleOrder?.products?.map((item) => item?.product?._id),
+        product: singleOrder?.products?.map((item) => item?.product),
       };
 
       const data = new FormData();
@@ -272,6 +272,7 @@ const UserOrders = () => {
         onCancel={() => setReviewModalOpen(false)}
         footer={null}
         centered
+        destroyOnClose
       >
         <CustomForm onSubmit={handleReview}>
           <CustomInput
