@@ -12,11 +12,13 @@ const DashboardCards = ({ icon, title, data, href }) => {
       })}
       {data >= 0 && (
         <div className="flex items-center gap-2 lg:gap-4 text-center">
-          <p>Total {title}</p>
-          <p className="text-4xl">{data}</p>
+          <p className="text-sm lg:text-xl">Total {title}</p>
+          <p className="text-2xl lg:text-4xl">{data}</p>
         </div>
       )}
-      {!data && data !== 0 && <p className="text-center">{title}</p>}
+      {!data && data !== 0 && (
+        <p className="text-center text-sm lg:text-xl">{title}</p>
+      )}
     </Link>
   );
 };

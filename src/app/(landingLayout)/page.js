@@ -1,4 +1,5 @@
 import Banner from "@/components/LandingPages/Home/Banner";
+import BottomBanner from "@/components/LandingPages/Home/BottomBanner";
 import Brands from "@/components/LandingPages/Home/Brands";
 import Categories from "@/components/LandingPages/Home/Categories";
 import NewsletterBanner from "@/components/LandingPages/Home/NewsletterBanner";
@@ -19,6 +20,7 @@ const page = async () => {
       <CategoryProducts />
       <OfferProducts />
       <Brands />
+      <BottomBanner />
       <TopProducts />
       <NewsletterBanner />
     </div>

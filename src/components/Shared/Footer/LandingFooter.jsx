@@ -12,8 +12,8 @@ const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
-    <section className="bg-[#0f0f0f] mb-16 lg:mb-0 text-gray-400">
-      <footer className="pt-10">
+    <section className="bg-[#0f0f0f] mb-12 lg:mb-0 text-gray-400">
+      <footer className="-mt-10 lg:mt-0">
         <div className="my-container">
           <Link href={"/"}>
             <Image
@@ -24,7 +24,7 @@ const LandingFooter = () => {
             />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center  my-container">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-0 xl:gap-10 items-start justify-center my-container -mt-10 lg:mt-0">
           <ContactInfo globalData={globalData} />
 
           {footerData?.map((item, i) => (

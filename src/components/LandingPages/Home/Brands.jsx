@@ -64,13 +64,13 @@ const Brands = () => {
         </Swiper>
         <div className="flex items-center justify-center gap-5 mt-10">
           <button
-            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-24"
+            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[6.5%] right-10   lg:right-24"
             onClick={() => swiperRef.current.slidePrev()}
           >
             <FaAngleLeft className="text-xl" />
           </button>
           <button
-            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[8%] right-12"
+            className="lg:w-8 lg:h-8 flex items-center justify-center rounded-full bg-white text-black border border-primary hover:bg-primary hover:text-white duration-300 absolute top-[6.5%] right-2 lg:right-12"
             onClick={() => swiperRef.current.slideNext()}
           >
             <FaAngleRight className="text-xl" />

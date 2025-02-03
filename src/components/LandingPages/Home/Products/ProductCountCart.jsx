@@ -7,7 +7,7 @@ import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaCartShopping } from "react-icons/fa6";
@@ -204,13 +204,17 @@ const ProductCountCart = ({
             loading={isLoading}
             fullWidth={fullWidth}
           />
-          <SubmitButton
-            func={() => addToCart("buy")}
-            text={"Buy Now"}
-            icon={<FaCartShopping />}
+
+          <Button
+            htmlType="submit"
+            size="large"
             loading={isLoading}
-            fullWidth={fullWidth}
-          />
+            icon={<FaCartShopping />}
+            onClick={() => addToCart("buy")}
+            className={`bg-navyBlue text-white font-bold px-10 w-full`}
+          >
+            Buy Now
+          </Button>
         </>
       ) : (
         <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">

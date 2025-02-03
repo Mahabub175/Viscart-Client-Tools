@@ -4,10 +4,13 @@ import LinkButton from "@/components/Shared/LinkButton";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import Image from "next/image";
+import { useState } from "react";
 
 const Categories = () => {
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: products } = useGetAllProductsQuery();
+
+  const [showAll, setShowAll] = useState(false);
 
   const activeCategories = categories?.results?.filter(
     (item) => item?.status !== "Inactive"
@@ -27,8 +30,11 @@ const Categories = () => {
       ...category,
       productCount: getProductCountByCategory(category?._id),
     }))
-    .sort((a, b) => b.productCount - a.productCount)
-    .slice(0, 6);
+    .sort((a, b) => b.productCount - a.productCount);
+
+  const visibleCategories = showAll
+    ? sortedCategories
+    : sortedCategories?.slice(0, 6);
 
   return (
     <section className="my-container p-5 -mt-5 lg:mt-10 relative">
@@ -36,7 +42,7 @@ const Categories = () => {
         Top Categories
       </h2>
       <div className="grid grid-cols-2 md:flex md:flex-wrap gap-5">
-        {sortedCategories?.map((item) => (
+        {visibleCategories?.map((item) => (
           <div
             className="group relative w-[160px] h-[160px] mx-auto rounded-xl"
             key={item?._id}
@@ -66,6 +72,17 @@ const Categories = () => {
           </div>
         ))}
       </div>
+
+      {!showAll && sortedCategories?.length > 6 && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setShowAll(true)}
+            className="bg-primary text-white px-6 py-2 rounded duration-300"
+          >
+            View All
+          </button>
+        </div>
+      )}
     </section>
   );
 };

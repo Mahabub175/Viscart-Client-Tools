@@ -146,7 +146,7 @@ const ProductCard = ({ item }) => {
 
       <div className="hidden lg:block">
         <div
-          className={`absolute bottom-0 left-0 right-0 bg-white z-10 rounded-b-xl overflow-hidden transition-transform duration-500 ${
+          className={`absolute left-1/2 transform -translate-x-1/2 bottom-0 bg-white z-10 rounded-b-xl w-full overflow-hidden transition-transform duration-500 ${
             isHovered ? "translate-y-0" : "translate-y-full"
           }`}
         >
