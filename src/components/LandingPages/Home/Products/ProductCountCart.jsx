@@ -182,7 +182,7 @@ const ProductCountCart = ({
     >
       {!isOutOfStock ? (
         <>
-          <div className="flex items-center gap-3 border border-primary rounded-xl p-1.5">
+          <div className="flex items-center gap-3 border border-primary rounded-lg p-0.5">
             <button
               className="cursor-pointer bg-primaryLight text-primary p-2 rounded text-xl"
               onClick={() => handleCount("decrement")}

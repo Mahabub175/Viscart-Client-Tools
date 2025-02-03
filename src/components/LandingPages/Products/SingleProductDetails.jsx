@@ -228,15 +228,15 @@ const SingleProductDetails = ({ params }) => {
               <span>{singleProduct?.category?.name}</span>
             </div>
             {singleProduct?.brand && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-1">
                 <span className="font-medium">Brand:</span>
                 <span>{singleProduct?.brand?.name}</span>
               </div>
             )}
-            {singleProduct?.model && (
+            {singleProduct?.productModel && (
               <div className="flex items-center gap-2">
                 <span className="font-medium">Model:</span>
-                <span>{singleProduct?.model?.name}</span>
+                <span>{singleProduct?.productModel}</span>
               </div>
             )}
             <div className="flex items-center mt-4 gap-4 font-medium">

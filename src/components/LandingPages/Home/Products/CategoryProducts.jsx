@@ -80,7 +80,7 @@ const CategoryProducts = () => {
       )}
 
       {filteredProducts?.length > 8 && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-10">
           <Link
             href={`${
               activeCategory === "all-products"

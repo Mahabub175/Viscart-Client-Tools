@@ -55,7 +55,7 @@ const LandingFooter = () => {
             />
           </Link>
         </div>
-        <div className="my-container flex flex-wrap justify-center gap-5 mb-10">
+        <div className="my-container flex flex-wrap justify-center gap-2 lg:gap-5 mb-10">
           {footerLinks?.map((item, i) => (
             <Link key={i} href={item?.to}>
               <p className="border border-primaryLight p-2 rounded-full text-xs hover:bg-primary hover:text-primaryLight duration-300">
@@ -119,10 +119,10 @@ const LandingFooter = () => {
                     })}
                   </div>
                   <div>
-                    <div className="text-sm lg:text-xl font-medium mb-2">
+                    <div className="text-sm lg:text-lg font-medium mb-2">
                       {footer.name}
                     </div>
-                    <div className="text-xs lg:text-base">
+                    <div className="text-xs lg:text-sm">
                       {footer.description}
                     </div>
                   </div>

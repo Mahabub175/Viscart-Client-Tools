@@ -109,6 +109,11 @@ const QuickProductView = ({
           <p className="font-bold my-2 text-textColor">
             Category: {item?.category?.name}
           </p>
+          {item?.productModel && (
+            <div className="font-bold my-2 text-textColor">
+              Model: {item?.productModel}
+            </div>
+          )}
 
           <AttributeOptionSelector
             groupedAttributes={groupedAttributes}

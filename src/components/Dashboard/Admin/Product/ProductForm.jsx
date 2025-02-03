@@ -75,7 +75,7 @@ const ProductForm = ({
           icon={<RiRefreshLine className="text-xl" />}
         />
       </div>
-      <div className="three-grid">
+      <div className="two-grid">
         <CustomSelect
           label={"Product Brand"}
           name={"brand"}
@@ -92,6 +92,7 @@ const ProductForm = ({
           disabled={isCategoryFetching}
         />
         <CustomInput label={"Product Model"} name={"productModel"} />
+        <CustomInput label={"Product Weight"} name={"weight"} />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
 

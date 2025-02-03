@@ -74,7 +74,7 @@ const Categories = () => {
       </div>
 
       {!showAll && sortedCategories?.length > 6 && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-10">
           <button
             onClick={() => setShowAll(true)}
             className="bg-primary text-white px-6 py-2 rounded duration-300"
