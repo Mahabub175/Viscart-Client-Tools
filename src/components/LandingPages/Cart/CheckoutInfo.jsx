@@ -1,7 +1,7 @@
-import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
-import { Radio, Form } from "antd";
+import { Radio, Form, Button } from "antd";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { FaCartShopping } from "react-icons/fa6";
 
 const CheckoutInfo = () => {
   const form = Form.useFormInstance();
@@ -66,7 +66,14 @@ const CheckoutInfo = () => {
         </Radio.Group>
       </Form.Item>
 
-      <SubmitButton fullWidth text="Order Now" />
+      <Button
+        htmlType="submit"
+        size="large"
+        icon={<FaCartShopping />}
+        className={`bg-navyBlue text-white font-bold px-10 w-full`}
+      >
+        Order Now
+      </Button>
     </div>
   );
 };

@@ -8,9 +8,13 @@ import Link from "next/link";
 const BottomBanner = () => {
   const { data: sliders } = useGetAllSlidersQuery();
 
-  const activeSliders = sliders?.results?.filter(
-    (item) => item.status === "Active"
+  const activeSliders = sliders?.results?.find(
+    (item) => item.status === "Active" && item?.bottomBanner
   );
+
+  if (!activeSliders) {
+    return null;
+  }
 
   return (
     <section className="relative mt-10 lg:mt-20">

@@ -30,10 +30,11 @@ const CompareTable = ({
     <div>
       <div className="overflow-x-auto">
         <div
-          className="text-2xl cursor-pointer text-red-500 absolute right-0 top-0 hover:scale-105 duration-300"
+          className="text-sm px-4 py-1 rounded-xl cursor-pointer bg-red-500 text-primaryLight items-center gap-2 flex absolute right-[27%] lg:right-[33%] top-0 hover:scale-105 duration-300"
           onClick={() => handleDelete(compareData[0]?._id)}
         >
           <MdDelete />
+          Clear Comparison
         </div>
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead>
