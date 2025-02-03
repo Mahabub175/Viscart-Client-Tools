@@ -29,3 +29,16 @@ export const footerData = [
     ],
   },
 ];
+
+export const footerLinks = [
+  { name: "About Us", to: "/about-us" },
+  { name: "Delivery", to: "/" },
+  { name: "Pickup Point", to: "/" },
+  { name: "Payment Terms", to: "/payment-terms" },
+  { name: "EMI Information", to: "/" },
+  { name: "Warranty Terms", to: "/warranty-terms" },
+  { name: "Privacy Policy", to: "/privacy-policy" },
+  { name: "Refund & Return", to: "/" },
+  { name: "Terms & Condition", to: "/terms-conditions" },
+  { name: "Blog", to: "/blog" },
+];
