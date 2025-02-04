@@ -113,7 +113,11 @@ const BottomNavigation = () => {
             setIsCartOpen(true);
           }}
         >
-          <FaShoppingBag className="mb-1 mt-2.5" />
+          <FaShoppingBag
+            className={`mb-1 mt-2.5 ${
+              pathname === "/cart" ? "text-orange" : ""
+            }`}
+          />
           {cartData?.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {cartData.length}
