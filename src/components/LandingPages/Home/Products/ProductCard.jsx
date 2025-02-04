@@ -87,7 +87,7 @@ const ProductCard = ({ item }) => {
             alt={item?.name}
             width={200}
             height={260}
-            className="h-[180px] lg:h-[200px] lg:group-hover:scale-110 duration-500"
+            className="h-[180px] w-full lg:h-[200px] lg:group-hover:scale-110 duration-500"
           />
         )}
       </div>
@@ -146,14 +146,14 @@ const ProductCard = ({ item }) => {
 
       <div className="hidden lg:block">
         <div
-          className={`absolute left-1/2 transform -translate-x-1/2 bottom-0 bg-white z-10 rounded-b-xl w-full overflow-hidden transition-transform duration-500 ${
+          className={`absolute left-1/2 right-1/2 transform -translate-x-1/2 bottom-0 bg-white z-10 rounded-b-xl w-full overflow-hidden transition-transform duration-500 ${
             isHovered ? "translate-y-0" : "translate-y-full"
           }`}
         >
           <QuickViewHover item={item} />
         </div>
       </div>
-      <div className="lg:hidden absolute bottom-0">
+      <div className="lg:hidden absolute bottom-0 left-1/2 right-1/2 transform -translate-x-1/2 w-full">
         <QuickViewHover item={item} />
       </div>
 
