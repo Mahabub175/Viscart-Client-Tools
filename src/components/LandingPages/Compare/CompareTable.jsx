@@ -36,7 +36,7 @@ const CompareTable = ({
           <MdDelete />
           Clear Comparison
         </div>
-        <table className="w-full table-auto border-collapse border border-gray-300">
+        <table className="w-full table-auto items-start border-collapse border border-gray-300">
           <thead>
             <tr>
               <th className="p-4 text-left hidden lg:table-cell">
@@ -79,7 +79,7 @@ const CompareTable = ({
                                     className="object-cover rounded-xl w-[50px] h-[50px] lg:w-[80px] lg:h-[80px]"
                                   />
                                   <div className="text-start">
-                                    <p className="text-xs lg:text-lg font-medium">
+                                    <p className="text-xs lg:text-lg lg:font-medium">
                                       {product?.name}
                                     </p>
                                     <p className="flex items-center gap-4">
@@ -203,7 +203,7 @@ const CompareTable = ({
                     className="mx-auto rounded-md mb-4"
                   />
                   <LinkButton href={`/products/${item?.slug}`}>
-                    {item?.name}
+                    <span className="text-xs lg:text-base">{item?.name}</span>
                   </LinkButton>
                   <div
                     className="text-2xl cursor-pointer text-red-500 flex justify-center mt-5 hover:scale-105 duration-300"

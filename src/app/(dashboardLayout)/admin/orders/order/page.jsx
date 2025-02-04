@@ -192,6 +192,12 @@ const Orders = () => {
       align: "center",
     },
     {
+      title: "Weight",
+      dataIndex: "weight",
+      key: "weight",
+      align: "center",
+    },
+    {
       title: "Sub Total",
       dataIndex: "subTotal",
       key: "subTotal",
@@ -201,6 +207,12 @@ const Orders = () => {
       title: "Shipping Fee",
       dataIndex: "shippingFee",
       key: "shippingFee",
+      align: "center",
+    },
+    {
+      title: "Extra Charge",
+      dataIndex: "extraCharge",
+      key: "extraCharge",
       align: "center",
     },
     {
@@ -436,28 +448,38 @@ const Orders = () => {
     },
   ];
 
-  const tableData = userOrders?.results?.map((item) => ({
-    key: item._id,
-    orderId: item.orderId,
-    tranId: item.tranId ?? "N/A",
-    trackingCode: item.trackingCode,
-    name: item?.name,
-    email: item?.email,
-    number: item?.number,
-    address: item?.address,
-    products: item?.products
-      ?.map((product) => product?.productName)
-      .join(" , "),
-    quantity: item?.products?.map((product) => product?.quantity).join(" , "),
-    subTotal: item?.subTotal,
-    shippingFee: item?.shippingFee,
-    discount: item?.discount ?? 0,
-    grandTotal: item?.grandTotal,
-    paymentStatus: item?.paymentStatus,
-    deliveryStatus: item?.deliveryStatus,
-    paymentMethod: item?.paymentMethod,
-    orderStatus: item?.orderStatus,
-  }));
+  const tableData = userOrders?.results?.map((item) => {
+    const extraCharge = item?.products?.reduce((acc, product) => {
+      const productWeight = product?.weight || 0;
+      const charge = productWeight * (globalData?.results?.pricePerWeight || 0);
+      return acc + charge;
+    }, 0);
+
+    return {
+      key: item._id,
+      orderId: item.orderId,
+      tranId: item.tranId ?? "N/A",
+      trackingCode: item.trackingCode,
+      name: item?.name,
+      email: item?.email,
+      number: item?.number,
+      address: item?.address,
+      products: item?.products
+        ?.map((product) => product?.productName)
+        .join(" , "),
+      quantity: item?.products?.map((product) => product?.quantity).join(" , "),
+      subTotal: item?.subTotal,
+      shippingFee: item?.shippingFee,
+      discount: item?.discount ?? 0,
+      weight: item?.products?.map((product) => product?.weight).join(" , "),
+      grandTotal: item?.grandTotal,
+      paymentStatus: item?.paymentStatus,
+      deliveryStatus: item?.deliveryStatus,
+      paymentMethod: item?.paymentMethod,
+      orderStatus: item?.orderStatus,
+      extraCharge,
+    };
+  });
 
   const filteredTableData = tableData?.filter((item) => {
     if (!search) return true;

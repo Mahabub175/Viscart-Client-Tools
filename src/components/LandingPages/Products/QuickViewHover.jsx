@@ -32,6 +32,7 @@ const QuickViewHover = ({ item }) => {
       product: item?._id,
       quantity: 1,
       sku: item?.sku,
+      weight: item?.weight,
       price: item?.offerPrice ? item?.offerPrice : item?.sellingPrice,
     };
 

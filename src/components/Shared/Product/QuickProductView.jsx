@@ -114,6 +114,11 @@ const QuickProductView = ({
               Model: {item?.productModel}
             </div>
           )}
+          {item?.weight && (
+            <div className="font-bold my-2 text-textColor">
+              Weight: {item?.weight} KG
+            </div>
+          )}
 
           <AttributeOptionSelector
             groupedAttributes={groupedAttributes}

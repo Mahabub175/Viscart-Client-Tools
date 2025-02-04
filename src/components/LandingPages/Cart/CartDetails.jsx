@@ -40,6 +40,7 @@ const CartDetails = () => {
   const [addOrder] = useAddOrderMutation();
 
   const [counts, setCounts] = useState({});
+  const [weight, setWeight] = useState({});
   const [subTotal, setSubTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
   const [code, setCode] = useState("");
@@ -58,8 +59,23 @@ const CartDetails = () => {
           {}
         )
       );
+      setWeight(
+        cartData?.reduce(
+          (acc, item) => ({
+            ...acc,
+            [item._id]: Number(item.weight) || 0,
+          }),
+          {}
+        )
+      );
     }
   }, [cartData]);
+
+  const extraCharge = cartData?.map(
+    (item) => item?.weight * globalData?.results?.pricePerWeight
+  );
+
+  const totalCharge = extraCharge?.reduce((total, charge) => total + charge, 0);
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
@@ -111,6 +127,7 @@ const CartDetails = () => {
                       .join(" ")})`
                   : ""),
               quantity: item?.quantity,
+              weight: item?.weight,
               sku: item?.sku,
             })),
             shippingFee,
@@ -204,6 +221,11 @@ const CartDetails = () => {
                         <div className="mt-2 font-semibold">
                           Quantity: {counts[item._id]}
                         </div>
+                        {item?.weight > 0 ? (
+                          <div className="mt-2 font-semibold">
+                            Weight: {weight[item._id]} KG
+                          </div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -242,6 +264,7 @@ const CartDetails = () => {
                   shippingFee={shippingFee}
                   setShippingFee={setShippingFee}
                   setGrandTotal={setGrandTotal}
+                  totalCharge={totalCharge}
                 />
               </div>
 

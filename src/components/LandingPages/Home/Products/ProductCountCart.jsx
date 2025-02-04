@@ -139,6 +139,7 @@ const ProductCountCart = ({
       product: item?._id,
       quantity: count,
       sku: currentVariant?.sku ?? item?.sku,
+      weight: item?.weight,
       price: currentVariant?.sellingPrice
         ? currentVariant?.sellingPrice
         : item?.offerPrice

@@ -133,7 +133,7 @@ const BottomNavigation = () => {
       </div>
 
       {isContactOpen && (
-        <div className="fixed bottom-16 left-4 z-50 flex flex-col space-y-2">
+        <div className="fixed bottom-16 left-6 z-50 flex flex-col space-y-2">
           <motion.a
             href={`tel:${globalData?.results?.businessNumber}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white rounded-full shadow-lg"

@@ -18,6 +18,7 @@ const CheckoutDetails = ({
   setShippingFee,
   shippingFee,
   setGrandTotal,
+  totalCharge,
 }) => {
   const [discountOption, setDiscountOption] = useState("");
 
@@ -107,8 +108,8 @@ const CheckoutDetails = ({
   const discountAmount = calculateDiscount();
 
   useEffect(() => {
-    setGrandTotal(subTotal + shippingFee - discountAmount);
-  }, [subTotal, shippingFee, discountAmount, setGrandTotal]);
+    setGrandTotal(subTotal + totalCharge + shippingFee - discountAmount);
+  }, [subTotal, shippingFee, totalCharge, discountAmount, setGrandTotal]);
 
   return (
     <>
@@ -152,6 +153,11 @@ const CheckoutDetails = ({
         <div className="flex justify-between items-center gap-20">
           <p>Shipping Fee</p>
           <p>{globalData?.results?.currency + " " + shippingFee || 0}</p>
+        </div>
+
+        <div className="flex justify-between items-center gap-20">
+          <p>Extra Charge</p>
+          <p>{globalData?.results?.currency + " " + totalCharge || 0}</p>
         </div>
 
         <div className="flex justify-between items-center gap-20">

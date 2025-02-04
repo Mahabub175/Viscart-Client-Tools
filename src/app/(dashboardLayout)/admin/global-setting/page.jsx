@@ -115,6 +115,11 @@ const AdminAccountSetting = () => {
             label={"Delivery Charge Outside Dhaka"}
             type={"number"}
           />
+          <CustomInput
+            name={"pricePerWeight"}
+            label={"Extra Price Per Weight"}
+            type={"number"}
+          />
           {/* <CustomInput
             name={"deliveryApiKey"}
             label={"Delivery API Key"}
