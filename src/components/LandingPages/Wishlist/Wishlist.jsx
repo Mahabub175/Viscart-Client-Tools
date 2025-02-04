@@ -41,7 +41,7 @@ const Wishlist = () => {
   };
 
   return (
-    <section className="container mx-auto px-5 mt-28 lg:py-10">
+    <section className="container mx-auto px-5 mt-28 pb-10 lg:pb-0 lg:py-10">
       <h2 className="font-normal text-2xl">My Wishlist</h2>
       <div>
         {wishlistData?.length === 0 || !wishlistData || isError ? (

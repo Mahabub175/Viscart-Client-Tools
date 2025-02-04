@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-const CategoryBrandNavigation = () => {
+const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: brands } = useGetAllBrandsQuery();
   const [activeTab, setActiveTab] = useState("categories");
@@ -49,6 +49,7 @@ const CategoryBrandNavigation = () => {
             {categories?.results?.map((category) => (
               <Link
                 href={`/products?filter=${category.name}`}
+                onClick={() => setIsDrawerOpen(false)}
                 key={category._id}
                 className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
                   cleanedQuery === `/products?${category.name}`
@@ -66,6 +67,7 @@ const CategoryBrandNavigation = () => {
             {brands?.results?.map((brand) => (
               <Link
                 href={`/products?filter=${brand.name}`}
+                onClick={() => setIsDrawerOpen(false)}
                 key={brand._id}
                 className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
                   cleanedQuery === `/products?${brand.name}`

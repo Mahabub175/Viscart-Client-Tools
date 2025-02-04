@@ -7,7 +7,7 @@ import { MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Drawer, Popover } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaHeart, FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import CategoryNavigation from "./CategoryNavigation";
@@ -25,9 +25,11 @@ import { toast } from "sonner";
 import { IoMdArrowDropdown } from "react-icons/io";
 import CategoryBrandNavigation from "./CategoryBrandNavigation";
 import ProductSearchBar from "./ProductSearchBar";
+import { RxCross1 } from "react-icons/rx";
 
 const LandingHeader = () => {
   const pathname = usePathname();
+  const searchRef = useRef(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -76,6 +78,24 @@ const LandingHeader = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+      }
+    }
+
+    if (isSearchOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSearchOpen]);
 
   const toggleSearchBar = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -187,10 +207,14 @@ const LandingHeader = () => {
                 )}
               </Link>
               <div className="lg:hidden">
-                <FaSearch
-                  className="text-xl cursor-pointer text-primaryLight"
-                  onClick={toggleSearchBar}
-                />
+                {isSearchOpen ? (
+                  <RxCross1 className="text-xl cursor-pointer text-orange" />
+                ) : (
+                  <FaSearch
+                    className="text-xl cursor-pointer text-primaryLight"
+                    onClick={toggleSearchBar}
+                  />
+                )}
               </div>
               {user?._id ? (
                 <>
@@ -258,7 +282,9 @@ const LandingHeader = () => {
         </div>
       </nav>
       {isSearchOpen && (
-        <ProductSearchBar products={products} globalData={globalData} />
+        <div ref={searchRef}>
+          <ProductSearchBar products={products} globalData={globalData} />
+        </div>
       )}
       <div className="hidden lg:flex gap-6 items-center bg-black/95">
         <CategoryNavigation />
@@ -286,7 +312,7 @@ const LandingHeader = () => {
         </div>
 
         <ProductSearchBar products={products} globalData={globalData} />
-        <CategoryBrandNavigation />
+        <CategoryBrandNavigation setIsDrawerOpen={setIsDrawerOpen} />
       </Drawer>
       <Drawer
         placement="right"

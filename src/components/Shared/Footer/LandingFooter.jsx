@@ -3,7 +3,7 @@
 import { footerLinks } from "@/assets/data/footerData";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import Image from "next/image";
 import { FaLocationDot, FaBoxArchive } from "react-icons/fa6";
@@ -73,6 +73,13 @@ const LandingFooter = () => {
               className="flex items-center gap-4"
             >
               <FaFacebook className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
+            </Link>
+            <Link
+              href={globalData?.results?.businessYoutube ?? "/"}
+              target="_blank"
+              className="flex items-center gap-4"
+            >
+              <FaYoutube className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
             </Link>
             <Link
               href={globalData?.results?.businessLinkedin ?? "/"}

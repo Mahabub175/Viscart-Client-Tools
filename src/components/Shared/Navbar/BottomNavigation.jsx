@@ -19,11 +19,14 @@ import {
   FaPhone,
   FaWhatsapp,
   FaFacebookMessenger,
+  FaHeart,
 } from "react-icons/fa";
 import { IoChatbubble } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { RxCross1 } from "react-icons/rx";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { usePathname } from "next/navigation";
+import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
 
 const BottomNavigation = () => {
   const user = useSelector(useCurrentUser);
@@ -32,6 +35,10 @@ const BottomNavigation = () => {
   const { data: compareData } = useGetSingleCompareByUserQuery(
     user?._id ?? deviceId
   );
+  const { data: wishListData } = useGetSingleWishlistByUserQuery(
+    user?._id ?? deviceId
+  );
+  const pathname = usePathname();
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -58,7 +65,7 @@ const BottomNavigation = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {isContactOpen ? (
-              <RxCross1 className="mb-1 mt-2.5 text-red-500" />
+              <RxCross1 className="mb-1 mt-2.5 text-orange" />
             ) : (
               <IoChatbubble className="mb-1 mt-2.5" />
             )}
@@ -69,7 +76,31 @@ const BottomNavigation = () => {
     {
       name: "Offers",
       href: "/offers",
-      icon: <AppstoreOutlined className="mb-1 mt-2.5" />,
+      icon: (
+        <AppstoreOutlined
+          className={`mb-1 mt-2.5 ${
+            pathname === "/offers" ? "text-orange" : ""
+          }`}
+        />
+      ),
+    },
+    {
+      name: "Wishlist",
+      href: "/wishlist",
+      icon: (
+        <div className="relative">
+          <FaHeart
+            className={`mb-1 mt-2.5 ${
+              pathname === "/wishlist" ? "text-orange" : ""
+            }`}
+          />
+          {wishListData?.length > 0 && (
+            <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {wishListData.length}
+            </span>
+          )}
+        </div>
+      ),
     },
     {
       name: "Cart",
@@ -96,7 +127,11 @@ const BottomNavigation = () => {
       href: "/compare",
       icon: (
         <div className="relative">
-          <FaCodeCompare className="rotate-90 mt-2.5 mb-0.5" />
+          <FaCodeCompare
+            className={`rotate-90 mt-2.5 mb-0.5 ${
+              pathname === "/compare" ? "text-orange" : ""
+            }`}
+          />
           {compareData?.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {compareData.length}
@@ -107,11 +142,17 @@ const BottomNavigation = () => {
     },
   ];
 
-  if (data?.role) {
+  if (user?._id) {
     navItems.push({
       name: "My Account",
-      href: `/${data.role}/dashboard`,
-      icon: <TbLayoutDashboardFilled className="mt-[13px] mb-1" />,
+      href: `/${data?.role}/dashboard`,
+      icon: (
+        <TbLayoutDashboardFilled
+          className={`mt-[13px] mb-1 ${
+            pathname.includes(`/${data?.role}/`) ? "text-orange" : ""
+          }`}
+        />
+      ),
     });
   }
 
