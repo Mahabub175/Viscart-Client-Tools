@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { AppstoreOutlined } from "@ant-design/icons";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
-import { useSelector } from "react-redux";
-import { useCurrentUser } from "@/redux/services/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { FaCodeCompare } from "react-icons/fa6";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
-import { Drawer } from "antd";
+import { Button, Drawer, Popover } from "antd";
 import { GiCancel } from "react-icons/gi";
 import DrawerCart from "../Product/DrawerCart";
 import { useState } from "react";
@@ -25,10 +25,13 @@ import { IoChatbubble } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { RxCross1 } from "react-icons/rx";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
+import { toast } from "sonner";
 
 const BottomNavigation = () => {
+  const dispatch = useDispatch();
+
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const { data } = useGetSingleUserQuery(user?._id);
@@ -39,6 +42,7 @@ const BottomNavigation = () => {
     user?._id ?? deviceId
   );
   const pathname = usePathname();
+  const router = useRouter();
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -50,6 +54,51 @@ const BottomNavigation = () => {
     e.preventDefault();
     setIsContactOpen(!isContactOpen);
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully!");
+  };
+
+  const links = {
+    Dashboard: `/${data?.role}/dashboard`,
+    Order: `/${data?.role}/orders/order`,
+    Profile: `/${data?.role}/account-setting`,
+    Wishlist: `/${data?.role}/orders/wishlist`,
+    Cart: `/${data?.role}/orders/cart`,
+  };
+
+  const accountContent = (
+    <div>
+      <div className="rounded-md px-16 py-3">
+        <div className="flex flex-col items-start gap-4 text-md">
+          {["Dashboard", "Order", "Profile", "Wishlist", "Cart"].map(
+            (item, index) => (
+              <Link
+                key={index}
+                href={links[item]}
+                className={`gap-2 font-bold duration-300 ${
+                  pathname === links[item] ? "text-primary" : "text-black"
+                }`}
+              >
+                {item}
+              </Link>
+            )
+          )}
+        </div>
+      </div>
+      <div className="flex w-full justify-end pt-3">
+        <Button
+          onClick={handleLogout}
+          className={`w-full font-bold`}
+          size="large"
+          type="primary"
+        >
+          Log Out
+        </Button>
+      </div>
+    </div>
+  );
 
   const navItems = [
     {
@@ -144,21 +193,27 @@ const BottomNavigation = () => {
         </div>
       ),
     },
-  ];
-
-  if (user?._id) {
-    navItems.push({
+    {
       name: "My Account",
-      href: `/${data?.role}/dashboard`,
-      icon: (
+      href: user ? "#" : "/sign-in",
+      icon: user ? (
+        <Popover content={accountContent} trigger="click">
+          <TbLayoutDashboardFilled
+            className={`mt-[13px] mb-1 cursor-pointer ${
+              pathname.includes(`/${data?.role}/`)
+                ? "text-orange"
+                : "text-white"
+            }`}
+          />
+        </Popover>
+      ) : (
         <TbLayoutDashboardFilled
-          className={`mt-[13px] mb-1 ${
-            pathname.includes(`/${data?.role}/`) ? "text-orange" : ""
-          }`}
+          className="mt-[13px] mb-1 cursor-pointer"
+          onClick={() => router.push("/sign-in")}
         />
       ),
-    });
-  }
+    },
+  ];
 
   return (
     <div className="relative">

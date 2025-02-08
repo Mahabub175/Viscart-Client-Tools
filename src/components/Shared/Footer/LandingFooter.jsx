@@ -29,7 +29,7 @@ const LandingFooter = () => {
     },
     {
       name: "Contact",
-      description: "Find Our Outlets In Your Area",
+      description: "Contact Us For Any Query",
       icon: MdContactPhone,
       to: "/contact",
     },

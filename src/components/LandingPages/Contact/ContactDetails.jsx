@@ -2,7 +2,7 @@
 
 import ContactForm from "./ContactForm";
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
@@ -12,12 +12,6 @@ const ContactDetails = () => {
     <section className="my-container pt-10 lg:pt-24">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:gap-10">
         <div>
-          <div className="bg-white p-5 rounded-xl shadow-xl mb-10">
-            <h2 className="text-xl font-bold text-black/80 mb-4 border-b pb-2">
-              Working Days
-            </h2>
-            <p> {globalData?.results?.businessWorkHours}</p>
-          </div>
           <div className="bg-white p-5 rounded-xl shadow-xl mb-10">
             <h2 className="text-xl font-bold text-black/80 mb-4 border-b pb-2">
               Store address
@@ -33,6 +27,13 @@ const ContactDetails = () => {
                 target="_blank"
               >
                 <FaFacebook className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
+              </Link>
+              <Link
+                href={globalData?.results?.businessYoutube ?? "/"}
+                target="_blank"
+                className="flex items-center gap-4"
+              >
+                <FaYoutube className="text-4xl bg-primary p-2 rounded-full text-white hover:scale-110 duration-300" />
               </Link>
               <Link
                 href={globalData?.results?.businessLinkedin}

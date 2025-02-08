@@ -19,13 +19,13 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
     .replace(/[+]/g, " ");
 
   return (
-    <section className="">
+    <section className="mt-5">
       <div className="flex border-b justify-center gap-5">
         <button
           className={`px-4 py-2 text-sm font-medium ${
             activeTab === "categories"
-              ? "border-b-2 border-blue-500 text-blue-500"
-              : "text-gray-600"
+              ? "border-b-2 border-orange text-orange"
+              : "text-white"
           }`}
           onClick={() => setActiveTab("categories")}
         >
@@ -34,8 +34,8 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
         <button
           className={`px-4 py-2 text-sm font-medium ${
             activeTab === "brands"
-              ? "border-b-2 border-blue-500 text-blue-500"
-              : "text-gray-600"
+              ? "border-b-2 border-orange text-orange"
+              : "text-white"
           }`}
           onClick={() => setActiveTab("brands")}
         >
@@ -51,7 +51,7 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
                 href={`/products?filter=${category.name}`}
                 onClick={() => setIsDrawerOpen(false)}
                 key={category._id}
-                className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
+                className={`py-4 font-medium odd:border-y text-white hover:text-primary ${
                   cleanedQuery === `/products?${category.name}`
                     ? "text-primary"
                     : ""
@@ -69,7 +69,7 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
                 href={`/products?filter=${brand.name}`}
                 onClick={() => setIsDrawerOpen(false)}
                 key={brand._id}
-                className={`py-4 font-medium odd:border-y text-gray-700 hover:text-primary ${
+                className={`py-4 font-medium odd:border-y text-white hover:text-primary ${
                   cleanedQuery === `/products?${brand.name}`
                     ? "text-primary"
                     : ""
