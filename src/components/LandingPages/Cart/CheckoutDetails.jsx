@@ -151,12 +151,12 @@ const CheckoutDetails = ({
         </div>
 
         <div className="flex justify-between items-center gap-20">
-          <p>Shipping Fee</p>
+          <p>Shipping Fee (Per KG)</p>
           <p>{globalData?.results?.currency + " " + shippingFee || 0}</p>
         </div>
 
         <div className="flex justify-between items-center gap-20">
-          <p>Extra Charge</p>
+          <p>Shipping Fee (Extra KG)</p>
           <p>{globalData?.results?.currency + " " + totalCharge || 0}</p>
         </div>
 

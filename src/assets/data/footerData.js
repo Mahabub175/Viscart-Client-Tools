@@ -32,13 +32,13 @@ export const footerData = [
 
 export const footerLinks = [
   { name: "About Us", to: "/about-us" },
-  { name: "Delivery", to: "/" },
-  { name: "Pickup Point", to: "/" },
-  { name: "Payment Terms", to: "/" },
-  { name: "EMI Information", to: "/" },
-  { name: "Warranty Terms", to: "/" },
+  { name: "Delivery", to: "/delivery" },
+  { name: "Pickup Point", to: "/pickup-point" },
+  { name: "Payment Terms", to: "/payment-terms" },
+  { name: "EMI Information", to: "/emi-information" },
+  { name: "Warranty Terms", to: "/warranty-terms" },
   { name: "Privacy Policy", to: "/privacy-policy" },
-  { name: "Refund & Return", to: "/" },
+  { name: "Refund & Return", to: "/refund-and-return" },
   { name: "Terms & Condition", to: "/terms-and-conditions" },
   { name: "Blog", to: "/blog" },
 ];

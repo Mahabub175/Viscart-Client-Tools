@@ -51,10 +51,10 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
                 href={`/products?filter=${category.name}`}
                 onClick={() => setIsDrawerOpen(false)}
                 key={category._id}
-                className={`py-4 font-medium odd:border-y text-white hover:text-primary ${
+                className={`py-4 font-medium odd:border-y hover:text-primary ${
                   cleanedQuery === `/products?${category.name}`
-                    ? "text-primary"
-                    : ""
+                    ? "text-orange"
+                    : "text-white"
                 }`}
               >
                 {category.name}
@@ -69,10 +69,10 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
                 href={`/products?filter=${brand.name}`}
                 onClick={() => setIsDrawerOpen(false)}
                 key={brand._id}
-                className={`py-4 font-medium odd:border-y text-white hover:text-primary ${
+                className={`py-4 font-medium odd:border-y hover:text-primary ${
                   cleanedQuery === `/products?${brand.name}`
-                    ? "text-primary"
-                    : ""
+                    ? "text-orange"
+                    : "text-white"
                 }`}
               >
                 {brand.name}

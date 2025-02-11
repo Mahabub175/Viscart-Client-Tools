@@ -92,14 +92,6 @@ const DrawerCart = ({ data, setDrawer }) => {
                     height={128}
                     className="lg:w-[150px] lg:h-32 rounded-xl"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center rounded-xl transition-opacity duration-300">
-                    <button
-                      onClick={() => handleDeleteCart(item._id)}
-                      className="bg-white px-2 py-1 rounded-full"
-                    >
-                      ✕
-                    </button>
-                  </div>
                 </div>
                 <div className="w-full">
                   <Link

@@ -10,9 +10,11 @@ import { FaLocationDot, FaBoxArchive } from "react-icons/fa6";
 import { MdContactPhone } from "react-icons/md";
 import { RiChatQuoteFill } from "react-icons/ri";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
+  const pathname = usePathname();
 
   const footersData = [
     {
@@ -51,7 +53,7 @@ const LandingFooter = () => {
               alt="logo"
               width={200}
               height={200}
-              className="-my-5 lg:my-0"
+              className={`${pathname.includes("admin" || "user") && "mt-10"}`}
             />
           </Link>
         </div>

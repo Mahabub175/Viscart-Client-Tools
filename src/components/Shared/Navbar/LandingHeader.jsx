@@ -159,7 +159,7 @@ const LandingHeader = () => {
               icon={<MenuOutlined />}
               onClick={toggleDrawer}
             />
-            <Link href={"/"}>
+            <Link href={"/"} className="-translate-x-1 mt-1">
               <Image
                 src={globalData?.results?.logo}
                 alt="logo"
@@ -173,6 +173,7 @@ const LandingHeader = () => {
               products={products}
               globalData={globalData}
               isMobile
+              setDrawerOpen={setIsDrawerOpen}
             />
 
             <div className="flex gap-6 items-center text-lg">
@@ -250,12 +251,10 @@ const LandingHeader = () => {
                 <>
                   <Link
                     href={"/sign-in"}
-                    className="bg-white p-1.5 lg:p-3 rounded-full flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300"
+                    className="bg-white p-1.5 lg:p-3 rounded-full lg:flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300 hidden"
                   >
                     <FaUser />
-                    <span className="text-sm hidden lg:block">
-                      Login / Register
-                    </span>
+                    <span className="text-sm">Login / Register</span>
                   </Link>
                 </>
               )}
@@ -283,7 +282,11 @@ const LandingHeader = () => {
       </nav>
       {isSearchOpen && (
         <div ref={searchRef}>
-          <ProductSearchBar products={products} globalData={globalData} />
+          <ProductSearchBar
+            products={products}
+            globalData={globalData}
+            setDrawerOpen={setIsDrawerOpen}
+          />
         </div>
       )}
       <div className="hidden lg:flex gap-6 items-center bg-black/95">
@@ -296,7 +299,7 @@ const LandingHeader = () => {
         className="!bg-black"
       >
         <div className="flex justify-between items-center -mt-5">
-          <Link href={"/"}>
+          <Link href={"/"} onClick={() => setIsDrawerOpen(false)}>
             <Image
               src={globalData?.results?.logo}
               alt="logo"
@@ -312,7 +315,11 @@ const LandingHeader = () => {
           </button>
         </div>
 
-        <ProductSearchBar products={products} globalData={globalData} />
+        <ProductSearchBar
+          products={products}
+          globalData={globalData}
+          setDrawerOpen={setIsDrawerOpen}
+        />
         <CategoryBrandNavigation setIsDrawerOpen={setIsDrawerOpen} />
       </Drawer>
       <Drawer

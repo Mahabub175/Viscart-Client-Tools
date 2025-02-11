@@ -144,7 +144,7 @@ const BottomNavigation = () => {
             }`}
           />
           {wishListData?.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {wishListData.length}
             </span>
           )}
@@ -168,7 +168,7 @@ const BottomNavigation = () => {
             }`}
           />
           {cartData?.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {cartData.length}
             </span>
           )}
@@ -186,7 +186,7 @@ const BottomNavigation = () => {
             }`}
           />
           {compareData?.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {compareData.length}
             </span>
           )}
@@ -208,7 +208,11 @@ const BottomNavigation = () => {
         </Popover>
       ) : (
         <TbLayoutDashboardFilled
-          className="mt-[13px] mb-1 cursor-pointer"
+          className={`mt-[13px] mb-1 cursor-pointer ${
+            pathname === ("/sign-in" || "/sign-up")
+              ? "text-orange"
+              : "text-white"
+          }`}
           onClick={() => router.push("/sign-in")}
         />
       ),

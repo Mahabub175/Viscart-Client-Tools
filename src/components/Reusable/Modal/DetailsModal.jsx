@@ -114,7 +114,7 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
       open={modalOpen}
       onCancel={handleCloseModal}
       footer={null}
-      width={"50%"}
+      width={1000}
     >
       {details ? (
         <div className="p-5">

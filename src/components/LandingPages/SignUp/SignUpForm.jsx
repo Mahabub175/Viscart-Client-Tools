@@ -105,7 +105,15 @@ const SignUpForm = () => {
               },
             ]}
           >
-            <Checkbox>I agree to the terms & policy</Checkbox>
+            <Checkbox defaultChecked>
+              I Have Read & Agree To The{" "}
+              <Link
+                href={"/privacy-policy"}
+                className="font-medium text-orange"
+              >
+                Privacy Policy
+              </Link>
+            </Checkbox>
           </Form.Item>
         </div>
 

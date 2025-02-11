@@ -84,7 +84,7 @@ const ProductCard = ({ item }) => {
                 ? formatImagePath(item?.mainImage)
                 : "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
             }
-            alt={item?.name}
+            alt={item?.name ?? "demo"}
             width={200}
             height={260}
             className="h-[180px] w-full lg:h-[200px] lg:group-hover:scale-110 duration-500"

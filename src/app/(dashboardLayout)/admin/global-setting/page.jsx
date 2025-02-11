@@ -230,7 +230,25 @@ const AdminAccountSetting = () => {
         >
           <DynamicEditor />
         </Form.Item>
-        <Form.Item label={"Privacy Policy"} name={"privacyPolicy"} required>
+        <Form.Item label={"Privacy Policy"} name={"privacyPolicy"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Delivery Policy"} name={"delivery"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Pickup Point"} name={"pickupPoint"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Payment Terms"} name={"paymentTerms"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"EMI Information"} name={"emiInformation"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Warranty Terms"} name={"warrantyTerms"}>
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Refund & Return"} name={"refundAndReturn"}>
           <DynamicEditor />
         </Form.Item>
 

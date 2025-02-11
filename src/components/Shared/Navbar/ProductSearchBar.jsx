@@ -5,7 +5,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-const ProductSearchBar = ({ products, globalData, isMobile }) => {
+const ProductSearchBar = ({
+  products,
+  globalData,
+  isMobile,
+  setDrawerOpen,
+}) => {
   const [searchValue, setSearchValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
@@ -54,6 +59,7 @@ const ProductSearchBar = ({ products, globalData, isMobile }) => {
               <Link
                 key={product.slug}
                 href={`/products/${product?.slug}`}
+                onClick={() => setDrawerOpen(false)}
                 className="flex items-center gap-4 hover:text-primary duration-300 p-4 border-b border-b-gray-200"
               >
                 <Image
