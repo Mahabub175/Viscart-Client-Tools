@@ -52,6 +52,11 @@ const AdminAccountSetting = () => {
           values.favicon[0].originFileObj
         );
       }
+      if (!values.storeImage[0].url) {
+        submittedData.storeImage = await compressImage(
+          values.storeImage[0].originFileObj
+        );
+      }
       const updatedUserData = new FormData();
       appendToFormData(submittedData, updatedUserData);
 
@@ -102,6 +107,12 @@ const AdminAccountSetting = () => {
           defaultValue={data?.results?.favicon}
           label="Website Favicon"
           name="favicon"
+          required={true}
+        />
+        <FileUploader
+          defaultValue={data?.results?.storeImage}
+          label="Store Image"
+          name="storeImage"
           required={true}
         />
         <div className="two-grid">

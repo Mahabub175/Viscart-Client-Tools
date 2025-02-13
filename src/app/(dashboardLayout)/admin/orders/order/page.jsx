@@ -204,16 +204,18 @@ const Orders = () => {
       align: "center",
     },
     {
-      title: "Shipping Fee",
+      title: "Shipping Fee (Per KG)",
       dataIndex: "shippingFee",
       key: "shippingFee",
       align: "center",
+      render: (item) => <div className="w-[100px]">{item}</div>,
     },
     {
-      title: "Extra Charge",
+      title: "Shipping Fee (Extra KG)",
       dataIndex: "extraCharge",
       key: "extraCharge",
       align: "center",
+      render: (item) => <div className="w-[100px]">{item}</div>,
     },
     {
       title: "Discount",
@@ -394,9 +396,10 @@ const Orders = () => {
       render: (_, record) => (
         <Button
           className="capitalize font-semibold cursor-pointer"
-          type="primary"
+          type=""
           onClick={() => handleAutoDelivery(record)}
-          disabled={record.trackingCode}
+          // disabled={record.trackingCode}
+          disabled
         >
           Auto Delivery
         </Button>
@@ -449,12 +452,6 @@ const Orders = () => {
   ];
 
   const tableData = userOrders?.results?.map((item) => {
-    const extraCharge = item?.products?.reduce((acc, product) => {
-      const productWeight = product?.weight || 0;
-      const charge = productWeight * (globalData?.results?.pricePerWeight || 0);
-      return acc + charge;
-    }, 0);
-
     return {
       key: item._id,
       orderId: item.orderId,
@@ -477,7 +474,7 @@ const Orders = () => {
       deliveryStatus: item?.deliveryStatus,
       paymentMethod: item?.paymentMethod,
       orderStatus: item?.orderStatus,
-      extraCharge,
+      extraCharge: item?.extraFee || 0,
     };
   });
 

@@ -131,6 +131,7 @@ const CartDetails = () => {
               sku: item?.sku,
             })),
             shippingFee,
+            extraFee: totalCharge,
             discount,
             deliveryOption,
             code,

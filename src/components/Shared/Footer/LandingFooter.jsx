@@ -21,7 +21,7 @@ const LandingFooter = () => {
       name: "Find Store",
       description: "Find Our Outlets In Your Area",
       icon: FaLocationDot,
-      to: "/contact",
+      to: "/store",
     },
     {
       name: "Get Quote",
