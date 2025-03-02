@@ -94,7 +94,7 @@ const AdminProducts = () => {
             item ??
             "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
           }
-          alt={"brand image"}
+          alt={"product image"}
           className="!w-12 !h-12 rounded-full"
         />
       ),

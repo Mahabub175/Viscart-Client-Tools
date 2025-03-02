@@ -17,7 +17,7 @@ const ProductReview = ({ productId }) => {
   }
 
   return (
-    <div className="p-4">
+    <div className="lg:p-3 mt-5 lg:mt-0">
       <div className="space-y-4">
         {filteredReviews?.map((review) => {
           const { user, comment, createdAt, rating } = review;
@@ -26,7 +26,7 @@ const ProductReview = ({ productId }) => {
           return (
             <Card
               key={review._id}
-              className="border p-4 rounded-lg shadow-sm"
+              className="border p-2 lg:p-3 rounded-lg shadow-sm"
               title={
                 <div className="flex items-center space-x-3">
                   {profile_image ? (
@@ -40,7 +40,7 @@ const ProductReview = ({ productId }) => {
                     <Avatar size={40} icon={<UserOutlined />} />
                   )}
                   <div>
-                    <div className="font-semibold">{name}</div>
+                    <div className="font-semibold italic">{name}</div>
                     <div className="text-sm text-gray-500">
                       {dayjs(createdAt).format("DD/MM/YYYY")}
                     </div>

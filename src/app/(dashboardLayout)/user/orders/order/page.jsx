@@ -13,12 +13,19 @@ import { Empty, Form, Input, Modal, Rate } from "antd";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const UserOrders = () => {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+
   const user = useSelector(useCurrentUser);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
