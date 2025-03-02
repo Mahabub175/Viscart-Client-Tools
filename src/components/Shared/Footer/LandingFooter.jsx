@@ -10,11 +10,9 @@ import { FaLocationDot, FaBoxArchive } from "react-icons/fa6";
 import { MdContactPhone } from "react-icons/md";
 import { RiChatQuoteFill } from "react-icons/ri";
 import React from "react";
-import { usePathname } from "next/navigation";
 
 const LandingFooter = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
-  const pathname = usePathname();
 
   const footersData = [
     {
@@ -27,7 +25,7 @@ const LandingFooter = () => {
       name: "Get Quote",
       description: "Get A Quote For Your Products",
       icon: RiChatQuoteFill,
-      to: `mailto:${globalData?.results?.businessEmail}`,
+      to: `mailto:${globalData?.results?.businessEmail ?? "/"}`,
     },
     {
       name: "Contact",
@@ -39,12 +37,12 @@ const LandingFooter = () => {
       name: "Complaint Box",
       description: "If You Have Any Complaint",
       icon: FaBoxArchive,
-      to: globalData?.results?.complaintLink,
+      to: globalData?.results?.complaintLink ?? "/",
     },
   ];
 
   return (
-    <section className="bg-[#0f0f0f] mb-12 lg:mb-0 text-gray-400 mt-10">
+    <section className="bg-[#0f0f0f] mb-12 lg:mb-0 text-gray-400 mt-10 pt-10">
       <footer className="-mt-10 lg:mt-0">
         <div className="my-container flex justify-center">
           <Link href={"/"}>
@@ -53,7 +51,6 @@ const LandingFooter = () => {
               alt="logo"
               width={200}
               height={200}
-              className={`${pathname.includes("admin" || "user") && "mt-10"}`}
             />
           </Link>
         </div>
@@ -109,13 +106,13 @@ const LandingFooter = () => {
 
         <div>
           <div className="my-container grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {footersData.map((footer, index) => (
+            {footersData?.map((footer, index) => (
               <div key={index}>
                 <Link
-                  href={footer.to}
+                  href={footer?.to ?? "/"}
                   target={
-                    footer.to.startsWith("http") ||
-                    footer.to.startsWith("mailto")
+                    footer?.to?.startsWith("http") ||
+                    footer?.to?.startsWith("mailto")
                       ? "_blank"
                       : "_self"
                   }

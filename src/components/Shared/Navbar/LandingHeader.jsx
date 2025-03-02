@@ -174,6 +174,7 @@ const LandingHeader = () => {
               globalData={globalData}
               isMobile
               setDrawerOpen={setIsDrawerOpen}
+              setIsSearchOpen={setIsSearchOpen}
             />
 
             <div className="flex gap-6 items-center text-lg">
@@ -259,6 +260,28 @@ const LandingHeader = () => {
                 </>
               )}
               <div
+                className={`lg:hidden cursor-pointer ${
+                  pathname === "/cart" ? "text-orange" : "text-white"
+                } mr-2`}
+                onClick={() => setIsCartOpen(true)}
+              >
+                {cartData?.length > 0 ? (
+                  <span className="relative">
+                    {cartData?.length > 0 && (
+                      <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                        {cartData.length}
+                      </span>
+                    )}
+                    <FaShoppingBag />
+                  </span>
+                ) : (
+                  <FaShoppingBag
+                    className="cursor-pointer hover:text-primary duration-300"
+                    onClick={() => setIsCartOpen(true)}
+                  />
+                )}
+              </div>
+              <div
                 className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
                 onClick={() => setIsCartOpen(true)}
               >
@@ -286,6 +309,7 @@ const LandingHeader = () => {
             products={products}
             globalData={globalData}
             setDrawerOpen={setIsDrawerOpen}
+            setIsSearchOpen={setIsSearchOpen}
           />
         </div>
       )}
@@ -319,6 +343,7 @@ const LandingHeader = () => {
           products={products}
           globalData={globalData}
           setDrawerOpen={setIsDrawerOpen}
+          setIsSearchOpen={setIsSearchOpen}
         />
         <CategoryBrandNavigation setIsDrawerOpen={setIsDrawerOpen} />
       </Drawer>

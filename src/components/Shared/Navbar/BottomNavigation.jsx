@@ -1,37 +1,29 @@
 "use client";
 
-import Link from "next/link";
-import { AppstoreOutlined } from "@ant-design/icons";
-import { TbLayoutDashboardFilled } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
-import { FaCodeCompare } from "react-icons/fa6";
-import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleCompareByUserQuery } from "@/redux/services/compare/compareApi";
-import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
-import { Button, Drawer, Popover } from "antd";
-import { GiCancel } from "react-icons/gi";
-import DrawerCart from "../Product/DrawerCart";
-import { useState } from "react";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
+import { AppstoreOutlined } from "@ant-design/icons";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
-  FaShoppingBag,
-  FaPhone,
-  FaWhatsapp,
   FaFacebookMessenger,
   FaHeart,
+  FaPhone,
+  FaUser,
+  FaWhatsapp,
 } from "react-icons/fa";
+import { FaCodeCompare } from "react-icons/fa6";
 import { IoChatbubble } from "react-icons/io5";
-import { motion } from "framer-motion";
 import { RxCross1 } from "react-icons/rx";
-import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
-import { usePathname, useRouter } from "next/navigation";
-import { useGetSingleWishlistByUserQuery } from "@/redux/services/wishlist/wishlistApi";
-import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const BottomNavigation = () => {
-  const dispatch = useDispatch();
-
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
   const { data } = useGetSingleUserQuery(user?._id);
@@ -46,66 +38,42 @@ const BottomNavigation = () => {
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
-  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+
+  const contactButtonRef = useRef(null);
 
   const handleContactClick = (e) => {
     e.preventDefault();
     setIsContactOpen(!isContactOpen);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    toast.success("Logged out successfully!");
-  };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        contactButtonRef.current &&
+        !contactButtonRef.current.contains(e.target)
+      ) {
+        setIsContactOpen(false);
+      }
+    };
 
-  const links = {
-    Dashboard: `/${data?.role}/dashboard`,
-    Order: `/${data?.role}/orders/order`,
-    Profile: `/${data?.role}/account-setting`,
-    Wishlist: `/${data?.role}/orders/wishlist`,
-    Cart: `/${data?.role}/orders/cart`,
-  };
+    document.addEventListener("mousedown", handleClickOutside);
 
-  const accountContent = (
-    <div>
-      <div className="rounded-md px-16 py-3">
-        <div className="flex flex-col items-start gap-4 text-md">
-          {["Dashboard", "Order", "Profile", "Wishlist", "Cart"].map(
-            (item, index) => (
-              <Link
-                key={index}
-                href={links[item]}
-                className={`gap-2 font-bold duration-300 ${
-                  pathname === links[item] ? "text-primary" : "text-black"
-                }`}
-              >
-                {item}
-              </Link>
-            )
-          )}
-        </div>
-      </div>
-      <div className="flex w-full justify-end pt-3">
-        <Button
-          onClick={handleLogout}
-          className={`w-full font-bold`}
-          size="large"
-          type="primary"
-        >
-          Log Out
-        </Button>
-      </div>
-    </div>
-  );
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const navItems = [
     {
       name: "Contact",
       href: "#",
       icon: (
-        <div className="relative cursor-pointer" onClick={handleContactClick}>
+        <div
+          className="relative cursor-pointer"
+          onClick={handleContactClick}
+          ref={contactButtonRef}
+        >
           <motion.div
             key={isContactOpen ? "close" : "chat"}
             initial={{ rotate: 0, scale: 1 }}
@@ -152,30 +120,6 @@ const BottomNavigation = () => {
       ),
     },
     {
-      name: "Cart",
-      href: "/cart",
-      icon: (
-        <div
-          className="relative cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            setIsCartOpen(true);
-          }}
-        >
-          <FaShoppingBag
-            className={`mb-1 mt-2.5 ${
-              pathname === "/cart" ? "text-orange" : ""
-            }`}
-          />
-          {cartData?.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              {cartData.length}
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
       name: "Compare",
       href: "/compare",
       icon: (
@@ -195,19 +139,16 @@ const BottomNavigation = () => {
     },
     {
       name: "My Account",
-      href: user ? "#" : "/sign-in",
+      href: user ? `/${data?.role}/dashboard` : "/sign-in",
       icon: user ? (
-        <Popover content={accountContent} trigger="click">
-          <TbLayoutDashboardFilled
-            className={`mt-[13px] mb-1 cursor-pointer ${
-              pathname.includes(`/${data?.role}/`)
-                ? "text-orange"
-                : "text-white"
-            }`}
-          />
-        </Popover>
+        <FaUser
+          className={`mt-[13px] mb-1 cursor-pointer ${
+            pathname.includes(`/${data?.role}/`) ? "text-orange" : "text-white"
+          }`}
+          onClick={() => router.push(`/${data?.role}/dashboard`)}
+        />
       ) : (
-        <TbLayoutDashboardFilled
+        <FaUser
           className={`mt-[13px] mb-1 cursor-pointer ${
             pathname === ("/sign-in" || "/sign-up")
               ? "text-orange"
@@ -237,7 +178,7 @@ const BottomNavigation = () => {
       </div>
 
       {isContactOpen && (
-        <div className="fixed bottom-16 left-6 z-50 flex flex-col space-y-2">
+        <div className="fixed bottom-16 left-5 z-50 flex flex-col space-y-2">
           <motion.a
             href={`tel:${globalData?.results?.businessNumber}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white rounded-full shadow-lg"
@@ -267,25 +208,6 @@ const BottomNavigation = () => {
           </motion.a>
         </div>
       )}
-
-      <Drawer
-        placement="right"
-        onClose={() => setIsCartOpen(false)}
-        open={isCartOpen}
-        width={450}
-        destroyOnClose
-      >
-        <div className="flex justify-between items-center mb-4 border-b pb-4">
-          <p className="text-2xl font-semibold">Shopping Cart</p>
-          <button
-            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
-            onClick={() => setIsCartOpen(false)}
-          >
-            <GiCancel className="text-xl text-gray-700" />
-          </button>
-        </div>
-        <DrawerCart data={cartData} setDrawer={setIsCartOpen} />
-      </Drawer>
     </div>
   );
 };

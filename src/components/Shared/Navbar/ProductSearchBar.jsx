@@ -10,6 +10,7 @@ const ProductSearchBar = ({
   globalData,
   isMobile,
   setDrawerOpen,
+  setIsSearchOpen,
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -37,6 +38,14 @@ const ProductSearchBar = ({
     setTimeout(() => setIsFocused(false), 150);
   };
 
+  const handleProductClick = () => {
+    setSearchValue("");
+    setFilteredOptions([]);
+    setIsFocused(false);
+    setDrawerOpen(false);
+    setIsSearchOpen(false);
+  };
+
   return (
     <div className={`${isMobile && "hidden lg:block"} w-full`}>
       <div className="relative w-full">
@@ -52,14 +61,13 @@ const ProductSearchBar = ({
           prefix={<FaSearch className="text-primary" />}
         />
 
-        {/* Search Results */}
         {isFocused && searchValue && filteredOptions.length > 0 && (
           <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto">
             {filteredOptions.slice(0, 10).map((product) => (
               <Link
                 key={product.slug}
                 href={`/products/${product?.slug}`}
-                onClick={() => setDrawerOpen(false)}
+                onClick={handleProductClick}
                 className="flex items-center gap-4 hover:text-primary duration-300 p-4 border-b border-b-gray-200"
               >
                 <Image

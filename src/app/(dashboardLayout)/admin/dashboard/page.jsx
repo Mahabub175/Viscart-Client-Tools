@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { TbBrandAirtable } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
+import LogOutButton from "@/components/Dashboard/LogOutButton";
 
 const AdminDashboard = () => {
   useEffect(() => {
@@ -114,6 +115,7 @@ const AdminDashboard = () => {
           title="Global Settings"
           href={"/admin/global-setting"}
         />
+        <LogOutButton />
       </div>
     </section>
   );

@@ -85,7 +85,7 @@ const AdminAccountSetting = () => {
   }, [data]);
 
   return (
-    <section className="w-4/6 mx-auto">
+    <section className="lg:w-4/6 mx-auto">
       <Divider orientation="left" orientationMargin={0}>
         Global Settings
       </Divider>

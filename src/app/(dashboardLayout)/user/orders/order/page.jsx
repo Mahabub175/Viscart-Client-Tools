@@ -1,14 +1,18 @@
 "use client";
 
-import { paginationNumbers } from "@/assets/data/paginationData";
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import CustomForm from "@/components/Reusable/Form/CustomForm";
 import CustomInput from "@/components/Reusable/Form/CustomInput";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetOrdersByUserQuery } from "@/redux/services/order/orderApi";
 import { useAddReviewMutation } from "@/redux/services/review/reviewApi";
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
-import { Button, Form, Input, Modal, Pagination, Rate, Table, Tag } from "antd";
+import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import { Empty, Form, Input, Modal, Rate } from "antd";
+import dayjs from "dayjs";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -16,194 +20,16 @@ import { toast } from "sonner";
 
 const UserOrders = () => {
   const user = useSelector(useCurrentUser);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [singleOrder, setSingleOrder] = useState({});
   const [search, setSearch] = useState("");
 
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+
   const { data: userOrders, isFetching } = useGetOrdersByUserQuery({
-    page: currentPage,
-    limit: pageSize,
     id: user?._id,
   });
-
-  const handlePageChange = (page, size) => {
-    setCurrentPage(page);
-    setPageSize(size);
-  };
-
-  const columns = [
-    {
-      title: "Transaction ID",
-      dataIndex: "tranId",
-      key: "tranId",
-      align: "center",
-    },
-    {
-      title: "Products",
-      dataIndex: "products",
-      key: "products",
-      align: "center",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      align: "center",
-    },
-    {
-      title: "Sub Total",
-      dataIndex: "subTotal",
-      key: "subTotal",
-      align: "center",
-    },
-    {
-      title: "Shipping Fee (Per KG)",
-      dataIndex: "shippingFee",
-      key: "shippingFee",
-      align: "center",
-      render: (item) => <div className="w-[100px]">{item}</div>,
-    },
-    {
-      title: "Shipping Fee (Extra KG)",
-      dataIndex: "extraCharge",
-      key: "extraCharge",
-      align: "center",
-      render: (item) => <div className="w-[100px]">{item}</div>,
-    },
-    {
-      title: "Discount",
-      dataIndex: "discount",
-      key: "discount",
-      align: "center",
-    },
-    {
-      title: "Grand Total",
-      dataIndex: "grandTotal",
-      key: "grandTotal",
-      align: "center",
-    },
-    {
-      title: "Payment Method",
-      dataIndex: "paymentMethod",
-      key: "paymentMethod",
-      align: "center",
-    },
-    {
-      title: "Payment Status",
-      dataIndex: "paymentStatus",
-      key: "paymentStatus",
-      align: "center",
-      render: (item) => {
-        let color;
-        let text;
-
-        switch (item) {
-          case "SUCCESS":
-            color = "green";
-            text = "Success";
-            break;
-          case "PENDING":
-            color = "orange";
-            text = "Pending";
-            break;
-          case "FAILED":
-            color = "red";
-            text = "Failed";
-            break;
-          default:
-            color = "gray";
-            text = "Unknown";
-            break;
-        }
-
-        return (
-          <Tag color={color} className="capitalize font-semibold">
-            {text}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Delivery Status",
-      dataIndex: "deliveryStatus",
-      key: "deliveryStatus",
-      align: "center",
-      render: (item) => {
-        let color;
-        let text;
-
-        switch (item) {
-          case "delivered":
-            color = "green";
-            text = "Delivered";
-            break;
-          case "pending":
-            color = "blue";
-            text = "Pending";
-            break;
-          case "shipped":
-            color = "orange";
-            text = "Shipped";
-            break;
-          case "returned":
-            color = "red";
-            text = "Returned";
-            break;
-          default:
-            color = "gray";
-            text = "Unknown";
-            break;
-        }
-
-        return (
-          <Tag
-            color={color}
-            className="capitalize font-semibold cursor-pointer"
-          >
-            {text}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Review",
-      dataIndex: "review",
-      key: "review",
-      align: "center",
-      render: (record) => (
-        <Button
-          className="capitalize font-semibold cursor-pointer"
-          type="primary"
-          onClick={() => {
-            setReviewModalOpen(true);
-            setSingleOrder(record);
-          }}
-        >
-          Add Review
-        </Button>
-      ),
-    },
-  ];
-
-  const tableData = userOrders?.results?.map((item) => ({
-    key: item._id,
-    tranId: item.tranId ?? "N/A",
-    products: item?.products
-      ?.map((product) => product?.productName)
-      .join(" , "),
-    quantity: item?.products?.map((product) => product?.quantity).join(" , "),
-    subTotal: item?.subTotal,
-    shippingFee: item?.shippingFee,
-    discount: item?.discount ?? 0,
-    grandTotal: item?.grandTotal,
-    paymentStatus: item?.paymentStatus,
-    deliveryStatus: item?.deliveryStatus,
-    paymentMethod: item?.paymentMethod,
-    extraCharge: item?.extraFee || 0,
-    review: item,
-  }));
 
   const [addReview, { isLoading: isReviewLoading }] = useAddReviewMutation();
 
@@ -214,7 +40,7 @@ const UserOrders = () => {
       const submittedData = {
         ...values,
         user: user?._id,
-        product: singleOrder?.products?.map((item) => item?.product),
+        product: singleOrder?.products?.map((item) => item?.product?._id),
       };
 
       const data = new FormData();
@@ -236,7 +62,7 @@ const UserOrders = () => {
     }
   };
 
-  const filteredTableData = tableData?.filter((item) => {
+  const filteredData = userOrders?.results?.filter((item) => {
     if (!search) return true;
     const searchTerm = search.toLowerCase();
 
@@ -244,6 +70,19 @@ const UserOrders = () => {
       value?.toString().toLowerCase().includes(searchTerm)
     );
   });
+
+  const handleOrderDetails = (item) => {
+    setSingleOrder(item);
+    setDetailsModalOpen(true);
+  };
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-5">
@@ -257,24 +96,167 @@ const UserOrders = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <Table
-        columns={columns}
-        pagination={false}
-        dataSource={filteredTableData}
-        className="mt-10"
-        loading={isFetching}
-      />
 
-      <Pagination
-        className="flex justify-end items-center !mt-10"
-        total={userOrders?.meta?.totalCount}
-        current={currentPage}
-        onChange={handlePageChange}
-        pageSize={pageSize}
-        showSizeChanger
-        pageSizeOptions={paginationNumbers}
-        simple
-      />
+      <div className="mt-10">
+        {filteredData?.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap gap-5">
+            {filteredData?.map((item) => (
+              <div
+                key={item?._id}
+                className="bg-white rounded-xl shadow-xl lg:w-[350px]"
+                onClick={() => handleOrderDetails(item)}
+              >
+                <div className="bg-black/70 text-white rounded-t-xl">
+                  <div className="p-3 flex justify-between items-center text-lg font-semibold">
+                    <p>Order ID</p>
+                    <p># {item?.orderId}</p>
+                  </div>
+                </div>
+                <div className="">
+                  <div className="p-3 lg:text-lg font-semibold space-y-4">
+                    <div className="flex justify-between items-center">
+                      <p>Order Date:</p>
+                      <p>{dayjs(item?.createdAt).format("MMMM DD, YYYY")}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Delivery Status:</p>
+                      <p>{item?.deliveryStatus}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Payment Method:</p>
+                      <p>{item?.paymentMethod.toUpperCase()}</p>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <p>Grand Total:</p>
+                      <p>
+                        {globalData?.results?.currency + " " + item?.grandTotal}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Empty description="No orders found" />
+        )}
+      </div>
+
+      <Modal
+        open={detailsModalOpen}
+        onCancel={() => setDetailsModalOpen(false)}
+        footer={null}
+        centered
+        destroyOnClose
+      >
+        <div>
+          <h3 className="text-lg font-semibold">Order Details</h3>
+          <div className="mt-4">
+            <div className="bg-black/70 text-white">
+              <div className="p-3">
+                <div className="flex gap-2 items-center text-lg font-semibold mb-1">
+                  <p>Order ID: </p>
+                  <p># {singleOrder?.orderId}</p>
+                </div>
+                <p>
+                  <strong>Order Date:</strong>{" "}
+                  {dayjs(singleOrder?.createdAt).format(
+                    "MMMM DD, YYYY hh:MM A"
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <p className="bg-grey p-3 mt-2">
+              <strong>Delivery Status:</strong>{" "}
+              {singleOrder?.deliveryStatus?.toUpperCase()}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Payment Status:</strong> {singleOrder?.paymentStatus}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Payment Method:</strong>{" "}
+              {singleOrder?.paymentMethod?.toUpperCase()}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Name:</strong> {singleOrder?.name}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Address:</strong> {singleOrder?.address}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Number:</strong> {singleOrder?.number}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Shipping Fee (Per KG):</strong>{" "}
+              {globalData?.results?.currency} {singleOrder?.shippingFee}
+            </p>
+            {singleOrder?.extraFee && (
+              <p className="bg-grey p-3 mt-2">
+                <strong>Shipping Fee (Extra KG):</strong>{" "}
+                {globalData?.results?.currency} {singleOrder?.extraFee}
+              </p>
+            )}
+            {singleOrder?.discount && (
+              <p className="bg-grey p-3 mt-2">
+                <strong>Discount:</strong> {globalData?.results?.currency}{" "}
+                {singleOrder?.discount}
+              </p>
+            )}
+            <p className="bg-grey p-3 mt-2">
+              <strong>Subtotal:</strong> {globalData?.results?.currency}{" "}
+              {singleOrder?.subTotal}
+            </p>
+            <p className="bg-grey p-3 mt-2">
+              <strong>Grand Total:</strong> {globalData?.results?.currency}{" "}
+              {singleOrder?.grandTotal}
+            </p>
+
+            <p className="p-3 mt-2 text-lg">
+              <strong>Item Details</strong>
+            </p>
+            <div className="bg-white shadow-xl p-3 mt-2">
+              <div>
+                {singleOrder?.products?.map((item, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between gap-5">
+                      <Image
+                        src={formatImagePath(item?.product?.mainImage)}
+                        alt={item?.productName}
+                        width={100}
+                        height={100}
+                      />
+                      <div>
+                        <Link href={`/products/${item?.product?.slug}`}>
+                          {item?.productName}
+                        </Link>
+                        <p className="mt-2">
+                          <strong>Price:</strong>{" "}
+                          {globalData?.results?.currency}{" "}
+                          {item?.product?.offerPrice ??
+                            item?.product?.sellingPrice}
+                        </p>
+                      </div>
+                      <p className="bg-black text-white px-3">
+                        x{item?.quantity}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 text-right">
+            <button
+              className="text-blue-500 border-2 border-blue-500 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white duration-300"
+              onClick={() => setReviewModalOpen(true)}
+            >
+              Leave a Review
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       <Modal
         open={reviewModalOpen}

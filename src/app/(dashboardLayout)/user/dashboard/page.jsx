@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { TbBrandAirtable } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
+import LogOutButton from "@/components/Dashboard/LogOutButton";
 
 const UserDashboard = () => {
   useEffect(() => {
@@ -70,9 +71,15 @@ const UserDashboard = () => {
         />
         <DashboardCards
           icon={TbBrandAirtable}
+          title="Reviews"
+          href={"/user/review"}
+        />
+        <DashboardCards
+          icon={TbBrandAirtable}
           title="Account Setting"
           href={"/user/account-setting"}
         />
+        <LogOutButton />
       </div>
     </section>
   );
