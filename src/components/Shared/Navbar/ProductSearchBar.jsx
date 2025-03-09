@@ -83,18 +83,16 @@ const ProductSearchBar = ({
         </AnimatePresence>
 
         <AnimatePresence>
-          {isFocused &&
-            searchValue &&
-            filteredOptions.length > 0 &&
-            !isFiltering && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto"
-              >
-                {filteredOptions.slice(0, 10).map((product) => (
+          {isFocused && searchValue && !isFiltering && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto"
+            >
+              {filteredOptions.length > 0 ? (
+                filteredOptions.slice(0, 10).map((product) => (
                   <Link
                     key={product.slug}
                     href={`/products/${product?.slug}`}
@@ -128,18 +126,22 @@ const ProductSearchBar = ({
                       <p>Category: {product?.category?.name}</p>
                     </div>
                   </Link>
-                ))}
-
-                {filteredOptions.length > 10 && (
-                  <Link
-                    href="/products"
-                    className="block text-center text-primary py-2 hover:bg-gray-100"
-                  >
-                    View All
-                  </Link>
-                )}
-              </motion.div>
-            )}
+                ))
+              ) : (
+                <p className="text-center text-gray-500 p-4">
+                  No products found
+                </p>
+              )}
+              {filteredOptions.length > 10 && (
+                <Link
+                  href="/products"
+                  className="block text-center text-primary py-2 hover:bg-gray-100"
+                >
+                  View All
+                </Link>
+              )}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>
