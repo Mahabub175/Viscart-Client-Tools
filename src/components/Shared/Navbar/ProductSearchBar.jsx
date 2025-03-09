@@ -1,9 +1,10 @@
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ProductSearchBar = ({
   products,
@@ -15,23 +16,29 @@ const ProductSearchBar = ({
   const [searchValue, setSearchValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
 
   const handleSearch = (value) => {
     setSearchValue(value);
+    setIsFiltering(true);
     if (!value) {
       setFilteredOptions([]);
+      setIsFiltering(false);
       return;
     }
 
-    const results =
-      Array.isArray(products?.results) &&
-      products?.results?.filter(
-        (product) =>
-          product?.name?.toLowerCase().includes(value.toLowerCase()) ||
-          product?.category?.name?.toLowerCase().includes(value.toLowerCase())
-      );
+    setTimeout(() => {
+      const results =
+        Array.isArray(products?.results) &&
+        products?.results?.filter(
+          (product) =>
+            product?.name?.toLowerCase().includes(value.toLowerCase()) ||
+            product?.category?.name?.toLowerCase().includes(value.toLowerCase())
+        );
 
-    setFilteredOptions(results || []);
+      setFilteredOptions(results || []);
+      setIsFiltering(false);
+    }, 300);
   };
 
   const handleBlur = () => {
@@ -61,60 +68,79 @@ const ProductSearchBar = ({
           prefix={<FaSearch className="text-primary" />}
         />
 
-        {isFocused && searchValue && filteredOptions.length > 0 && (
-          <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto">
-            {filteredOptions.slice(0, 10).map((product) => (
-              <Link
-                key={product.slug}
-                href={`/products/${product?.slug}`}
-                onClick={handleProductClick}
-                className="flex items-center gap-4 hover:text-primary duration-300 p-4 border-b border-b-gray-200"
-              >
-                <Image
-                  src={formatImagePath(product?.mainImage)}
-                  alt="product"
-                  width={80}
-                  height={50}
-                  className="object-cover rounded-xl"
-                />
-                <div>
-                  <p className="text-lg font-medium">{product?.name}</p>
-                  <p className="flex items-center gap-4">
-                    Price:{" "}
-                    {product?.offerPrice && (
-                      <span className="text-xs line-through text-red-500">
-                        {globalData?.results?.currency +
-                          " " +
-                          product?.sellingPrice}
-                      </span>
-                    )}
-                    <span className="text-xs lg:text-sm">
-                      {globalData?.results?.currency +
-                        " " +
-                        (product?.offerPrice || product?.sellingPrice)}
-                    </span>
-                  </p>
-                  <p>Category: {product?.category?.name}</p>
-                </div>
-              </Link>
-            ))}
+        <AnimatePresence>
+          {isFiltering && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 p-4 text-gray-500 flex justify-center items-center"
+            >
+              <Spin />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            {filteredOptions.length > 10 && (
-              <Link
-                href="/products"
-                className="block text-center text-primary py-2 hover:bg-gray-100"
+        <AnimatePresence>
+          {isFocused &&
+            searchValue &&
+            filteredOptions.length > 0 &&
+            !isFiltering && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-1 lg:mt-2 max-h-[35rem] overflow-y-auto"
               >
-                View All
-              </Link>
+                {filteredOptions.slice(0, 10).map((product) => (
+                  <Link
+                    key={product.slug}
+                    href={`/products/${product?.slug}`}
+                    onClick={handleProductClick}
+                    className="flex items-center gap-4 hover:text-primary duration-300 p-4 border-b border-b-gray-200"
+                  >
+                    <Image
+                      src={formatImagePath(product?.mainImage)}
+                      alt="product"
+                      width={80}
+                      height={50}
+                      className="object-cover rounded-xl"
+                    />
+                    <div>
+                      <p className="text-lg font-medium">{product?.name}</p>
+                      <p className="flex items-center gap-4">
+                        Price:{" "}
+                        {product?.offerPrice && (
+                          <span className="text-xs line-through text-red-500">
+                            {globalData?.results?.currency +
+                              " " +
+                              product?.sellingPrice}
+                          </span>
+                        )}
+                        <span className="text-xs lg:text-sm">
+                          {globalData?.results?.currency +
+                            " " +
+                            (product?.offerPrice || product?.sellingPrice)}
+                        </span>
+                      </p>
+                      <p>Category: {product?.category?.name}</p>
+                    </div>
+                  </Link>
+                ))}
+
+                {filteredOptions.length > 10 && (
+                  <Link
+                    href="/products"
+                    className="block text-center text-primary py-2 hover:bg-gray-100"
+                  >
+                    View All
+                  </Link>
+                )}
+              </motion.div>
             )}
-          </div>
-        )}
-
-        {isFocused && searchValue && filteredOptions.length === 0 && (
-          <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg w-full mt-2 p-4 text-gray-500">
-            No products found
-          </div>
-        )}
+        </AnimatePresence>
       </div>
     </div>
   );
