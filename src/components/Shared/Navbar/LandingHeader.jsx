@@ -268,8 +268,8 @@ const LandingHeader = () => {
                 <>
                   <Link
                     href={"/sign-in"}
-                    className={`bg-white p-1.5 lg:p-3 rounded-full lg:flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-orange duration-300 hidden ${
-                      pathname === "/sign-in" || "sign-up"
+                    className={`bg-white p-1.5 lg:p-3 rounded-full lg:flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-orange duration-300 hidden  ${
+                      pathname === ("/sign-in" || "sign-up")
                         ? "text-orange"
                         : "text-black"
                     }`}
