@@ -4,13 +4,17 @@ import DashboardCards from "@/components/Dashboard/DashboardCards";
 import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetSingleUserDashboardQuery } from "@/redux/services/dashboard/dashboardApi";
-import { Avatar } from "antd";
+import { Avatar, Drawer } from "antd";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TbBrandAirtable } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import LogOutButton from "@/components/Dashboard/LogOutButton";
+import DrawerCart from "@/components/Shared/Product/DrawerCart";
+import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { GiCancel } from "react-icons/gi";
 
 const UserDashboard = () => {
   useEffect(() => {
@@ -21,9 +25,14 @@ const UserDashboard = () => {
   });
 
   const user = useSelector(useCurrentUser);
+  const deviceId = useSelector(useDeviceId);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const { data } = useGetSingleUserQuery(user?._id);
 
   const { data: dashboardData } = useGetSingleUserDashboardQuery(user?._id);
+
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
   return (
     <section>
@@ -57,12 +66,16 @@ const UserDashboard = () => {
           data={dashboardData?.wishlists}
           href={"/wishlist"}
         />
-        <DashboardCards
-          icon={TbBrandAirtable}
-          title="Carts"
-          data={dashboardData?.carts || 0}
-          href={"/cart"}
-        />
+        <div
+          className="bg-white p-5 rounded-xl shadow-xl text-base font-bold text-end flex flex-col justify-center lg:justify-around items-center gap-2 hover:text-primary"
+          onClick={() => setIsCartOpen(true)}
+        >
+          <TbBrandAirtable className="text-[40px] lg:text-[50px] text-primary" />
+          <div className="flex items-center gap-2 lg:gap-4 text-center">
+            <p className="text-sm lg:text-xl">Total Carts</p>
+            <p className="text-2xl lg:text-4xl">{dashboardData?.carts || 0}</p>
+          </div>
+        </div>
         <DashboardCards
           icon={TbBrandAirtable}
           title="Orders"
@@ -81,6 +94,25 @@ const UserDashboard = () => {
         />
         <LogOutButton />
       </div>
+      <Drawer
+        placement="right"
+        onClose={() => setIsCartOpen(false)}
+        open={isCartOpen}
+        width={450}
+        keyboard={true}
+        destroyOnClose
+      >
+        <div className="flex justify-between items-center mb-4 border-b pb-4">
+          <p className="lg:text-2xl font-semibold">Shopping Cart</p>
+          <button
+            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+            onClick={() => setIsCartOpen(false)}
+          >
+            <GiCancel className="text-xl text-gray-700" />
+          </button>
+        </div>
+        <DrawerCart data={cartData} setDrawer={setIsCartOpen} />
+      </Drawer>
     </section>
   );
 };

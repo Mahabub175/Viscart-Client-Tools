@@ -196,6 +196,10 @@ const UserOrders = () => {
               <strong>Number:</strong> {singleOrder?.number}
             </p>
             <p className="bg-grey p-3 mt-2">
+              <strong>Subtotal:</strong> {globalData?.results?.currency}{" "}
+              {singleOrder?.subTotal}
+            </p>
+            <p className="bg-grey p-3 mt-2">
               <strong>Shipping Fee (Per KG):</strong>{" "}
               {globalData?.results?.currency} {singleOrder?.shippingFee}
             </p>
@@ -211,10 +215,6 @@ const UserOrders = () => {
                 {singleOrder?.discount}
               </p>
             )}
-            <p className="bg-grey p-3 mt-2">
-              <strong>Subtotal:</strong> {globalData?.results?.currency}{" "}
-              {singleOrder?.subTotal}
-            </p>
             <p className="bg-grey p-3 mt-2">
               <strong>Grand Total:</strong> {globalData?.results?.currency}{" "}
               {singleOrder?.grandTotal}

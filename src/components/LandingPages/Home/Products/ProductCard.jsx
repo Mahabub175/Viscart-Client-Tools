@@ -63,34 +63,36 @@ const ProductCard = ({ item }) => {
           <TbHeart />
         </div>
       </Tooltip>
-      <div className="relative">
-        {item?.video && isHovered ? (
-          <video
-            src={formatImagePath(item?.video)}
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            autoPlay
-            muted
-            controls={false}
-            className="w-full h-[160px] lg:h-[200px] object-cover"
-          >
-            Your browser does not support the video tag.
-          </video>
-        ) : (
-          <Image
-            src={
-              item?.mainImage
-                ? formatImagePath(item?.mainImage)
-                : "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
-            }
-            alt={item?.name ?? "demo"}
-            width={200}
-            height={260}
-            className="h-[180px] w-full lg:h-[200px] lg:group-hover:scale-110 duration-500"
-          />
-        )}
-      </div>
+      <LinkButton href={`/products/${item?.slug}`}>
+        <div className="relative">
+          {item?.video && isHovered ? (
+            <video
+              src={formatImagePath(item?.video)}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              autoPlay
+              muted
+              controls={false}
+              className="w-full h-[160px] lg:h-[200px] object-cover"
+            >
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <Image
+              src={
+                item?.mainImage
+                  ? formatImagePath(item?.mainImage)
+                  : "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
+              }
+              alt={item?.name ?? "demo"}
+              width={200}
+              height={260}
+              className="h-[180px] w-full lg:h-[200px] lg:group-hover:scale-110 duration-500"
+            />
+          )}
+        </div>
+      </LinkButton>
 
       <div>
         <div
