@@ -180,32 +180,48 @@ const LandingHeader = () => {
             <div className="flex gap-6 items-center text-lg">
               <Link
                 href={"/compare"}
-                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-orange duration-300"
               >
                 {compareData?.[0]?.product?.length > 0 ? (
                   <span className="relative">
                     <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                       {compareData?.[0]?.product?.length}
                     </span>
-                    <FaCodeCompare className="rotate-90" />
+                    <FaCodeCompare
+                      className={`rotate-90 ${
+                        pathname === "/compare" ? "text-orange" : "text-black"
+                      }`}
+                    />
                   </span>
                 ) : (
-                  <FaCodeCompare className="rotate-90" />
+                  <FaCodeCompare
+                    className={`rotate-90 ${
+                      pathname === "/compare" ? "text-orange" : "text-black"
+                    }`}
+                  />
                 )}
               </Link>
               <Link
                 href={"/wishlist"}
-                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer duration-300 hover:text-orange"
               >
                 {wishListData?.length > 0 ? (
                   <span className="relative">
                     <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                       {wishListData?.length}
                     </span>
-                    <FaHeart />
+                    <FaHeart
+                      className={
+                        pathname === "/wishlist" ? "text-orange" : "text-black"
+                      }
+                    />
                   </span>
                 ) : (
-                  <FaHeart />
+                  <FaHeart
+                    className={
+                      pathname === "/wishlist" ? "text-orange" : "text-black"
+                    }
+                  />
                 )}
               </Link>
               <div className="lg:hidden">
@@ -252,7 +268,11 @@ const LandingHeader = () => {
                 <>
                   <Link
                     href={"/sign-in"}
-                    className="bg-white p-1.5 lg:p-3 rounded-full lg:flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-primary duration-300 hidden"
+                    className={`bg-white p-1.5 lg:p-3 rounded-full lg:flex items-center gap-2 lg:w-[170px] cursor-pointer hover:text-orange duration-300 hidden ${
+                      pathname === "/sign-in" || "sign-up"
+                        ? "text-orange"
+                        : "text-black"
+                    }`}
                   >
                     <FaUser />
                     <span className="text-sm">Login / Register</span>

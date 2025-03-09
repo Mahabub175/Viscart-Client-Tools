@@ -1,9 +1,11 @@
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import { Menu, Dropdown } from "antd";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const CategoryNavigation = () => {
+  const pathname = usePathname();
   const { data: categories } = useGetAllCategoriesQuery();
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -63,7 +65,11 @@ const CategoryNavigation = () => {
         >
           <Link
             href={`/products?filter=${parentCategory?.name}`}
-            className="flex items-center cursor-pointer"
+            className={`hover:text-orange duration-300 flex items-center cursor-pointer ${
+              pathname.includes(parentCategory?.name)
+                ? "text-orange"
+                : "text-white"
+            }`}
           >
             <span>{parentCategory?.name}</span>
           </Link>
@@ -74,9 +80,30 @@ const CategoryNavigation = () => {
   return (
     <div className="my-container -mt-5 lg:-mt-0 text-white">
       <div className="flex flex-col lg:flex-row gap-5 lg:items-center justify-center xl:justify-start flex-wrap py-4 text-sm">
-        <Link href={"/"}>Home</Link>
-        <Link href={"/offers"}>Offers</Link>
-        <Link href={"/products"}>All Products</Link>
+        <Link
+          href={"/"}
+          className={`hover:text-orange duration-300 ${
+            pathname === "/" ? "text-orange" : "text-white"
+          }`}
+        >
+          Home
+        </Link>
+        <Link
+          href={"/offers"}
+          className={`hover:text-orange duration-300 ${
+            pathname === "/offers" ? "text-orange" : "text-white"
+          }`}
+        >
+          Offers
+        </Link>
+        <Link
+          href={"/products"}
+          className={`hover:text-orange duration-300 ${
+            pathname === "/products" ? "text-orange" : "text-white"
+          }`}
+        >
+          All Products
+        </Link>
         <Dropdown
           overlay={
             <Menu>

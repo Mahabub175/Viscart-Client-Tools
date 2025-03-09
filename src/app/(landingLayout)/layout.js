@@ -7,7 +7,7 @@ const LandingLayout = ({ children }) => {
   return (
     <>
       <LandingHeader />
-      <div className="mt-[5.7rem] md:mt-[6.4rem] lg:mt-[11.4rem] xl:mt-[11rem] xxl:mt-[11.4rem]">
+      <div className="mt-[5.7rem] md:mt-[6.4rem] lg:mt-[11.5rem] xl:mt-[10.1rem] xxl:mt-[10.7rem]">
         {children}
       </div>
       <BackToTop />
