@@ -152,13 +152,13 @@ const LandingHeader = () => {
 
       <nav className="bg-black">
         <div className="my-container px-2 lg:-my-2">
-          <div className="flex justify-between items-center gap-10">
-            <Button
-              type="text"
-              className="lg:hidden text-primaryLight"
-              icon={<MenuOutlined />}
+          <div className="flex justify-between items-center gap-10 lg:gap-2">
+            <button
               onClick={toggleDrawer}
-            />
+              className="text-primaryLight hover:text-orange duration-300"
+            >
+              <MenuOutlined />
+            </button>
             <Link href={"/"} className="-translate-x-1 mt-1">
               <Image
                 src={globalData?.results?.logo}
@@ -189,14 +189,14 @@ const LandingHeader = () => {
                     </span>
                     <FaCodeCompare
                       className={`rotate-90 ${
-                        pathname === "/compare" ? "text-orange" : "text-black"
+                        pathname === "/compare" ? "text-orange" : ""
                       }`}
                     />
                   </span>
                 ) : (
                   <FaCodeCompare
                     className={`rotate-90 ${
-                      pathname === "/compare" ? "text-orange" : "text-black"
+                      pathname === "/compare" ? "text-orange" : ""
                     }`}
                   />
                 )}
@@ -211,16 +211,12 @@ const LandingHeader = () => {
                       {wishListData?.length}
                     </span>
                     <FaHeart
-                      className={
-                        pathname === "/wishlist" ? "text-orange" : "text-black"
-                      }
+                      className={pathname === "/wishlist" ? "text-orange" : ""}
                     />
                   </span>
                 ) : (
                   <FaHeart
-                    className={
-                      pathname === "/wishlist" ? "text-orange" : "text-black"
-                    }
+                    className={pathname === "/wishlist" ? "text-orange" : ""}
                   />
                 )}
               </Link>
@@ -296,13 +292,13 @@ const LandingHeader = () => {
                   </span>
                 ) : (
                   <FaShoppingBag
-                    className="cursor-pointer hover:text-primary duration-300"
+                    className="cursor-pointer hover:text-orange duration-300"
                     onClick={() => setIsCartOpen(true)}
                   />
                 )}
               </div>
               <div
-                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-primary duration-300"
+                className="hidden lg:flex bg-white p-3 rounded-full cursor-pointer hover:text-orange duration-300"
                 onClick={() => setIsCartOpen(true)}
               >
                 {cartData?.length > 0 ? (
@@ -314,7 +310,7 @@ const LandingHeader = () => {
                   </span>
                 ) : (
                   <FaShoppingBag
-                    className="cursor-pointer hover:text-primary duration-300"
+                    className="cursor-pointer hover:text-orange duration-300"
                     onClick={() => setIsCartOpen(true)}
                   />
                 )}

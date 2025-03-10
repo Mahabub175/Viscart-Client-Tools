@@ -8,7 +8,9 @@ const LinkButton = ({ href, children }) => {
     <Link href={href}>
       <button
         className="w-full"
-        onClick={() => sendGTMEvent("item_click", "itemClick", { value: href })}
+        onClick={() =>
+          sendGTMEvent({ event: "click_link_button", value: href })
+        }
       >
         {children}
       </button>
