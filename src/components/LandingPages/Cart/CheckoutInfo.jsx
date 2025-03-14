@@ -3,7 +3,7 @@ import { Radio, Form, Button } from "antd";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { FaCartShopping } from "react-icons/fa6";
 
-const CheckoutInfo = () => {
+const CheckoutInfo = ({ isLoading }) => {
   const form = Form.useFormInstance();
   const selectedPayment = Form.useWatch("paymentMethod", form);
 
@@ -71,6 +71,8 @@ const CheckoutInfo = () => {
         size="large"
         icon={<FaCartShopping />}
         className={`bg-navyBlue text-white font-bold px-10 w-full`}
+        loading={isLoading}
+        disabled={isLoading}
       >
         Order Now
       </Button>

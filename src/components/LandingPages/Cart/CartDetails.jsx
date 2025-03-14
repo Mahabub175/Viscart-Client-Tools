@@ -37,7 +37,7 @@ const CartDetails = () => {
   const [deleteCart] = useDeleteCartMutation();
   const [deleteBulkCart] = useDeleteBulkCartMutation();
   const [login] = useLoginMutation();
-  const [addOrder] = useAddOrderMutation();
+  const [addOrder, { isLoading }] = useAddOrderMutation();
 
   const [counts, setCounts] = useState({});
   const [weight, setWeight] = useState({});
@@ -174,7 +174,7 @@ const CartDetails = () => {
         }
       }, 1000);
     } catch (error) {
-      toast.error("Error in order creation process!");
+      toast.error("Error in order creation process!", { id: toastId });
     }
   };
 
@@ -198,7 +198,7 @@ const CartDetails = () => {
                 {cartData?.map((item) => (
                   <div
                     key={item?._id}
-                    className="flex flex-col lg:flex-row items-center gap-4 justify-center pb-5 mt-5 first:mt-0 border-b border-gray-300 last:border-b-0"
+                    className="flex flex-col xl:flex-row items-center gap-4 justify-center pb-5 mt-5 first:mt-0 border-b border-gray-300 last:border-b-0"
                   >
                     <div className="flex flex-[3] items-center gap-4">
                       <Image
@@ -271,7 +271,7 @@ const CartDetails = () => {
 
               <div className="lg:w-2/6 w-full border-2 border-primary rounded-lg p-5">
                 <CustomForm onSubmit={onSubmit}>
-                  <CheckoutInfo />
+                  <CheckoutInfo isLoading={isLoading} />
                 </CustomForm>
               </div>
             </div>

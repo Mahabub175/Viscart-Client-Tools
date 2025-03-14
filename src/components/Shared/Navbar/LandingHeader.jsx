@@ -155,11 +155,11 @@ const LandingHeader = () => {
           <div className="flex justify-between items-center gap-10 lg:gap-2">
             <button
               onClick={toggleDrawer}
-              className="text-primaryLight hover:text-orange duration-300"
+              className="text-primaryLight hover:text-orange duration-300 translate-x-2 lg:translate-x-0"
             >
               <MenuOutlined />
             </button>
-            <Link href={"/"} className="-translate-x-1 mt-1 py-5">
+            <Link href={"/"} className="-translate-x-1 mt-1 lg:py-5">
               <Image
                 src={globalData?.results?.logo}
                 alt="logo"
@@ -345,6 +345,7 @@ const LandingHeader = () => {
               alt="logo"
               width={80}
               height={80}
+              className="py-5"
             />
           </Link>
           <button
