@@ -194,7 +194,7 @@ const CartDetails = () => {
               {cartData?.length} Items
             </h2>
             <div className="flex flex-col lg:flex-row items-start gap-4 justify-between my-10">
-              <div className="lg:w-3/6 border-2 border-primary rounded-lg p-5 lg:sticky top-10">
+              <div className="lg:w-3/6 border-2 border-primary rounded-lg p-5 lg:sticky top-10 w-full">
                 {cartData?.map((item) => (
                   <div
                     key={item?._id}

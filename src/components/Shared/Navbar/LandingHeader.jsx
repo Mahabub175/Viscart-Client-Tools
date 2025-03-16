@@ -165,7 +165,7 @@ const LandingHeader = () => {
                 alt="logo"
                 width={100}
                 height={100}
-                className="h-[70px] lg:h-full w-full object-contain -my-1.5 lg:my-0"
+                className="h-[70px] lg:h-full w-full object-contain -my-1.5 lg:my-0 translate-x-5 lg:translate-x-0"
               />
             </Link>
 
@@ -245,7 +245,7 @@ const LandingHeader = () => {
                           alt="profile"
                           height={40}
                           width={40}
-                          className="rounded-full w-[30px] h-[30px] lg:w-[90px] lg:h-[35px] border-2 border-primaryLight object-contain"
+                          className="border-2 border-primaryLight rounded-full w-[30px] h-[30px] lg:w-[80px] lg:h-[35px] object-contain"
                         />
                       ) : (
                         <Avatar

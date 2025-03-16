@@ -2,6 +2,11 @@ import CustomInput from "@/components/Reusable/Form/CustomInput";
 import { Radio, Form, Button } from "antd";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { FaCartShopping } from "react-icons/fa6";
+import bkash from "@/assets/images/bkash.png";
+import cod from "@/assets/images/cod.png";
+import eft from "@/assets/images/eft.png";
+import ssl from "@/assets/images/ssl.png";
+import Image from "next/image";
 
 const CheckoutInfo = ({ isLoading }) => {
   const form = Form.useFormInstance();
@@ -11,20 +16,23 @@ const CheckoutInfo = ({ isLoading }) => {
 
   const paymentOptions = [
     {
-      value: "bkash",
-      label: "Bkash",
-      info: globalData?.results?.bkashMessage,
-    },
-    {
       value: "cod",
       label: "Cash on Delivery",
+      image: cod,
       info: globalData?.results?.codMessage,
+    },
+    {
+      value: "bkash",
+      label: "Bkash",
+      image: bkash,
+      info: globalData?.results?.bkashMessage,
     },
     ...(globalData?.results?.bank === "Active"
       ? [
           {
             value: "bank",
             label: "EFT/RTGS",
+            image: eft,
             info: globalData?.results?.bankMessage,
           },
         ]
@@ -34,6 +42,7 @@ const CheckoutInfo = ({ isLoading }) => {
           {
             value: "ssl",
             label: "SSLCommerz",
+            image: ssl,
             info: "SSLCommerz: You will be redirected to the SSLCommerz payment gateway.",
           },
         ]
@@ -55,7 +64,17 @@ const CheckoutInfo = ({ isLoading }) => {
         <Radio.Group className="flex flex-col gap-4">
           {paymentOptions.map((option) => (
             <div key={option.value} className="flex flex-col">
-              <Radio value={option.value}>{option.label}</Radio>
+              <Radio value={option.value}>
+                <div className="font-semibold flex items-center gap-2 -my-3">
+                  <span>{option.label}</span>
+                  <Image
+                    src={option.image}
+                    alt={option.label}
+                    width={50}
+                    className="object-contain"
+                  />
+                </div>
+              </Radio>
               {selectedPayment === option.value && (
                 <p className="mt-1 pl-6 text-sm text-primary font-semibold">
                   {option.info}
