@@ -20,7 +20,7 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
 
   return (
     <section className="mt-5">
-      <div className="flex border-b justify-center gap-5">
+      <div className="flex justify-center gap-5">
         <button
           className={`px-4 py-2 text-sm font-medium ${
             activeTab === "categories"
