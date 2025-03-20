@@ -216,6 +216,14 @@ const AdminAccountSetting = () => {
               { value: "Inactive", label: "Inactive" },
             ]}
           />
+          <CustomSelect
+            name={"bkash"}
+            label={"Bkash Status"}
+            options={[
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+          />
           {/* <Form.Item
             name="primaryColor"
             label="Website Primary Color"

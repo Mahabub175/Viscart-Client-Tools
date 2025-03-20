@@ -21,12 +21,16 @@ const CheckoutInfo = ({ isLoading }) => {
       image: cod,
       info: globalData?.results?.codMessage,
     },
-    {
-      value: "bkash",
-      label: "Bkash",
-      image: bkash,
-      info: globalData?.results?.bkashMessage,
-    },
+    ...(globalData?.results?.bkash === "Active"
+      ? [
+          {
+            value: "bkash",
+            label: "BKash",
+            image: bkash,
+            info: globalData?.results?.bkashMessage,
+          },
+        ]
+      : []),
     ...(globalData?.results?.bank === "Active"
       ? [
           {
@@ -76,9 +80,10 @@ const CheckoutInfo = ({ isLoading }) => {
                 </div>
               </Radio>
               {selectedPayment === option.value && (
-                <p className="mt-1 pl-6 text-sm text-primary font-semibold">
-                  {option.info}
-                </p>
+                <div
+                  className="mt-1 pl-6 text-sm text-primary font-semibold"
+                  dangerouslySetInnerHTML={{ __html: option.info }}
+                />
               )}
             </div>
           ))}

@@ -8,15 +8,12 @@ import { Checkbox, Form } from "antd";
 import { RiRefreshLine } from "react-icons/ri";
 import { VariantComponent } from "./VariantComponent";
 import CustomTextEditor from "@/components/Reusable/Form/CustomTextEditor";
-import CustomVideoUploader from "@/components/Reusable/Form/VideoUploader";
 import MultipleFileUploader from "@/components/Reusable/Form/MultipleFIleUploader";
 
 const ProductForm = ({
   attachment,
   handleVariantProduct,
   data,
-  videoData,
-  onChange,
   content,
   setContent,
 }) => {
@@ -123,13 +120,13 @@ const ProductForm = ({
           />
         )}
       </div>
-      <CustomVideoUploader
+      {/* <CustomVideoUploader
         name="video"
         label="Product Video"
         required={true}
         onChange={onChange}
         defaultValue={videoData}
-      />
+      /> */}
       <FileUploader
         defaultValue={attachment}
         label="Product Main Image"

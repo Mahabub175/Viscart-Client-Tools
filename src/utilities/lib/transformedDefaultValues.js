@@ -55,6 +55,15 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
         } else if (
           typeof value === "string" &&
           value.startsWith("http") &&
+          [
+            "logo",
+            "attachment",
+            "image",
+            "favicon",
+            "storeImage",
+            "mainImage",
+            "images",
+          ].some((substring) => key.includes(substring)) &&
           !excludedKeys.includes(key)
         ) {
           value = [{ url: value }];
@@ -69,7 +78,6 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
     }
   }
 
-  // Add selected data fields that are not in the default value
   if (Array.isArray(selectedData)) {
     selectedData.forEach((data) => {
       if (!fields.some((field) => field.name === data.name)) {

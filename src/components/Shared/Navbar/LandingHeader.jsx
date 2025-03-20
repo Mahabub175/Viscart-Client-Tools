@@ -140,15 +140,17 @@ const LandingHeader = () => {
     <header
       className={`fixed top-0 left-0 w-full shadow-md transition-transform duration-300 z-50`}
     >
-      <div
-        className={`transition-all duration-300 ease-in-out lg:pb-4 ${
-          lastScrollY > 0
-            ? "-translate-y-full opacity-0 pointer-events-none -my-5 lg:-my-6"
-            : "translate-y-0 opacity-100"
-        } bg-black/95 py-2 text-center px-2 text-sm md:text-base text-white`}
-      >
-        {globalData?.results?.announcement ?? "Some Announcement"}
-      </div>
+      {globalData?.results?.announcement && (
+        <div
+          className={`transition-all duration-300 ease-in-out lg:pb-4 ${
+            lastScrollY > 0
+              ? "-translate-y-full opacity-0 pointer-events-none -my-5 lg:-my-6"
+              : "translate-y-0 opacity-100"
+          } bg-black/95 py-2 text-center px-2 text-sm md:text-base text-white`}
+        >
+          {globalData?.results?.announcement}
+        </div>
+      )}
 
       <nav className="bg-black">
         <div className="my-container px-2 lg:-my-2">
@@ -159,7 +161,7 @@ const LandingHeader = () => {
             >
               <MenuOutlined />
             </button>
-            <Link href={"/"} className="-translate-x-1 mt-1 lg:py-5">
+            <Link href={"/"} className="-translate-x-1 mt-1">
               <Image
                 src={globalData?.results?.logo}
                 alt="logo"
