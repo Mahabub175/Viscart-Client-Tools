@@ -97,7 +97,7 @@ const FloatingContact = () => {
             <FaWhatsapp size={20} />
           </motion.a>
           <motion.a
-            href={`${globalData?.results?.messengerUsername}`}
+            href={`https://m.me/${globalData?.results?.messengerUsername}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
