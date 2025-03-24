@@ -41,6 +41,11 @@ const BottomNavigation = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   const contactButtonRef = useRef(null);
+  const contactContainerRef = useRef(null);
+
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+  };
 
   const handleContactClick = (e) => {
     e.preventDefault();
@@ -50,7 +55,8 @@ const BottomNavigation = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        contactButtonRef.current &&
+        contactContainerRef.current &&
+        !contactContainerRef.current.contains(e.target) &&
         !contactButtonRef.current.contains(e.target)
       ) {
         setIsContactOpen(false);
@@ -178,7 +184,10 @@ const BottomNavigation = () => {
       </div>
 
       {isContactOpen && (
-        <div className="fixed bottom-16 left-5 z-50 flex flex-col space-y-2">
+        <div
+          className="fixed bottom-16 left-5 z-50 flex flex-col space-y-2"
+          ref={contactContainerRef}
+        >
           <motion.a
             href={`tel:${globalData?.results?.businessNumber}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white rounded-full shadow-lg"
@@ -187,6 +196,7 @@ const BottomNavigation = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
+            onClick={handleIconClick}
           >
             <FaPhone size={20} />
           </motion.a>
@@ -198,6 +208,7 @@ const BottomNavigation = () => {
             transition={{ duration: 0.4 }}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleIconClick}
           >
             <FaWhatsapp size={20} />
           </motion.a>
@@ -209,6 +220,7 @@ const BottomNavigation = () => {
             transition={{ duration: 0.5 }}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleIconClick}
           >
             <FaFacebookMessenger size={20} />
           </motion.a>

@@ -105,10 +105,7 @@ const SingleProductDetails = ({ params }) => {
 
   const allMedia =
     variantMedia.length > 0
-      ? [
-          ...variantMedia,
-          singleProduct?.video ? "video-thumbnail" : null,
-        ].filter(Boolean)
+      ? [...variantMedia].filter(Boolean)
       : [
           singleProduct?.mainImage
             ? formatImagePath(singleProduct.mainImage)
@@ -127,7 +124,6 @@ const SingleProductDetails = ({ params }) => {
                   : []
               )
             : []),
-          singleProduct?.video ? "video-thumbnail" : null,
         ].filter(Boolean);
 
   if (isFetching) {
@@ -242,6 +238,18 @@ const SingleProductDetails = ({ params }) => {
           <div
             dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
           ></div>
+          <div>
+            <iframe
+              width="100%"
+              height="500"
+              src={singleProduct?.video}
+              title="video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-fit lg:h-[500px]"
+            />
+          </div>
         </div>
         <div className="rounded-xl p-5 mb-10 shadow bg-white/80 border">
           <div className="bg-primary px-10 py-2 text-white font-bold rounded-xl inline-block">

@@ -54,7 +54,7 @@ const Categories = () => {
                     item?.attachment ??
                     "https://thumbs.dreamstime.com/b/demo-demo-icon-139882881.jpg"
                   }
-                  alt={item?.name ?? "demo"}
+                  alt={item?.name ?? "categories"}
                   width={160}
                   height={160}
                   className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl"

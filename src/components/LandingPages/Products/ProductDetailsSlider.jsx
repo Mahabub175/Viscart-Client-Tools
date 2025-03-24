@@ -27,6 +27,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
               width={500}
               height={400}
               className="rounded-xl mx-auto h-[350px] lg:h-full"
+              priority
             />
           </SwiperSlide>
         ))}
@@ -56,6 +57,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
               width={80}
               height={80}
               className="rounded-md border-2 border-transparent hover:border-primary w-[80px] h-[60px] lg:h-[80px] object-cover mx-auto p-1"
+              priority
             />
           </SwiperSlide>
         ))}

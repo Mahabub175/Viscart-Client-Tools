@@ -39,6 +39,11 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
   const [updateProduct, { isLoading }] = useUpdateProductMutation();
 
   const onSubmit = async (values) => {
+    if (values?.sellingPrice < values?.offerPrice) {
+      toast.error("Selling Price must be greater than Offer Price");
+      return;
+    }
+
     const variantData = variantProductRef.current
       ? variantProductRef.current()
       : null;

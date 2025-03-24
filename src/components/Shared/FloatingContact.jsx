@@ -13,16 +13,22 @@ const FloatingContact = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   const contactButtonRef = useRef(null);
+  const contactContainerRef = useRef(null);
 
   const handleContactClick = (e) => {
     e.preventDefault();
     setIsContactOpen(!isContactOpen);
   };
 
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        contactButtonRef.current &&
+        contactContainerRef.current &&
+        !contactContainerRef.current.contains(e.target) &&
         !contactButtonRef.current.contains(e.target)
       ) {
         setIsContactOpen(false);
@@ -62,31 +68,43 @@ const FloatingContact = () => {
         </motion.div>
       </div>
       {isContactOpen && (
-        <div className="fixed bottom-[22%] xxl:bottom-[16%] right-6 z-50 flex flex-col space-y-2">
+        <div
+          className="fixed bottom-[22%] xxl:bottom-[16%] right-6 z-50 flex flex-col space-y-2"
+          ref={contactContainerRef}
+        >
           <motion.a
             href={`tel:${globalData?.results?.businessNumber}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white rounded-full shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
+            onClick={handleIconClick}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaPhone size={20} />
           </motion.a>
           <motion.a
-            href={`https://wa.me/${globalData?.results?.whatsappNumber}`}
+            href={`https://wa.me/${globalData?.results?.businessWhatsapp}`}
             className="flex items-center justify-center w-12 h-12 bg-green-500 text-white rounded-full shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            onClick={handleIconClick}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaWhatsapp size={20} />
           </motion.a>
           <motion.a
-            href={`https://m.me/${globalData?.results?.messengerUsername}`}
+            href={`${globalData?.results?.messengerUsername}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            onClick={handleIconClick}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaFacebookMessenger size={20} />
           </motion.a>

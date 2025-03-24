@@ -63,7 +63,7 @@ const AddToCompare = ({ item }) => {
     <div className="flex items-center gap-5">
       <Tooltip placement="top" title={"Add To Compare"}>
         <div
-          className="text-lg lg:text-2xl flex items-center gap-2"
+          className="text-lg lg:text-2xl flex items-center gap-2 cursor-pointer"
           onClick={() => addToCompare(item?._id)}
         >
           <FaCodeCompare className="rotate-90" />
@@ -72,7 +72,7 @@ const AddToCompare = ({ item }) => {
       </Tooltip>
       <Tooltip placement="top" title={"Add To Wishlist"}>
         <div
-          className="text-lg lg:text-2xl flex items-center gap-2"
+          className="text-lg lg:text-2xl flex items-center gap-2 cursor-pointer"
           onClick={() => addToWishlist(item?._id)}
         >
           <TbHeart />

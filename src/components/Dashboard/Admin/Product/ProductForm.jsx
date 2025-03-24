@@ -92,6 +92,7 @@ const ProductForm = ({
         <CustomInput label={"Product Weight"} name={"weight"} />
       </div>
       <CustomSelect label={"Product Tags"} name={"tags"} mode={"tags"} />
+      <CustomInput label={"Product Video Link"} name={"video"} />
 
       <div className="two-grid">
         <CustomInput
@@ -120,13 +121,6 @@ const ProductForm = ({
           />
         )}
       </div>
-      {/* <CustomVideoUploader
-        name="video"
-        label="Product Video"
-        required={true}
-        onChange={onChange}
-        defaultValue={videoData}
-      /> */}
       <FileUploader
         defaultValue={attachment}
         label="Product Main Image"

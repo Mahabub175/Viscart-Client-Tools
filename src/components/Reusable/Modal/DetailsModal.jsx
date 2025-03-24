@@ -18,7 +18,9 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     setModalOpen(false);
   };
 
-  const excludedKeys = details ? ["__v", "updatedAt", "_id", "variants"] : [];
+  const excludedKeys = details
+    ? ["__v", "updatedAt", "_id", "variants", "images", "reviews", "offers"]
+    : [];
 
   const formatStatus = (value) => (
     <Tag color={value ? "green" : "red"} className="capitalize">
@@ -26,11 +28,8 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     </Tag>
   );
 
-  const formatTrending = (value) => (
-    <Tag color={value ? "blue" : "red"} className="capitalize">
-      {value ? "Trending" : "Not Trending"}
-    </Tag>
-  );
+  const formatBoolean = (value) =>
+    value ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>;
 
   const formatDate = (value) => moment(value).format("Do MMM, YYYY");
 
@@ -38,7 +37,12 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     if (key.toLowerCase().includes("date") || key === "createdAt") {
       return formatDate(value);
     }
-
+    if (key.toLowerCase() === "description") {
+      return <div dangerouslySetInnerHTML={{ __html: value }} />;
+    }
+    if (typeof value === "boolean") {
+      return formatBoolean(value);
+    }
     if (Array.isArray(value)) {
       return (
         <div key={key} label={formatLabel(key)}>
@@ -64,7 +68,6 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
         </div>
       );
     }
-
     if (typeof value === "object" && value !== null) {
       return (
         <div className="my-4 border-t border-primary/20 first:border-0">
@@ -80,6 +83,26 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
       );
     }
 
+    if (
+      key === "video" &&
+      (value.startsWith("https://www.youtube.com/embed/") ||
+        value.startsWith("https://player.vimeo.com/video/"))
+    ) {
+      return (
+        <div className="my-4">
+          <iframe
+            width="100%"
+            height="400"
+            src={value}
+            title="video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      );
+    }
+
     return value;
   };
 
@@ -87,8 +110,6 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     ? Object.entries(details).reduce((acc, [key, value]) => {
         if (
           !excludedKeys.includes(key) &&
-          (!key.toLowerCase().includes("id") ||
-            key.toLowerCase().includes("nid")) &&
           !(typeof value === "string" && value.startsWith("http"))
         ) {
           acc[key] = value;
@@ -101,8 +122,6 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
     ? Object.entries(details).filter(
         ([key, value]) =>
           !excludedKeys.includes(key) &&
-          (!key.toLowerCase().includes("id") ||
-            key.toLowerCase().includes("nid")) &&
           typeof value === "string" &&
           value.startsWith("http")
       )
@@ -128,7 +147,7 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
                 {key === "status"
                   ? formatStatus(value)
                   : key === "trending"
-                  ? formatTrending(value)
+                  ? formatStatus(value)
                   : renderValue(key, value)}
               </Descriptions.Item>
             ))}
@@ -139,16 +158,27 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
                   <Image src={value} alt={key} style={{ maxWidth: 200 }} />
                 </Descriptions.Item>
               ))}
-            {details?.images?.length > 0 &&
-              details?.images?.map((image, index) => (
-                <Descriptions.Item key={index} label={`Images ${index + 1}`}>
-                  <Image
-                    src={formatImagePath(image)}
-                    alt={index}
-                    style={{ maxWidth: 200 }}
-                  />
-                </Descriptions.Item>
-              ))}
+            <Descriptions.Item label={"Images"}>
+              {details?.images?.length > 0 &&
+                details?.images?.map((image, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      marginRight: 10,
+                    }}
+                  >
+                    <Image
+                      src={formatImagePath(image)}
+                      alt={index}
+                      width={100}
+                      height={100}
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+            </Descriptions.Item>
           </Descriptions>
 
           <div className="flex justify-end mt-10">
