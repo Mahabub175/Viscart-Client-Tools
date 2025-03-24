@@ -11,7 +11,7 @@ import { AiOutlineFullscreen } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const QuickViewHover = ({ item }) => {
+const QuickViewHover = ({ item, cartData }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
@@ -60,7 +60,12 @@ const QuickViewHover = ({ item }) => {
             <div>Details</div>
           </LinkButton>
         ) : (
-          <button onClick={addToCart}>Add to cart</button>
+          <button onClick={addToCart}>
+            {" "}
+            {cartData?.some((cartItem) => cartItem?.productId === item?._id)
+              ? "Added"
+              : "Add To Cart"}
+          </button>
         )}
       </div>
       <Tooltip placement="top" title={"Quick View"}>

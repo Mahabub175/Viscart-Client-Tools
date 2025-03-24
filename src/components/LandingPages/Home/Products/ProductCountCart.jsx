@@ -3,7 +3,10 @@
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
-import { useAddCartMutation } from "@/redux/services/cart/cartApi";
+import {
+  useAddCartMutation,
+  useGetSingleCartByUserQuery,
+} from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
@@ -33,6 +36,8 @@ const ProductCountCart = ({
   const [addCart, { isLoading }] = useAddCartMutation();
   const [btnText, setBtnText] = useState("");
   const [deleteWishlist] = useDeleteWishlistMutation();
+
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -183,39 +188,56 @@ const ProductCountCart = ({
     >
       {!isOutOfStock ? (
         <>
-          <div className="flex items-center gap-3 border border-primary rounded-lg p-0.5">
-            <button
-              className="cursor-pointer bg-primaryLight text-primary p-2 rounded text-xl"
-              onClick={() => handleCount("decrement")}
-            >
-              <FaMinus />
-            </button>
-            <span className="text-base font-bold text-textColor">{count}</span>
-            <button
-              className="cursor-pointer bg-primaryLight text-primary p-2 rounded text-xl"
-              onClick={() => handleCount("increment")}
-            >
-              <FaPlus />
-            </button>
-          </div>
-          <SubmitButton
-            func={() => addToCart("cart")}
-            text={"Add"}
-            icon={<FaCartShopping />}
-            loading={isLoading}
-            fullWidth={fullWidth}
-          />
+          {cartData?.length > 0 &&
+          cartData.some(
+            (cartItem) => cartItem?.productId === item?._id?.toString()
+          ) ? (
+            <SubmitButton
+              func={() => addToCart("buy")}
+              text={"Already In Cart"}
+              icon={<FaCartShopping />}
+              loading={isLoading}
+              fullWidth={fullWidth}
+            />
+          ) : (
+            <>
+              <div className="flex items-center gap-3 border border-primary rounded-lg p-0.5">
+                <button
+                  className="cursor-pointer bg-primaryLight text-primary p-2 rounded text-xl"
+                  onClick={() => handleCount("decrement")}
+                >
+                  <FaMinus />
+                </button>
+                <span className="text-base font-bold text-textColor">
+                  {count}
+                </span>
+                <button
+                  className="cursor-pointer bg-primaryLight text-primary p-2 rounded text-xl"
+                  onClick={() => handleCount("increment")}
+                >
+                  <FaPlus />
+                </button>
+              </div>
+              <SubmitButton
+                func={() => addToCart("cart")}
+                text={"Add"}
+                icon={<FaCartShopping />}
+                loading={isLoading}
+                fullWidth={fullWidth}
+              />
 
-          <Button
-            htmlType="submit"
-            size="large"
-            loading={isLoading}
-            icon={<FaCartShopping />}
-            onClick={() => addToCart("buy")}
-            className={`bg-navyBlue text-white font-bold px-10 w-full`}
-          >
-            Buy Now
-          </Button>
+              <Button
+                htmlType="submit"
+                size="large"
+                loading={isLoading}
+                icon={<FaCartShopping />}
+                onClick={() => addToCart("buy")}
+                className={`bg-navyBlue text-white font-bold px-10 w-full`}
+              >
+                Buy Now
+              </Button>
+            </>
+          )}
         </>
       ) : (
         <div className="p-2 bg-gradient-to-r from-red-500 to-red-700 text-white rounded font-bold text-xs z-10">
@@ -262,14 +284,28 @@ const ProductCountCart = ({
             </>
           ) : (
             <>
-              {btnText === "buy" ? (
+              {cartData?.length > 0 &&
+              cartData.some(
+                (cartItem) => cartItem?.productId === item?._id?.toString()
+              ) ? (
                 <SubmitButton
                   func={() => addToCart("buy")}
-                  text={"Buy Now"}
+                  text={"Already In Cart"}
                   icon={<FaCartShopping />}
                   loading={isLoading}
                   fullWidth={fullWidth}
                 />
+              ) : btnText === "buy" ? (
+                <Button
+                  htmlType="submit"
+                  size="large"
+                  loading={isLoading}
+                  icon={<FaCartShopping />}
+                  onClick={() => addToCart("buy")}
+                  className={`bg-navyBlue text-white font-bold px-10 w-full`}
+                >
+                  Buy Now
+                </Button>
               ) : (
                 <SubmitButton
                   func={() => addToCart("cart")}

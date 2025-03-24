@@ -182,6 +182,8 @@ const BottomNavigation = () => {
           <motion.a
             href={`tel:${globalData?.results?.businessNumber}`}
             className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white rounded-full shadow-lg"
+            target="_blank"
+            rel="noopener noreferrer"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -189,11 +191,13 @@ const BottomNavigation = () => {
             <FaPhone size={20} />
           </motion.a>
           <motion.a
-            href={`https://wa.me/${globalData?.results?.whatsappNumber}`}
+            href={`https://wa.me/${globalData?.results?.businessWhatsapp}`}
             className="flex items-center justify-center w-12 h-12 bg-green-500 text-white rounded-full shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaWhatsapp size={20} />
           </motion.a>
@@ -203,6 +207,8 @@ const BottomNavigation = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <FaFacebookMessenger size={20} />
           </motion.a>

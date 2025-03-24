@@ -1,6 +1,6 @@
 import { Tooltip } from "antd";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import QuickViewHover from "../../Products/QuickViewHover";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
@@ -8,10 +8,15 @@ import LinkButton from "@/components/Shared/LinkButton";
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
 import { useSelector } from "react-redux";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
-import { useAddWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
+import {
+  useAddWishlistMutation,
+  useGetSingleWishlistByUserQuery,
+} from "@/redux/services/wishlist/wishlistApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { toast } from "sonner";
 import { TbHeart } from "react-icons/tb";
+import { IoCheckmark } from "react-icons/io5";
+import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
 
 const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -22,6 +27,12 @@ const ProductCard = ({ item }) => {
 
   const [addWishlist] = useAddWishlistMutation();
   const user = useSelector(useCurrentUser);
+
+  const { data: wishlistData } = useGetSingleWishlistByUserQuery(
+    user?._id ?? deviceId
+  );
+
+  const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
   const handleModalClose = () => {
     setIsModalVisible(false);
@@ -49,6 +60,12 @@ const ProductCard = ({ item }) => {
     }
   };
 
+  const isItemInWishlist = useMemo(() => {
+    return wishlistData?.some(
+      (wishlistItem) => wishlistItem?.product?._id === item?._id
+    );
+  }, [wishlistData, item?._id]);
+
   return (
     <div
       className="relative group lg:w-[200px] mx-auto h-[340px] flex flex-col border border-gray-200 bg-white rounded-xl overflow-hidden hover:-translate-y-2 duration-500"
@@ -57,10 +74,10 @@ const ProductCard = ({ item }) => {
     >
       <Tooltip placement="top" title={"Add to Wishlist"}>
         <div
-          className="text-sm absolute top-2 right-2 z-10 lg:text-xl cursor-pointer hover:scale-110 duration-300 text-white p-2"
+          className="absolute top-2 right-2 z-10 text-xl cursor-pointer hover:scale-110 duration-300 text-white p-1 bg-primary rounded-full"
           onClick={() => addToWishlist(item?._id)}
         >
-          <TbHeart />
+          {isItemInWishlist ? <IoCheckmark /> : <TbHeart />}
         </div>
       </Tooltip>
       <LinkButton href={`/products/${item?.slug}`}>
@@ -152,11 +169,11 @@ const ProductCard = ({ item }) => {
             isHovered ? "translate-y-0" : "translate-y-full"
           }`}
         >
-          <QuickViewHover item={item} />
+          <QuickViewHover item={item} cartData={cartData} />
         </div>
       </div>
       <div className="lg:hidden absolute bottom-0 left-1/2 right-1/2 transform -translate-x-1/2 w-full">
-        <QuickViewHover item={item} />
+        <QuickViewHover item={item} cartData={cartData} />
       </div>
 
       <QuickProductView

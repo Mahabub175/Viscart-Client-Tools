@@ -4,7 +4,7 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { FaCartShopping } from "react-icons/fa6";
 import bkash from "@/assets/images/bkash.png";
 import cod from "@/assets/images/cod.png";
-import eft from "@/assets/images/eft.png";
+import eft from "@/assets/images/bank.png";
 import ssl from "@/assets/images/ssl.png";
 import Image from "next/image";
 

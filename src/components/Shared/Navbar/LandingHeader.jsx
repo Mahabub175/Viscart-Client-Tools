@@ -161,7 +161,7 @@ const LandingHeader = () => {
             >
               <MenuOutlined />
             </button>
-            <Link href={"/"} className="-translate-x-1 mt-1 lg:py-5">
+            <Link href={"/"} className="-translate-x-1 mt-1">
               <Image
                 src={globalData?.results?.logo}
                 alt="logo"

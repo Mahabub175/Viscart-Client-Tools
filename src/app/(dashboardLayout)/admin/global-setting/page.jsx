@@ -224,20 +224,6 @@ const AdminAccountSetting = () => {
               { value: "Inactive", label: "Inactive" },
             ]}
           />
-          {/* <Form.Item
-            name="primaryColor"
-            label="Website Primary Color"
-            required={true}
-          >
-            <ColorPicker showText />
-          </Form.Item>
-          <Form.Item
-            name="secondaryColor"
-            label="Website Secondary Color"
-            required={true}
-          >
-            <ColorPicker showText />
-          </Form.Item> */}
         </div>
         <Form.Item label={"About Us"} name={"aboutUs"} required>
           <DynamicEditor />

@@ -18,9 +18,10 @@ const Store = () => {
           width={500}
           height={500}
         />
-        <div className="mt-5 font-medium">
+        <div className="mt-5 font-medium space-y-2">
           <h3>Address: {globalData?.results?.businessAddress}</h3>
           <h3>Number: {globalData?.results?.businessNumber}</h3>
+          <h3>Business Hours: {globalData?.results?.businessWorkHours}</h3>
           <Link
             href={globalData?.results?.businessLocation || "/"}
             target="_blank"

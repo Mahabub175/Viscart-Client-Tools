@@ -11,6 +11,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
 
   return (
     <div className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+      {/* Main Image Swiper */}
       <Swiper
         spaceBetween={10}
         navigation
@@ -31,6 +32,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
         ))}
       </Swiper>
 
+      {/* Thumbnail Swiper */}
       <Swiper
         onSwiper={setThumbsSwiper}
         spaceBetween={10}
@@ -43,7 +45,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
         modules={[Thumbs]}
         className="mt-4 w-full border-2 rounded-lg overflow-x-auto"
       >
-        {allMedia.map((media, index) => (
+        {allMedia?.map((media, index) => (
           <SwiperSlide
             key={index}
             className="cursor-pointer flex justify-center p-2"
@@ -53,7 +55,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
               alt={`Thumbnail ${index}`}
               width={80}
               height={80}
-              className="rounded-md border-2 border-transparent hover:border-primary w-[80px] h-[60px] lg:h-[80px] object-cover mx-auto"
+              className="rounded-md border-2 border-transparent hover:border-primary w-[80px] h-[60px] lg:h-[80px] object-cover mx-auto p-1"
             />
           </SwiperSlide>
         ))}
