@@ -18,6 +18,7 @@ import AddToCompare from "./AddToCompare";
 import ProductBreadCrumb from "./ProductBreadCrumb";
 import ProductReview from "./ProductReview";
 import ProductDetailsSlider from "./ProductDetailsSlider";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const SingleProductDetails = ({ params }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -71,6 +72,7 @@ const SingleProductDetails = ({ params }) => {
   };
 
   useEffect(() => {
+    sendGTMEvent({ event: "singleProductView", value: singleProduct?.slug });
     if (Object.keys(selectedAttributes).length === 0) {
       setCurrentVariant(null);
       setVariantMedia([]);

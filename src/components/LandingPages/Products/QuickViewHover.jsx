@@ -2,9 +2,11 @@
 
 import LinkButton from "@/components/Shared/LinkButton";
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { Tooltip } from "antd";
 import { useState } from "react";
 import { AiOutlineFullscreen } from "react-icons/ai";
@@ -15,6 +17,10 @@ const QuickViewHover = ({ item, cartData }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const user = useSelector(useCurrentUser);
   const deviceId = useSelector(useDeviceId);
+
+  const { data: userData } = useGetSingleUserQuery(user?._id, {
+    skip: !user?._id,
+  });
 
   const [addCart] = useAddCartMutation();
 
@@ -34,6 +40,12 @@ const QuickViewHover = ({ item, cartData }) => {
       sku: item?.sku,
       weight: item?.weight,
       price: item?.offerPrice ? item?.offerPrice : item?.sellingPrice,
+      productName: item?.name,
+      ...(user?._id && {
+        userName: userData?.name,
+        userNumber: userData?.number,
+        userEmail: userData?.email,
+      }),
     };
 
     const toastId = toast.loading("Adding to cart");
@@ -41,6 +53,7 @@ const QuickViewHover = ({ item, cartData }) => {
     try {
       const res = await addCart(data);
       if (res?.data?.success) {
+        sendGTMEvent({ event: "addToCart", value: data });
         toast.success(res.data.message, { id: toastId });
       }
       if (res?.error) {

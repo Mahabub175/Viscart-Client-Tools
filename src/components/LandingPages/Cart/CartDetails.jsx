@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
 import { useLoginMutation } from "@/redux/services/auth/authApi";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const CartDetails = () => {
   const router = useRouter();
@@ -135,8 +136,8 @@ const CartDetails = () => {
             discount,
             deliveryOption,
             code,
-            grandTotal,
-            subTotal,
+            subTotal: parseFloat(subTotal?.toFixed(2)),
+            grandTotal: Number(grandTotal?.toFixed(2)),
           };
 
           if (values.paymentType === "cod") {
@@ -152,6 +153,7 @@ const CartDetails = () => {
             if (res?.error) {
               toast.error(res?.error?.data?.errorMessage, { id: toastId });
             } else if (res?.data?.success) {
+              sendGTMEvent({ event: "orderData", value: submittedData });
               if (res?.data?.data?.gatewayUrl) {
                 window.location.href = res?.data?.data?.gatewayUrl;
               }

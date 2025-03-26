@@ -2,6 +2,7 @@
 
 import { SubmitButton } from "@/components/Reusable/Button/CustomButton";
 import AttributeOptionSelector from "@/components/Shared/Product/AttributeOptionSelector";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
   useAddCartMutation,
@@ -10,6 +11,7 @@ import {
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { Button, Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,6 +40,10 @@ const ProductCountCart = ({
   const [deleteWishlist] = useDeleteWishlistMutation();
 
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
+
+  const { data: userData } = useGetSingleUserQuery(user?._id, {
+    skip: !user?._id,
+  });
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -122,14 +128,16 @@ const ProductCountCart = ({
     Object.keys(groupedAttributes).length ===
       Object.keys(selectedAttributes).length;
 
+  const currentPrice = currentVariant
+    ? currentVariant?.sellingPrice
+    : item?.offerPrice && item?.offerPrice > 0
+    ? item?.offerPrice
+    : item?.sellingPrice;
+
   const isOutOfStock =
     item?.stock <= 0 ||
     previousSelectedVariant?.stock <= 0 ||
     currentVariant?.stock <= 0;
-
-  const currentPrice = currentVariant
-    ? currentVariant?.sellingPrice
-    : item?.sellingPrice;
 
   const addToCart = async (type) => {
     if (item?.variants?.length > 0 && !allAttributesSelected) {
@@ -145,11 +153,12 @@ const ProductCountCart = ({
       quantity: count,
       sku: currentVariant?.sku ?? item?.sku,
       weight: item?.weight,
-      price: currentVariant?.sellingPrice
-        ? currentVariant?.sellingPrice
-        : item?.offerPrice
-        ? item?.offerPrice
-        : item?.sellingPrice,
+      price: currentPrice,
+      ...(user?._id && {
+        userName: userData?.name,
+        userNumber: userData?.number,
+        userEmail: userData?.email,
+      }),
     };
 
     const toastId = toast.loading("Adding to cart");
@@ -157,6 +166,7 @@ const ProductCountCart = ({
     try {
       const res = await addCart(data);
       if (res?.data?.success) {
+        sendGTMEvent({ event: "addToCart", value: data });
         toast.success(res.data.message, { id: toastId });
         if (isWishlist) {
           deleteWishlist(wishlistId);

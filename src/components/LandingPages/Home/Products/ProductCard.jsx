@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { TbHeart } from "react-icons/tb";
 import { IoCheckmark } from "react-icons/io5";
 import { useGetSingleCartByUserQuery } from "@/redux/services/cart/cartApi";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const ProductCard = ({ item }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
@@ -34,6 +36,10 @@ const ProductCard = ({ item }) => {
 
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
+  const { data: userData } = useGetSingleUserQuery(user?._id, {
+    skip: !user?._id,
+  });
+
   const handleModalClose = () => {
     setIsModalVisible(false);
   };
@@ -42,6 +48,12 @@ const ProductCard = ({ item }) => {
     const data = {
       ...(user?._id ? { user: user._id } : { deviceId }),
       product: id,
+      productName: item?.name,
+      ...(user?._id && {
+        userName: userData?.name,
+        userNumber: userData?.number,
+        userEmail: userData?.email,
+      }),
     };
 
     const toastId = toast.loading("Adding to wishlist");
@@ -52,6 +64,7 @@ const ProductCard = ({ item }) => {
         toast.error(res?.error?.data?.errorMessage, { id: toastId });
       }
       if (res?.data?.success) {
+        sendGTMEvent({ event: "addToWishlist", value: data });
         toast.success(res.data.message, { id: toastId });
       }
     } catch (error) {
