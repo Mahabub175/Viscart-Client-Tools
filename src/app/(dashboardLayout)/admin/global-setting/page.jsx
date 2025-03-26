@@ -131,16 +131,26 @@ const AdminAccountSetting = () => {
             label={"Extra Price Per Weight"}
             type={"number"}
           />
-          {/* <CustomInput
-            name={"deliveryApiKey"}
-            label={"Delivery API Key"}
+          <CustomInput
+            name={"bkashUserName"}
+            label={"Bkash User Name"}
             type={"password"}
           />
           <CustomInput
-            name={"deliverySecretKey"}
-            label={"Delivery Secret Key"}
+            name={"bkashPassword"}
+            label={"Bkash Password"}
             type={"password"}
-          /> */}
+          />
+          <CustomInput
+            name={"bkashApiKey"}
+            label={"Bkash API Key"}
+            type={"password"}
+          />
+          <CustomInput
+            name={"bkashSecretKey"}
+            label={"Bkash Secret Key"}
+            type={"password"}
+          />
           <CustomInput
             name={"businessNumber"}
             label={"Business Number"}
