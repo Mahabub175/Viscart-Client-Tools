@@ -81,14 +81,24 @@ const QuickViewHover = ({ item, cartData }) => {
           </button>
         )}
       </div>
-      <Tooltip placement="top" title={"Quick View"}>
+      <div className="hidden lg:block">
+        <Tooltip placement="top" title={"Quick View"} trigger={"hover"}>
+          <div
+            className="text-lg lg:text-2xl cursor-pointer hover:scale-110 duration-300"
+            onClick={showModal}
+          >
+            <AiOutlineFullscreen />
+          </div>
+        </Tooltip>
+      </div>
+      <div className="lg:hidden">
         <div
           className="text-lg lg:text-2xl cursor-pointer hover:scale-110 duration-300"
           onClick={showModal}
         >
           <AiOutlineFullscreen />
         </div>
-      </Tooltip>
+      </div>
 
       <QuickProductView
         item={item}

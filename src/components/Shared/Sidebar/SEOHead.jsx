@@ -9,7 +9,7 @@ const SEOHead = () => {
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Viscart</title>
+        <title>Viscart Tools</title>
         <meta name="description" content="Complete E-Commerce Site" />
       </Head>
 

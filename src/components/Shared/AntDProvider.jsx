@@ -49,7 +49,7 @@ const WrappedAntDConfig = ({ children }) => {
     setLoading(true);
 
     if (data?.results) {
-      const websiteName = data?.results?.name || "Viscart";
+      const websiteName = data?.results?.name || "Viscart Tools";
 
       document.title = websiteName;
 
@@ -80,8 +80,8 @@ const WrappedAntDConfig = ({ children }) => {
   }, [data, dispatch, token]);
 
   useEffect(() => {
-    const websiteName = data?.results?.name || "Viscart";
-    const favicon = data?.results?.favicon || "Viscart";
+    const websiteName = data?.results?.name || "Viscart Tools";
+    const favicon = data?.results?.favicon;
     document.title = websiteName;
 
     let link = document.querySelector("link[rel~='icon']");

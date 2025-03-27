@@ -73,10 +73,15 @@ const CartDetails = () => {
   }, [cartData]);
 
   const extraCharge = cartData?.map(
-    (item) => (item?.weight - 1) * globalData?.results?.pricePerWeight
+    (item) =>
+      item?.weight *
+      globalData?.results?.pricePerWeight *
+      (counts[item._id] || 1)
   );
 
-  const totalCharge = extraCharge?.reduce((total, charge) => total + charge, 0);
+  const totalCharge =
+    extraCharge?.reduce((total, charge) => total + charge, 0) -
+    globalData?.results?.pricePerWeight;
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
@@ -226,7 +231,7 @@ const CartDetails = () => {
                         </div>
                         {item?.weight > 0 ? (
                           <div className="mt-2 font-semibold">
-                            Weight: {weight[item._id]} KG
+                            Weight: {weight[item._id] * counts[item._id]} KG
                           </div>
                         ) : null}
                       </div>
