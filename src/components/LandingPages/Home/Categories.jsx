@@ -57,7 +57,7 @@ const Categories = () => {
                   alt={item?.name ?? "categories"}
                   width={160}
                   height={160}
-                  className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl"
+                  className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl border-2"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center rounded-xl">
                   <h2 className="text-white text-lg font-medium group-hover:-translate-y-2 duration-500">

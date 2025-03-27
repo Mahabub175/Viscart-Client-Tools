@@ -168,29 +168,45 @@ const CheckoutDetails = ({
       </div>
 
       <div className="bg-primaryLight p-5 rounded-lg border-2 border-primary space-y-3 font-semibold">
-        <div className="flex justify-between items-center gap-20">
+        <div className="flex justify-between items-center">
           <p>Sub Total</p>
           <p>{globalData?.results?.currency + " " + subTotal || 0}</p>
         </div>
 
-        <div className="flex justify-between items-center gap-20">
-          <p>Shipping Fee (Per KG)</p>
+        <div className="flex justify-between items-center">
+          <p>
+            <span>Shipping Fee </span>
+            <span className="text-xs">(First KG)</span>
+          </p>
           <p>{globalData?.results?.currency + " " + shippingFee || 0}</p>
         </div>
 
-        <div className="flex justify-between items-center gap-20">
-          <p>Shipping Fee (Extra KG)</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <p>
+              <span>Shipping Fee </span>
+              <span className="text-xs">(Additional KGs)</span>
+            </p>
+            {totalCharge > 0 && (
+              <span className="text-[10px]">
+                {globalData?.results?.currency +
+                  " " +
+                  globalData?.results?.pricePerWeight ?? 0}{" "}
+                Per KG Will Be Added For Extra Weight
+              </span>
+            )}
+          </div>
           <p>{globalData?.results?.currency + " " + totalCharge || 0}</p>
         </div>
 
-        <div className="flex justify-between items-center gap-20">
+        <div className="flex justify-between items-center">
           <p>Discount</p>
           <p>{globalData?.results?.currency + " " + discountAmount || 0}</p>
         </div>
 
         <hr className="border border-primary" />
 
-        <div className="flex justify-between items-center gap-20">
+        <div className="flex justify-between items-center">
           <p>Grand Total</p>
           <p>{globalData?.results?.currency + " " + grandTotal || 0}</p>
         </div>

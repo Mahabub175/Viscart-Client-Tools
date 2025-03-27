@@ -204,14 +204,14 @@ const Orders = () => {
       align: "center",
     },
     {
-      title: "Shipping Fee (Per KG)",
+      title: "Shipping Fee (First KG)",
       dataIndex: "shippingFee",
       key: "shippingFee",
       align: "center",
       render: (item) => <div className="w-[100px]">{item}</div>,
     },
     {
-      title: "Shipping Fee (Extra KG)",
+      title: "Shipping Fee (Additional KGs)",
       dataIndex: "extraCharge",
       key: "extraCharge",
       align: "center",

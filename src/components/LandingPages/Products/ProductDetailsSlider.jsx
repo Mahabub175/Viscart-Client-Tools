@@ -26,7 +26,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
               alt={`Product image ${index}`}
               width={500}
               height={400}
-              className="rounded-xl mx-auto h-[350px] lg:h-full"
+              className="rounded-xl mx-auto h-[350px] lg:h-full object-cover"
               priority
             />
           </SwiperSlide>

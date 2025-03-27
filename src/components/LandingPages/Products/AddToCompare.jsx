@@ -60,7 +60,7 @@ const AddToCompare = ({ item }) => {
     }
   };
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex justify-center lg:justify-start items-center gap-5">
       <Tooltip placement="top" title={"Add To Compare"}>
         <div
           className="text-lg lg:text-2xl flex items-center gap-2 cursor-pointer"

@@ -153,11 +153,11 @@ const LandingHeader = () => {
       )}
 
       <nav className="bg-black">
-        <div className="my-container px-2 lg:-my-2">
+        <div className="my-container lg:-my-2">
           <div className="flex justify-between items-center gap-10 lg:gap-2">
             <button
               onClick={toggleDrawer}
-              className="text-primaryLight hover:text-orange duration-300 translate-x-2 lg:translate-x-0"
+              className="text-primaryLight hover:text-orange duration-300"
             >
               <MenuOutlined />
             </button>

@@ -239,6 +239,7 @@ const SingleProductDetails = ({ params }) => {
           </div>
           <div
             dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
+            className="px-5"
           ></div>
           <div>
             <iframe

@@ -200,12 +200,12 @@ const UserOrders = () => {
               {singleOrder?.subTotal}
             </p>
             <p className="bg-grey p-3 mt-2">
-              <strong>Shipping Fee (Per KG):</strong>{" "}
+              <strong>Shipping Fee (First KG):</strong>{" "}
               {globalData?.results?.currency} {singleOrder?.shippingFee}
             </p>
             {singleOrder?.extraFee && (
               <p className="bg-grey p-3 mt-2">
-                <strong>Shipping Fee (Extra KG):</strong>{" "}
+                <strong>Shipping Fee (Additional KGs):</strong>{" "}
                 {globalData?.results?.currency} {singleOrder?.extraFee}
               </p>
             )}

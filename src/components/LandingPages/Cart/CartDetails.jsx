@@ -73,7 +73,7 @@ const CartDetails = () => {
   }, [cartData]);
 
   const extraCharge = cartData?.map(
-    (item) => item?.weight * globalData?.results?.pricePerWeight
+    (item) => (item?.weight - 1) * globalData?.results?.pricePerWeight
   );
 
   const totalCharge = extraCharge?.reduce((total, charge) => total + charge, 0);
