@@ -121,7 +121,7 @@ const LandingFooter = () => {
                 >
                   <div>
                     {React.createElement(footer.icon, {
-                      className: "text-2xl",
+                      className: "text-xl",
                     })}
                   </div>
                   <div>

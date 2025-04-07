@@ -16,7 +16,7 @@ const DynamicPage = ({ params }) => {
   }
 
   return (
-    <div className="mt-28 mb-20 lg:mt-56 my-container">
+    <div className="mt-24 mb-20 lg:mt-40 my-container">
       <div dangerouslySetInnerHTML={{ __html: pageData }} />
     </div>
   );
