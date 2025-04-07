@@ -62,6 +62,7 @@ export const transformDefaultValues = (defaultValue, selectedData) => {
             "storeImage",
             "mainImage",
             "images",
+            "popUpImage",
           ].some((substring) => key.includes(substring)) &&
           !excludedKeys.includes(key)
         ) {

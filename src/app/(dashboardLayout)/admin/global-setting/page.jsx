@@ -24,7 +24,7 @@ const DynamicEditor = dynamic(
   }
 );
 
-const AdminAccountSetting = () => {
+const GlobalSetting = () => {
   const [fields, setFields] = useState([]);
   const { data } = useGetAllGlobalSettingQuery();
 
@@ -275,4 +275,4 @@ const AdminAccountSetting = () => {
   );
 };
 
-export default AdminAccountSetting;
+export default GlobalSetting;

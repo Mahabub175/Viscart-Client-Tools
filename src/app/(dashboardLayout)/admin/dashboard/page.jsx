@@ -107,6 +107,11 @@ const AdminDashboard = () => {
         />
         <DashboardCards
           icon={TbBrandAirtable}
+          title="Popup Setting"
+          href={"/admin/popup-setting"}
+        />
+        <DashboardCards
+          icon={TbBrandAirtable}
           title="Account Setting"
           href={"/admin/account-setting"}
         />

@@ -71,7 +71,7 @@ const LandingHeader = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setDrawerWidth(window.innerWidth >= 1024 ? 450 : 300);
+      setDrawerWidth(window.innerWidth >= 1024 ? 400 : 300);
     };
 
     handleResize();

@@ -185,7 +185,7 @@ const DrawerCart = ({ data, setDrawer }) => {
       {data?.length > 0 && (
         <div
           onClick={proceedToCheckout}
-          className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-10 w-11/12 lg:w-5/6 mx-auto cursor-pointer"
+          className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-5 w-11/12  mx-auto cursor-pointer"
         >
           <div className="flex items-center justify-between bg-primary gap-5 px-5 py-4 rounded-xl cursor-pointer">
             <p>Proceed To Checkout</p>

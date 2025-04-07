@@ -2,7 +2,7 @@ import { AiFillProduct } from "react-icons/ai";
 import { BiCategoryAlt } from "react-icons/bi";
 import { BsFillCartCheckFill, BsFillCartFill } from "react-icons/bs";
 import { CiGift } from "react-icons/ci";
-import { FaUser, FaImage, FaPager } from "react-icons/fa";
+import { FaUser, FaImage, FaPager, FaRegImage } from "react-icons/fa";
 import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
 import {
@@ -77,6 +77,11 @@ export const adminSidebarRoutes = [
     name: "Sliders",
     path: "slider",
     icon: FaImage,
+  },
+  {
+    name: "Popup Setting",
+    path: "popup-setting",
+    icon: FaRegImage,
   },
   {
     name: "User",

@@ -19,7 +19,7 @@ const DashboardLayout = ({ children }) => {
         <PrivateRoute>
           <Layout>
             <LandingHeader />
-            <Layout className="relative mt-20 lg:mt-52 xl:mt-40">
+            <Layout className="relative mt-20 lg:mt-32">
               <Content
                 style={{
                   padding: 24,
