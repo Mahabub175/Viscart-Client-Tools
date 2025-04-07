@@ -202,9 +202,9 @@ const AllProducts = ({ searchParams }) => {
   }, [loading]);
 
   return (
-    <section className="pt-5 lg:pt-0 pb-10 relative bg-white">
+    <section className="pt-5 pb-10 relative">
       <div className="my-container">
-        <div className="bg-grey flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
+        <div className="bg-white flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
           <p className="text-xs md:text-base">
             <span className="font-semibold text-lg">
               {loading || delayedLoading ? "..." : filteredProducts?.length}
