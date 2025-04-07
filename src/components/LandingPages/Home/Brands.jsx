@@ -55,7 +55,7 @@ const Brands = () => {
                     alt={item?.name ?? "demo"}
                     width={240}
                     height={240}
-                    className="border-2 hover:border-primary duration-500 w-[200px] h-[200px] rounded-xl mx-auto object-contain p-2"
+                    className="border-2 hover:border-primary duration-500 w-[200px] h-[200px] rounded-xl mx-auto object-cover"
                   />
                 </LinkButton>
               </SwiperSlide>

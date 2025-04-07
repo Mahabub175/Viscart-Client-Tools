@@ -13,7 +13,7 @@ const Categories = () => {
   const [showAll, setShowAll] = useState(false);
 
   const activeCategories = categories?.results?.filter(
-    (item) => item?.status !== "Inactive"
+    (item) => item?.status !== "Inactive" && item?.level === "category"
   );
   const activeProducts = products?.results?.filter(
     (item) => item?.status !== "Inactive"
@@ -41,7 +41,7 @@ const Categories = () => {
       <h2 className="text-2xl lg:text-3xl font-medium text-center lg:text-start mb-5">
         Top Categories
       </h2>
-      <div className="grid grid-cols-2 md:flex md:flex-wrap gap-5">
+      <div className="grid grid-cols-2 md:flex md:flex-wrap gap-5 mx-auto justify-center items-center">
         {visibleCategories?.map((item) => (
           <div
             className="group relative w-[160px] h-[160px] mx-auto rounded-xl"
@@ -57,7 +57,7 @@ const Categories = () => {
                   alt={item?.name ?? "categories"}
                   width={160}
                   height={160}
-                  className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl border-2"
+                  className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center rounded-xl">
                   <h2 className="text-white text-lg font-medium group-hover:-translate-y-2 duration-500">

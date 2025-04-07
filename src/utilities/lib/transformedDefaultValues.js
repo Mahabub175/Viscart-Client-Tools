@@ -5,7 +5,6 @@ const excludedKeys = [];
 
 export const transformDefaultValues = (defaultValue, selectedData) => {
   if (!defaultValue) return [];
-
   const fields = [];
 
   const selectedDataMap = (

@@ -9,14 +9,15 @@ import {
   Checkbox,
   Select,
   Button,
-  Modal,
   Radio,
   Spin,
+  Drawer,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import ProductCard from "../Home/Products/ProductCard";
 import { debounce } from "lodash";
+import { GiCancel } from "react-icons/gi";
 
 const { Option } = Select;
 
@@ -201,7 +202,7 @@ const AllProducts = ({ searchParams }) => {
   }, [loading]);
 
   return (
-    <section className="py-10 relative bg-white">
+    <section className="pt-5 lg:pt-0 pb-10 relative bg-white">
       <div className="my-container">
         <div className="bg-grey flex items-center gap-2 justify-between py-3 px-2 lg:px-6 mb-6 rounded-xl">
           <p className="text-xs md:text-base">
@@ -299,12 +300,12 @@ const AllProducts = ({ searchParams }) => {
                 onChange={handleAvailabilityChange}
                 className="flex flex-col gap-2"
               >
-                <Radio value="inStock">
+                <Radio value="inStock" name="inStock">
                   In Stock (
                   {filteredProducts?.filter?.((item) => item?.stock > 0).length}
                   )
                 </Radio>
-                <Radio value="outOfStock">
+                <Radio value="outOfStock" name="outOfStock">
                   Out of Stock (
                   {filteredProducts?.filter?.((item) => item?.stock < 0).length}
                   )
@@ -343,14 +344,22 @@ const AllProducts = ({ searchParams }) => {
           </div>
         </div>
       </div>
-      <Modal
+      <Drawer
         open={filterModal}
-        onCancel={() => setFilterModal(false)}
-        footer={null}
-        centered
+        onClose={() => setFilterModal(false)}
+        placement="right"
+        width={300}
       >
-        <div className="w-full p-4">
-          <h2 className="mb-4 text-lg font-semibold">Filter Products</h2>
+        <div className="flex justify-between items-center border-b pb-2 -mt-2 mb-2">
+          <p className="lg:text-2xl font-semibold">Filter Products</p>
+          <button
+            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+            onClick={() => setFilterModal(false)}
+          >
+            <GiCancel className="text-xl text-gray-700" />
+          </button>
+        </div>
+        <div className="w-full p-2">
           <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
             <label className="block mb-2 font-semibold">Brands</label>
             <Checkbox.Group
@@ -401,19 +410,20 @@ const AllProducts = ({ searchParams }) => {
               value={availability}
               onChange={handleAvailabilityChange}
               className="flex flex-col gap-2"
+              name="stock"
             >
-              <Radio value="inStock">
+              <Radio value="inStock" name="inStock">
                 In Stock (
                 {filteredProducts?.filter?.((item) => item?.stock > 0).length})
               </Radio>
-              <Radio value="outOfStock">
+              <Radio value="outOfStock" name="outOfStock">
                 Out of Stock (
                 {filteredProducts?.filter?.((item) => item?.stock < 0).length})
               </Radio>
             </Radio.Group>
           </div>
         </div>
-      </Modal>
+      </Drawer>
     </section>
   );
 };

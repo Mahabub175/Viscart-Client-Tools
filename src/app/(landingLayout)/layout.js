@@ -8,7 +8,7 @@ const LandingLayout = ({ children }) => {
   return (
     <>
       <LandingHeader />
-      <div className="mt-[5.7rem] md:mt-[6.4rem] lg:mt-[11.5rem] xl:mt-[10.1rem] xxl:mt-[10.7rem]">
+      <div className="mt-[6.5rem] md:mt-[7rem] lg:mt-[10.6rem] xl:mt-[12rem]">
         {children}
       </div>
       <FloatingContact />

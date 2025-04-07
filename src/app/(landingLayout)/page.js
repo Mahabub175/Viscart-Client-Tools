@@ -8,8 +8,8 @@ import OfferProducts from "@/components/LandingPages/Home/Products/OfferProducts
 import TopProducts from "@/components/LandingPages/Home/Products/TopProducts";
 
 export const metadata = {
-  title: "Home | Viscart Tools",
-  description: "This is the homepage of Viscart Tools",
+  title: "Home | Akter Corporation",
+  description: "This is the homepage of Akter Corporation",
 };
 
 const page = async () => {

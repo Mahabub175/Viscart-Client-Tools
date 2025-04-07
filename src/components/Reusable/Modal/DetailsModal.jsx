@@ -2,6 +2,7 @@ import { Modal, Spin, Descriptions, Tag, Image } from "antd";
 import moment from "moment";
 import { SubmitButton } from "../Button/CustomButton";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
+import Link from "next/link";
 
 const formatLabel = (label) => {
   const withSpaces = label.replace(/_/g, " ");
@@ -155,12 +156,18 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
             {urlKeys.length > 0 &&
               urlKeys.map(([key, value]) => (
                 <Descriptions.Item key={key} label={formatLabel(key)}>
-                  <Image src={value} alt={key} style={{ maxWidth: 200 }} />
+                  {key === "name" ? (
+                    <Link href={value} target="_blank">
+                      {value}
+                    </Link>
+                  ) : (
+                    <Image src={value} alt={key} style={{ maxWidth: 200 }} />
+                  )}
                 </Descriptions.Item>
               ))}
-            <Descriptions.Item label={"Images"}>
-              {details?.images?.length > 0 &&
-                details?.images?.map((image, index) => (
+            {details?.images?.length > 0 && (
+              <Descriptions.Item label={formatLabel("images")}>
+                {details?.images?.map((image, index) => (
                   <div
                     key={index}
                     style={{
@@ -178,7 +185,8 @@ const DetailsModal = ({ modalOpen, setModalOpen, title, details }) => {
                     />
                   </div>
                 ))}
-            </Descriptions.Item>
+              </Descriptions.Item>
+            )}
           </Descriptions>
 
           <div className="flex justify-end mt-10">

@@ -19,7 +19,13 @@ const BottomBanner = () => {
   return (
     <section className="relative mt-10 lg:mt-20">
       <Link
-        href={`/products?filter=${activeBanner?.category?.name}`}
+        href={
+          activeBanner?.name
+            ? activeBanner.name
+            : activeBanner?.category?.name
+            ? `/products?filter=${activeBanner.category.name}`
+            : "/"
+        }
         key={activeBanner?._id}
       >
         <Image

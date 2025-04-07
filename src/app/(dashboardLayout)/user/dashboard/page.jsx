@@ -34,6 +34,19 @@ const UserDashboard = () => {
 
   const { data: cartData } = useGetSingleCartByUserQuery(user?._id ?? deviceId);
 
+  const [drawerWidth, setDrawerWidth] = useState(300);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDrawerWidth(window.innerWidth >= 1024 ? 450 : 300);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section>
       <div className="mb-10 flex items-center gap-5">
@@ -98,7 +111,7 @@ const UserDashboard = () => {
         placement="right"
         onClose={() => setIsCartOpen(false)}
         open={isCartOpen}
-        width={450}
+        width={drawerWidth}
         keyboard={true}
         destroyOnClose
       >

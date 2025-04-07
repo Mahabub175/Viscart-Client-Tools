@@ -114,7 +114,7 @@ const DrawerCart = ({ data, setDrawer }) => {
           {data.map((item) => (
             <div
               key={item._id}
-              className="flex items-center gap-4 pb-5 mt-5 first:mt-0 border-b border-gray-300 last:border-b-0"
+              className="flex items-center gap-3 pb-5 mt-5 first:mt-0 border-b border-gray-300 last:border-b-0"
             >
               <div className="border rounded-xl">
                 <Image
@@ -122,7 +122,7 @@ const DrawerCart = ({ data, setDrawer }) => {
                   alt={item.product?.name || "Product Image"}
                   width={128}
                   height={128}
-                  className="lg:w-[120px] lg:h-32 rounded-xl"
+                  className="w-[100px] lg:w-[120px] lg:h-32 rounded-xl"
                 />
               </div>
 
@@ -133,7 +133,7 @@ const DrawerCart = ({ data, setDrawer }) => {
                   onClick={() => setDrawer(false)}
                 >
                   <Tooltip placement="top" title={item.productName}>
-                    <h2 className="text-md font-semibold">
+                    <h2 className="text-xs lg:text-base lg:font-medium">
                       {item.productName}
                     </h2>
                   </Tooltip>
@@ -185,7 +185,7 @@ const DrawerCart = ({ data, setDrawer }) => {
       {data?.length > 0 && (
         <div
           onClick={proceedToCheckout}
-          className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-10 w-5/6 mx-auto cursor-pointer"
+          className="hover:text-white text-white lg:text-xl absolute bottom-5 left-1/2 -translate-x-1/2 lg:-translate-x-0 lg:left-10 w-11/12 lg:w-5/6 mx-auto cursor-pointer"
         >
           <div className="flex items-center justify-between bg-primary gap-5 px-5 py-4 rounded-xl cursor-pointer">
             <p>Proceed To Checkout</p>

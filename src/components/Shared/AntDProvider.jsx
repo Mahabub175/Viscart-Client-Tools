@@ -49,7 +49,7 @@ const WrappedAntDConfig = ({ children }) => {
     setLoading(true);
 
     if (data?.results) {
-      const websiteName = data?.results?.name || "Viscart Tools";
+      const websiteName = data?.results?.name || "Akter Corporation";
 
       document.title = websiteName;
 
@@ -80,7 +80,7 @@ const WrappedAntDConfig = ({ children }) => {
   }, [data, dispatch, token]);
 
   useEffect(() => {
-    const websiteName = data?.results?.name || "Viscart Tools";
+    const websiteName = data?.results?.name || "Akter Corporation";
     const favicon = data?.results?.favicon;
     document.title = websiteName;
 

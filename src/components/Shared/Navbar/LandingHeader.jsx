@@ -67,6 +67,19 @@ const LandingHeader = () => {
 
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  const [drawerWidth, setDrawerWidth] = useState(300);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDrawerWidth(window.innerWidth >= 1024 ? 450 : 300);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
     setLastScrollY(currentScrollY);
@@ -161,7 +174,7 @@ const LandingHeader = () => {
             >
               <MenuOutlined />
             </button>
-            <Link href={"/"} className="-translate-x-1 mt-1 lg:py-5">
+            <Link href={"/"} className="-translate-x-1 mt-1">
               <Image
                 src={globalData?.results?.logo}
                 alt="logo"
@@ -339,6 +352,7 @@ const LandingHeader = () => {
         onClose={() => setIsDrawerOpen(false)}
         open={isDrawerOpen}
         className="!bg-black"
+        width={drawerWidth}
       >
         <div className="flex justify-between items-center -mt-5">
           <Link href={"/"} onClick={() => setIsDrawerOpen(false)}>
@@ -366,25 +380,27 @@ const LandingHeader = () => {
         />
         <CategoryBrandNavigation setIsDrawerOpen={setIsDrawerOpen} />
       </Drawer>
-      <Drawer
-        placement="right"
-        onClose={() => setIsCartOpen(false)}
-        open={isCartOpen}
-        width={450}
-        keyboard={true}
-        destroyOnClose
-      >
-        <div className="flex justify-between items-center mb-4 border-b pb-4">
-          <p className="lg:text-2xl font-semibold">Shopping Cart</p>
-          <button
-            className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
-            onClick={() => setIsCartOpen(false)}
-          >
-            <GiCancel className="text-xl text-gray-700" />
-          </button>
-        </div>
-        <DrawerCart data={cartData} setDrawer={setIsCartOpen} />
-      </Drawer>
+      <div>
+        <Drawer
+          placement="right"
+          onClose={() => setIsCartOpen(false)}
+          open={isCartOpen}
+          width={drawerWidth}
+          keyboard={true}
+          destroyOnClose
+        >
+          <div className="flex justify-between items-center mb-4 border-b pb-4">
+            <p className="lg:text-2xl font-semibold">Shopping Cart</p>
+            <button
+              className="mt-1 bg-gray-200 hover:scale-110 duration-500 rounded-full p-1"
+              onClick={() => setIsCartOpen(false)}
+            >
+              <GiCancel className="text-xl text-gray-700" />
+            </button>
+          </div>
+          <DrawerCart data={cartData} setDrawer={setIsCartOpen} />
+        </Drawer>
+      </div>
     </header>
   );
 };
