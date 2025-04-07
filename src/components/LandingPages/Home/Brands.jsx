@@ -42,6 +42,7 @@ const Brands = () => {
             disableOnInteraction: false,
           }}
           className="mySwiper"
+          loop={true}
         >
           {activeBrands?.map((item) => {
             return (

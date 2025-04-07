@@ -9,18 +9,24 @@ import { GiCancel } from "react-icons/gi";
 import {
   closePopup,
   selectLastPopupClosed,
-} from "@/redux/services/popup/popupSlice";
+} from "@/redux/services/device/deviceSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useDeviceId } from "@/redux/services/device/deviceSlice";
 
 const PopupBanner = () => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const dispatch = useDispatch();
-  const lastPopupClosed = useSelector(selectLastPopupClosed);
+  const deviceId = useDeviceId();
+  const lastPopupClosed = useSelector((state) =>
+    selectLastPopupClosed(state, deviceId)
+  );
 
   const [isVisible, setIsVisible] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
 
   useEffect(() => {
+    if (!globalData) return;
+
     const now = Date.now();
     const duration = parseInt(globalData?.results?.popUpDuration, 10);
 
@@ -31,24 +37,29 @@ const PopupBanner = () => {
       setIsVisible(true);
     }
 
-    const timer = setInterval(() => {
-      setRemainingTime((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(timer);
-          setIsVisible(false);
-          dispatch(closePopup());
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
+    let timer;
+    if (isVisible) {
+      timer = setInterval(() => {
+        setRemainingTime((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            setIsVisible(false);
+            dispatch(closePopup(deviceId));
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
 
-    return () => clearInterval(timer);
-  }, [globalData, lastPopupClosed, dispatch]);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [globalData, lastPopupClosed, dispatch, deviceId, isVisible]);
 
   const handleClosePopup = () => {
     setIsVisible(false);
-    dispatch(closePopup());
+    dispatch(closePopup(deviceId));
   };
 
   return (

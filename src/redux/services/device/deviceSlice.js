@@ -12,6 +12,7 @@ const generateRandomCode = (length = 16) => {
 
 const initialState = {
   deviceId: generateRandomCode(),
+  lastPopupClosed: null,
 };
 
 const deviceSlice = createSlice({
@@ -21,11 +22,18 @@ const deviceSlice = createSlice({
     resetDeviceId: (state) => {
       state.deviceId = generateRandomCode();
     },
+    closePopup: (state) => {
+      state.lastPopupClosed = Date.now();
+    },
+    resetPopup: (state) => {
+      state.lastPopupClosed = null;
+    },
   },
 });
 
-export const { resetDeviceId } = deviceSlice.actions;
+export const { resetDeviceId, closePopup, resetPopup } = deviceSlice.actions;
 
 export default deviceSlice.reducer;
 
 export const useDeviceId = (state) => state?.device?.deviceId;
+export const selectLastPopupClosed = (state) => state?.device?.lastPopupClosed;
