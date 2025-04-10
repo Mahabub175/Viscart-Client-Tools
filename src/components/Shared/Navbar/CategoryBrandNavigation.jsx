@@ -30,7 +30,10 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
   const renderSubcategories = (subcategories) => {
     return subcategories.map((subcategory) => (
       <li key={subcategory._id} className="pl-6">
-        <Link href={`/products?filter=${subcategory.name}`}>
+        <Link
+          href={`/products?filter=${subcategory.name}`}
+          onClick={() => setIsDrawerOpen(false)}
+        >
           <span
             className={`hover:text-orange duration-300 ${
               cleanedQuery === `/products?${subcategory.name}`
@@ -58,6 +61,7 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
         >
           <Link
             href={`/products?filter=${category?.name}`}
+            onClick={() => setIsDrawerOpen(false)}
             className={`hover:text-orange ${
               cleanedQuery === `/products?${category.name}`
                 ? "text-orange"
@@ -96,7 +100,10 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
             className="flex items-center justify-between cursor-pointer pt-3.5 font-medium odd:border-t"
             onClick={() => toggleOpenKey(parentCategory._id)}
           >
-            <Link href={`/products?filter=${parentCategory?.name}`}>
+            <Link
+              href={`/products?filter=${parentCategory?.name}`}
+              onClick={() => setIsDrawerOpen(false)}
+            >
               <span
                 className={`flex items-center gap-4 duration-300 hover:text-orange ${
                   cleanedQuery === `/products?${parentCategory.name}`

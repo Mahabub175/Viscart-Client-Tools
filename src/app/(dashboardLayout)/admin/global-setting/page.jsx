@@ -156,7 +156,6 @@ const GlobalSetting = () => {
             label={"Business Number"}
             type={"number"}
           />
-          <CustomInput name={"businessAddress"} label={"Business Address"} />
           <CustomInput name={"businessLocation"} label={"Business Location"} />
           <CustomInput name={"businessSlogan"} label={"Business Slogan"} />
           <CustomInput name={"complaintLink"} label={"Complaint From Link"} />
@@ -243,6 +242,9 @@ const GlobalSetting = () => {
           name={"termsAndConditions"}
           required
         >
+          <DynamicEditor />
+        </Form.Item>
+        <Form.Item label={"Business Address Details"} name={"businessAddress"}>
           <DynamicEditor />
         </Form.Item>
         <Form.Item label={"Privacy Policy"} name={"privacyPolicy"}>

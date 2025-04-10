@@ -18,8 +18,11 @@ const ContactDetails = () => {
             </h2>
             <div className="flex flex-col gap-4 mt-4">
               <p>Our address information</p>
-              <p>{globalData?.results?.businessAddress}</p>
-              <p> {globalData?.results?.businessNumber}</p>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: globalData?.results?.businessAddress,
+                }}
+              />
             </div>
             <div className="flex items-center gap-4 mt-4">
               <Link
