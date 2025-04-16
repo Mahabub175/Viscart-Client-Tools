@@ -6,6 +6,8 @@ import { useGetSingleGiftCardByCodeQuery } from "@/redux/services/giftCard/giftC
 import { toast } from "sonner";
 import moment from "moment";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import Link from "next/link";
+import { FaInfoCircle } from "react-icons/fa";
 
 const CheckoutDetails = ({
   subTotal,
@@ -168,6 +170,13 @@ const CheckoutDetails = ({
       </div>
 
       <div className="bg-primaryLight p-5 rounded-lg border-2 border-primary space-y-3 font-semibold">
+        <Link
+          href={"/delivery"}
+          className="text-white rounded px-2 py-2 flex items-center gap-2 justify-center hover:underline font-medium bg-black lg:w-4/6 mx-auto text-sm"
+        >
+          Shipping Fee Details
+          <FaInfoCircle />
+        </Link>
         <div className="flex justify-between items-center">
           <p>Sub Total</p>
           <p>{globalData?.results?.currency + " " + subTotal || 0}</p>

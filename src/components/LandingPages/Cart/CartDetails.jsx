@@ -60,6 +60,7 @@ const CartDetails = () => {
           {}
         )
       );
+
       setWeight(
         cartData?.reduce(
           (acc, item) => ({
@@ -79,9 +80,11 @@ const CartDetails = () => {
       (counts[item._id] || 1)
   );
 
-  const totalCharge =
+  const totalCharge = Math.max(
     extraCharge?.reduce((total, charge) => total + charge, 0) -
-    globalData?.results?.pricePerWeight;
+      globalData?.results?.pricePerWeight,
+    0
+  );
 
   const handleDelete = (itemId) => {
     deleteCart(itemId);
@@ -231,7 +234,9 @@ const CartDetails = () => {
                         </div>
                         {item?.weight > 0 ? (
                           <div className="mt-2 font-semibold">
-                            Weight: {weight[item._id] * counts[item._id]} KG
+                            Weight:{" "}
+                            {(weight[item._id] * counts[item._id]).toFixed(1)}{" "}
+                            KG
                           </div>
                         ) : null}
                       </div>

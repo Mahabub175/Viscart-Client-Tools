@@ -13,7 +13,7 @@ const Categories = () => {
   const [showAll, setShowAll] = useState(false);
 
   const activeCategories = categories?.results?.filter(
-    (item) => item?.status !== "Inactive" && item?.level === "category"
+    (item) => item?.status !== "Inactive" && item?.level === "parentCategory"
   );
   const activeProducts = products?.results?.filter(
     (item) => item?.status !== "Inactive"
@@ -60,7 +60,7 @@ const Categories = () => {
                   className="w-full h-full object-cover group-hover:scale-110 duration-500 rounded-xl"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center rounded-xl">
-                  <h2 className="text-white text-lg font-medium group-hover:-translate-y-2 duration-500">
+                  <h2 className="text-white text-base lg:text-lg font-medium group-hover:-translate-y-2 duration-500 px-2">
                     {item?.name}
                   </h2>
                 </div>

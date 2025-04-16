@@ -78,7 +78,7 @@ const LandingHeader = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [window.innerWidth]);
 
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
@@ -354,7 +354,7 @@ const LandingHeader = () => {
         className="!bg-black"
         width={drawerWidth}
       >
-        <div className="flex justify-between items-center -mt-5">
+        <div className="flex justify-between items-center -my-10">
           <Link href={"/"} onClick={() => setIsDrawerOpen(false)}>
             <Image
               src={globalData?.results?.logo}
@@ -372,12 +372,6 @@ const LandingHeader = () => {
           </button>
         </div>
 
-        <ProductSearchBar
-          products={products}
-          globalData={globalData}
-          setDrawerOpen={setIsDrawerOpen}
-          setIsSearchOpen={setIsSearchOpen}
-        />
         <CategoryBrandNavigation setIsDrawerOpen={setIsDrawerOpen} />
       </Drawer>
       <div>

@@ -57,7 +57,6 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
               ? "text-orange"
               : "text-white"
           }`}
-          onClick={() => toggleOpenKey(category._id)}
         >
           <Link
             href={`/products?filter=${category?.name}`}
@@ -71,11 +70,14 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
             <span>{category.name}</span>
           </Link>
           {category.subcategories && category.subcategories.length > 0 && (
-            <span className="text-sm text-white duration-300 hover:text-orange">
+            <span
+              className="text-sm text-white duration-300 hover:text-orange"
+              onClick={() => toggleOpenKey(category._id)}
+            >
               {openKeys.includes(category._id) ? (
-                <DownOutlined />
+                <RightOutlined className="-rotate-90" />
               ) : (
-                <RightOutlined />
+                <DownOutlined />
               )}
             </span>
           )}
@@ -96,10 +98,7 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
       .filter((item) => item.level === "parentCategory")
       .map((parentCategory) => (
         <div key={parentCategory._id} className="mb-4">
-          <div
-            className="flex items-center justify-between cursor-pointer pt-3.5 font-medium odd:border-t"
-            onClick={() => toggleOpenKey(parentCategory._id)}
-          >
+          <div className="flex items-center justify-between cursor-pointer pt-3.5 font-medium odd:border-t">
             <Link
               href={`/products?filter=${parentCategory?.name}`}
               onClick={() => setIsDrawerOpen(false)}
@@ -116,11 +115,14 @@ const CategoryBrandNavigation = ({ setIsDrawerOpen }) => {
             </Link>
             {parentCategory.categories &&
               parentCategory.categories.length > 0 && (
-                <span className="text-sm text-white duration-300 hover:text-orange">
+                <span
+                  className="text-sm text-white duration-300 hover:text-orange"
+                  onClick={() => toggleOpenKey(parentCategory._id)}
+                >
                   {openKeys.includes(parentCategory._id) ? (
-                    <DownOutlined />
+                    <RightOutlined className="-rotate-90" />
                   ) : (
-                    <RightOutlined />
+                    <DownOutlined />
                   )}
                 </span>
               )}

@@ -234,25 +234,26 @@ const SingleProductDetails = ({ params }) => {
       </div>
       <div className="my-container">
         <div className="rounded-xl p-5 mb-10 shadow bg-white/80 border">
-          <div className="bg-primary mb-10 px-10 py-2 text-white font-bold rounded-xl inline-block">
+          <div className="bg-primary mb-5 px-10 py-2 text-white font-bold rounded-xl inline-block">
             Description
           </div>
           <div
             dangerouslySetInnerHTML={{ __html: singleProduct?.description }}
-            className="px-5"
           ></div>
-          <div>
-            <iframe
-              width="100%"
-              height="500"
-              src={singleProduct?.video}
-              title="video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="h-fit lg:h-[500px]"
-            />
-          </div>
+          {singleProduct?.video && (
+            <div>
+              <iframe
+                width="100%"
+                height="500"
+                src={singleProduct?.video}
+                title="video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="h-fit lg:h-[500px]"
+              />
+            </div>
+          )}
         </div>
         <div className="rounded-xl p-5 mb-10 shadow bg-white/80 border">
           <div className="bg-primary px-10 py-2 text-white font-bold rounded-xl inline-block">
