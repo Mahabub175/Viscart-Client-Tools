@@ -141,6 +141,7 @@ const CartDetails = () => {
             })),
             shippingFee,
             extraFee: totalCharge,
+            paymentType: values?.paymentMethod,
             discount,
             deliveryOption,
             code,
@@ -150,6 +151,13 @@ const CartDetails = () => {
 
           if (values.paymentType === "cod") {
             submittedData.paymentMethod = "cod";
+            submittedData.paymentType = "COD";
+          }
+          if (
+            typeof values.paymentMethod === "string" &&
+            values.paymentMethod.startsWith("manual")
+          ) {
+            submittedData.paymentMethod = "manual";
           }
 
           const data = new FormData();

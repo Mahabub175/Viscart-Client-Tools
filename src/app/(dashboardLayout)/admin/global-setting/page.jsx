@@ -33,8 +33,24 @@ const GlobalSetting = () => {
   const onSubmit = async (values) => {
     const toastId = toast.loading("Updating Global Setting...");
     try {
+      const manualPayments = [];
+      const payments = Object.entries(values).filter(([key]) =>
+        key.startsWith("manualPayments[")
+      );
+
+      payments.forEach(([key, value]) => {
+        const match = key.match(/manualPayments\[(\d+)\]\.(\w+)/);
+        if (match) {
+          const index = Number(match[1]);
+          const field = match[2];
+          if (!manualPayments[index]) manualPayments[index] = {};
+          manualPayments[index][field] = value;
+        }
+      });
+
       const submittedData = {
         ...values,
+        manualPayments,
       };
 
       if (typeof values?.primaryColor === "object") {
@@ -57,6 +73,7 @@ const GlobalSetting = () => {
           values.storeImage[0].originFileObj
         );
       }
+
       const updatedUserData = new FormData();
       appendToFormData(submittedData, updatedUserData);
 
@@ -81,7 +98,27 @@ const GlobalSetting = () => {
   };
 
   useEffect(() => {
-    setFields(transformDefaultValues(data?.results));
+    const selectedData = data?.results?.manualPayments
+      ?.map((item, i) => [
+        {
+          name: `manualPayments[${i}].name`,
+          value: item?.name ?? "",
+          errors: "",
+        },
+        {
+          name: `manualPayments[${i}].description`,
+          value: item?.description ?? "",
+          errors: "",
+        },
+        {
+          name: `manualPayments[${i}].status`,
+          value: item?.status ?? "",
+          errors: "",
+        },
+      ])
+      .flat();
+
+    setFields(transformDefaultValues(data.results, selectedData));
   }, [data]);
 
   return (
@@ -234,6 +271,32 @@ const GlobalSetting = () => {
             ]}
           />
         </div>
+        {data?.results?.manualPayments?.map((item, i) => (
+          <div key={i}>
+            <div className="two-grid">
+              <CustomInput
+                name={`manualPayments[${i}].name`}
+                label={`Manual Payment ${i + 1} Name`}
+              />
+
+              <CustomSelect
+                name={`manualPayments[${i}].status`}
+                label={`Manual Payment ${i + 1} Status`}
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Inactive", label: "Inactive" },
+                ]}
+              />
+            </div>
+            <Form.Item
+              label={`Manual Payment ${i + 1} Description`}
+              name={`manualPayments[${i}].description`}
+            >
+              <DynamicEditor />
+            </Form.Item>
+          </div>
+        ))}
+
         <Form.Item label={"About Us"} name={"aboutUs"} required>
           <DynamicEditor />
         </Form.Item>

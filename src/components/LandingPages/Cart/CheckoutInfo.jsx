@@ -6,6 +6,10 @@ import bkash from "@/assets/images/bkash.png";
 import cod from "@/assets/images/cod.png";
 import eft from "@/assets/images/bank.png";
 import ssl from "@/assets/images/ssl.png";
+import nagad from "@/assets/images/nagad.png";
+import rocket from "@/assets/images/rocket.png";
+import upay from "@/assets/images/upay.png";
+import surecash from "@/assets/images/surecash.png";
 import Image from "next/image";
 
 const CheckoutInfo = ({ isLoading }) => {
@@ -14,11 +18,29 @@ const CheckoutInfo = ({ isLoading }) => {
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
+  const imageMap = {
+    cod: cod,
+    bkash: bkash,
+    bank: eft,
+    ssl: ssl,
+    Nagad: nagad,
+    Bkash: bkash,
+    Rocket: rocket,
+    Upay: upay,
+    SureCash: surecash,
+  };
+
+  const manualPayments =
+    Array.isArray(globalData?.results?.manualPayments) &&
+    globalData.results.manualPayments.filter(
+      (item) => item.status === "Active"
+    );
+
   const paymentOptions = [
     {
       value: "cod",
       label: "Cash on Delivery",
-      image: cod,
+      image: imageMap.cod,
       info: globalData?.results?.codMessage,
     },
     ...(globalData?.results?.bkash === "Active"
@@ -26,7 +48,7 @@ const CheckoutInfo = ({ isLoading }) => {
           {
             value: "bkash",
             label: "BKash",
-            image: bkash,
+            image: imageMap.bkash,
             info: globalData?.results?.bkashMessage,
           },
         ]
@@ -36,7 +58,7 @@ const CheckoutInfo = ({ isLoading }) => {
           {
             value: "bank",
             label: "EFT/RTGS",
-            image: eft,
+            image: imageMap.bank,
             info: globalData?.results?.bankMessage,
           },
         ]
@@ -46,10 +68,33 @@ const CheckoutInfo = ({ isLoading }) => {
           {
             value: "ssl",
             label: "SSLCommerz",
-            image: ssl,
+            image: imageMap.ssl,
             info: "SSLCommerz: You will be redirected to the SSLCommerz payment gateway.",
           },
         ]
+      : []),
+    ...(manualPayments
+      ? manualPayments.map((item) => ({
+          value: "manual" + item.name,
+          label: item.name,
+          image: imageMap[item.name] || null,
+          info: item.description,
+          details: (
+            <>
+              <CustomInput
+                type="text"
+                name="tranId"
+                label="Transaction ID"
+                required
+              />
+              <CustomInput
+                type="text"
+                name="transaction Number"
+                label="Sender Number"
+              />
+            </>
+          ),
+        }))
       : []),
   ];
 
@@ -84,6 +129,21 @@ const CheckoutInfo = ({ isLoading }) => {
                   className="mt-1 pl-6 text-sm text-primary font-semibold"
                   dangerouslySetInnerHTML={{ __html: option.info }}
                 />
+              )}
+              {selectedPayment === "manual" + option.label && (
+                <div className="mt-5 -mb-5 pl-5">
+                  <CustomInput
+                    type="text"
+                    name="tranId"
+                    label="Transaction ID"
+                    required
+                  />
+                  <CustomInput
+                    type="text"
+                    name="transactionNumber"
+                    label="Sender Number"
+                  />
+                </div>
               )}
             </div>
           ))}
