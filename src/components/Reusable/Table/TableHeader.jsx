@@ -162,7 +162,11 @@ const TableHeader = ({
       >
         <div className="lg:p-8">
           <CustomForm onSubmit={handleUpload}>
-            <FileUploader name={"file"} required={true} />
+            <FileUploader
+              name={"file"}
+              label={"Product File"}
+              required={true}
+            />
             <SubmitButton fullWidth text={"Upload"} loading={isLoading} />
           </CustomForm>
           <p
