@@ -53,21 +53,31 @@ const TableHeader = ({
   const handleUpload = async (values) => {
     const toastId = toast.loading("Uploading File...");
 
-    const formData = new FormData();
-    formData.append("file", values.file[0].originFileObj);
-
-    const res = await addProductByFile(formData);
     try {
-      if (res.error) {
-        toast.error(res?.error?.data?.errorMessage, { id: toastId });
-      }
-      if (res.data.success) {
+      const formData = new FormData();
+      formData.append("file", values?.file[0].originFileObj);
+
+      const res = await addProductByFile(formData);
+
+      if (res?.error) {
+        toast.error(res?.error?.data?.errorMessage || "Something went wrong.", {
+          id: toastId,
+        });
+      } else if (res?.data?.success) {
         toast.success(res.data.message, { id: toastId });
         setIsModalOpen(false);
+      } else {
+        toast.error("Unexpected response from server.", { id: toastId });
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error(res?.error?.data?.errorMessage, { id: toastId });
+
+      const errorMessage =
+        error?.response?.data?.errorMessage ||
+        error?.message ||
+        "An unexpected error occurred while uploading the file.";
+
+      toast.error(errorMessage, { id: toastId });
     }
   };
 
@@ -152,7 +162,7 @@ const TableHeader = ({
       >
         <div className="lg:p-8">
           <CustomForm onSubmit={handleUpload}>
-            <FileUploader name={"file"} />
+            <FileUploader name={"file"} required={true} />
             <SubmitButton fullWidth text={"Upload"} loading={isLoading} />
           </CustomForm>
           <p
