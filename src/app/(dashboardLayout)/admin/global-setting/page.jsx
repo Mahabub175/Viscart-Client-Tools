@@ -12,10 +12,12 @@ import {
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import { compressImage } from "@/utilities/lib/compressImage";
 import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues";
-import { Divider, Form } from "antd";
+import { Divider, Form, TimePicker } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import { base_url_image } from "@/utilities/configs/base_api";
 
 const DynamicEditor = dynamic(
   () => import("@/components/Reusable/Form/CustomTextEditor"),
@@ -51,6 +53,9 @@ const GlobalSetting = () => {
       const submittedData = {
         ...values,
         manualPayments,
+        popUpDuration: values.popUpDuration
+          ? values.popUpDuration.minute() * 60 + values.popUpDuration.second()
+          : 0,
       };
 
       if (typeof values?.primaryColor === "object") {
@@ -58,6 +63,17 @@ const GlobalSetting = () => {
       }
       if (typeof values?.secondaryColor === "object") {
         submittedData.secondaryColor = values?.secondaryColor?.toHexString();
+      }
+
+      if (values?.popUpImage && values?.popUpImage[0]?.url) {
+        submittedData.popUpImage = values.popUpImage[0].url.replace(
+          base_url_image,
+          ""
+        );
+      } else if (values.popUpImage && values.popUpImage[0]?.originFileObj) {
+        submittedData.popUpImage = await compressImage(
+          values.popUpImage[0].originFileObj
+        );
       }
 
       if (!values.logo[0].url) {
@@ -98,27 +114,43 @@ const GlobalSetting = () => {
   };
 
   useEffect(() => {
-    const selectedData = data?.results?.manualPayments
-      ?.map((item, i) => [
-        {
-          name: `manualPayments[${i}].name`,
-          value: item?.name ?? "",
-          errors: "",
-        },
-        {
-          name: `manualPayments[${i}].description`,
-          value: item?.description ?? "",
-          errors: "",
-        },
-        {
-          name: `manualPayments[${i}].status`,
-          value: item?.status ?? "",
-          errors: "",
-        },
-      ])
-      .flat();
+    const popUpDurationSeconds = data?.results?.popUpDuration ?? 0;
+    const minutesPart = Math.floor(popUpDurationSeconds / 60);
+    const secondsPart = popUpDurationSeconds % 60;
 
-    setFields(transformDefaultValues(data.results, selectedData));
+    const popUpDurationField = {
+      name: "popUpDuration",
+      value: dayjs().hour(0).minute(minutesPart).second(secondsPart),
+      errors: "",
+    };
+
+    const manualPaymentsFields =
+      data?.results?.manualPayments
+        ?.map((item, i) => [
+          {
+            name: `manualPayments[${i}].name`,
+            value: item?.name ?? "",
+            errors: "",
+          },
+          {
+            name: `manualPayments[${i}].description`,
+            value: item?.description ?? "",
+            errors: "",
+          },
+          {
+            name: `manualPayments[${i}].status`,
+            value: item?.status ?? "",
+            errors: "",
+          },
+        ])
+        ?.flat() || [];
+
+    setFields(
+      transformDefaultValues(data?.results, [
+        popUpDurationField,
+        ...manualPaymentsFields,
+      ])
+    );
   }, [data]);
 
   return (
@@ -230,6 +262,7 @@ const GlobalSetting = () => {
             name={"businessWorkHours"}
             label={"Business Work Hours"}
           />
+
           <CustomInput
             name={"bkashMessage"}
             type={"textarea"}
@@ -331,6 +364,28 @@ const GlobalSetting = () => {
         <Form.Item label={"Refund & Return"} name={"refundAndReturn"}>
           <DynamicEditor />
         </Form.Item>
+
+        <section className="">
+          <Divider orientation="left" orientationMargin={0}>
+            Pop Up Settings
+          </Divider>
+          <CustomInput name={"popUpLink"} label={"Pop Up Link"} />
+          <Form.Item label={"Pop Up Duration"} name={"popUpDuration"}>
+            <TimePicker
+              format="mm:ss"
+              showHour={false}
+              showMinute={true}
+              showSecond={true}
+              secondStep={1}
+            />
+          </Form.Item>
+
+          <FileUploader
+            defaultValue={data?.results?.popUpImage}
+            label="Pop Up Image"
+            name="popUpImage"
+          />
+        </section>
 
         <div className="flex justify-center my-10">
           <SubmitButton text={"Save"} loading={isLoading} fullWidth={true} />

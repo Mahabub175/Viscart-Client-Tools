@@ -28,6 +28,7 @@ const PopUp = () => {
     try {
       const submittedData = {
         ...values,
+        announcement: data?.results?.announcement,
         popUpDuration: values.popUpDuration
           ? values.popUpDuration.minute() * 60 + values.popUpDuration.second()
           : 0,

@@ -44,15 +44,17 @@ const AllBlogs = () => {
           {filteredBlogs.map((item) => (
             <div
               key={item?.id}
-              className="bg-white rounded-xl shadow-lg h-full w-[400px] mx-auto group overflow-hidden"
+              className="bg-white rounded-xl shadow-lg h-full w-[400px] mx-auto group"
             >
-              <Image
-                src={item?.attachment}
-                alt={item?.title ?? "something"}
-                width={400}
-                height={600}
-                className="mx-auto h-[300px] object-cover border-b group-hover:scale-105 duration-500"
-              />
+              <div className="w-full h-[300px] overflow-hidden rounded-t-xl">
+                <Image
+                  src={item?.attachment}
+                  alt={item?.title ?? "something"}
+                  width={400}
+                  height={600}
+                  className="mx-auto h-[300px] object-cover border-b group-hover:scale-105 duration-500"
+                />
+              </div>
               <div className="px-6 mt-6 pb-2">
                 <h4 className="text-2xl font-bold mb-4 mt-4">{item?.name}</h4>
                 <div className="text-textColor mb-5">

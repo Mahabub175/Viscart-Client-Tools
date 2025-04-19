@@ -38,7 +38,7 @@ const Sidebar = () => {
       <Menu
         theme="dark"
         mode="horizontal"
-        className="mt-5 lg:py-4 flex items-center"
+        className="py-1 lg:py-4 flex items-center"
         items={sidebarItems}
         defaultSelectedKeys={formattedSegment}
       />
