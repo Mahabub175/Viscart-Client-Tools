@@ -1,7 +1,8 @@
 import { logout } from "@/redux/services/auth/authSlice";
-import { MdLogout } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import logoutImage from "@/assets/images/logout.png";
+import Image from "next/image";
 
 const LogOutButton = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,10 @@ const LogOutButton = () => {
 
   return (
     <div
-      className="bg-white p-5 rounded-xl shadow-xl text-base font-bold text-end flex flex-col justify-center lg:justify-around items-center gap-2 hover:text-primary"
+      className="bg-white p-5 rounded-xl shadow-xl text-base font-bold text-end flex flex-col justify-center lg:justify-around items-center gap-2 hover:text-primary cursor-pointer"
       onClick={handleLogout}
     >
-      <MdLogout className="text-[40px] lg:text-[50px] text-primary" />
+      <Image src={logoutImage} alt={"logout"} height={40} width={40} />
       <p className="text-center text-sm lg:text-xl">Log Out</p>
     </div>
   );

@@ -7,10 +7,19 @@ import { useGetAdminDashboardQuery } from "@/redux/services/dashboard/dashboardA
 import { Avatar } from "antd";
 import Image from "next/image";
 import { useEffect } from "react";
-import { TbBrandAirtable } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import LogOutButton from "@/components/Dashboard/LogOutButton";
+import OrderChart from "@/components/Dashboard/OrderChart";
+
+import settings from "@/assets/images/settings.png";
+import message from "@/assets/images/message.png";
+import settings2 from "@/assets/images/settings2.png";
+import products from "@/assets/images/products.png";
+import carts from "@/assets/images/carts.png";
+import orders from "@/assets/images/orders.png";
+import users from "@/assets/images/users.png";
+import OrderCards from "@/components/Dashboard/OrderCards";
 
 const AdminDashboard = () => {
   useEffect(() => {
@@ -52,76 +61,51 @@ const AdminDashboard = () => {
       </div>
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-10">
         <DashboardCards
-          icon={TbBrandAirtable}
-          title="Brands"
-          data={dashboardData?.results?.brands}
-          href={"/admin/products/brand"}
-        />
-        <DashboardCards
-          icon={TbBrandAirtable}
-          title="Categories"
-          data={dashboardData?.results?.categories}
-          href={"/admin/products/category"}
-        />
-        <DashboardCards
-          icon={TbBrandAirtable}
+          image={products}
           title="Products"
           data={dashboardData?.results?.products}
           href={"/admin/products/product"}
+          size={50}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
-          title="Coupons"
-          data={dashboardData?.results?.coupons}
-          href={"/admin/orders/coupon"}
-        />
-        <DashboardCards
-          icon={TbBrandAirtable}
-          title="Gift Cards"
-          data={dashboardData?.results?.giftCards}
-          href={"/admin/orders/coupon"}
-        />
-        <DashboardCards
-          icon={TbBrandAirtable}
-          title="Wishlists"
-          data={dashboardData?.results?.wishlists}
-          href={"/admin/orders/wishlist"}
-        />
-        <DashboardCards
-          icon={TbBrandAirtable}
+          image={carts}
           title="Carts"
           data={dashboardData?.results?.carts}
           href={"/admin/orders/cart"}
+          size={60}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
+          image={orders}
           title="Orders"
           data={dashboardData?.results?.orders}
           href={"/admin/orders/order"}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
-          title="Sliders"
-          data={dashboardData?.results?.sliders}
-          href={"/admin/slider"}
+          image={users}
+          title="Users"
+          data={dashboardData?.results?.users}
+          href={"/admin/user"}
+          size={50}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
-          title="Popup Setting"
-          href={"/admin/popup-setting"}
+          image={message}
+          title="Message Platform"
+          href={"/admin/message-platform"}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
+          image={settings2}
           title="Account Setting"
           href={"/admin/account-setting"}
         />
         <DashboardCards
-          icon={TbBrandAirtable}
+          image={settings}
           title="Global Settings"
           href={"/admin/global-setting"}
         />
         <LogOutButton />
       </div>
+      <OrderCards />
+      <OrderChart />
     </section>
   );
 };
