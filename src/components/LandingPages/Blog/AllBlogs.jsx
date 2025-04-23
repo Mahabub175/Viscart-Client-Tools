@@ -21,14 +21,14 @@ const AllBlogs = () => {
 
   return (
     <section className="my-container mt-36 lg:mt-56 mb-20">
-      <div className="flex justify-between mt-10 relative">
+      <div className="lg:flex justify-between mt-10 relative">
         <div></div>
         <div>
           <Input
             size="large"
             label="Search..."
             value={searchTerm}
-            className="bg-white/70"
+            className="bg-white/70 rounded-full"
             placeholder="Search Blogs..."
             suffix={<CiSearch className="text-black text-2xl" />}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -43,8 +43,8 @@ const AllBlogs = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10 justify-center items-center mt-10">
           {filteredBlogs.map((item) => (
             <div
-              key={item?.id}
-              className="bg-white rounded-xl shadow-lg h-full w-[400px] mx-auto group"
+              key={item?._id}
+              className="bg-white rounded-xl shadow-lg h-full lg:w-[400px] mx-auto group"
             >
               <div className="w-full h-[300px] overflow-hidden rounded-t-xl">
                 <Image
