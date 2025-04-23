@@ -157,7 +157,7 @@ const LandingHeader = () => {
         <div
           className={`transition-all duration-300 ease-in-out lg:pb-4 ${
             lastScrollY > 0
-              ? "-translate-y-full opacity-0 pointer-events-none -my-7 lg:-my-6"
+              ? "-translate-y-full opacity-0 pointer-events-none -my-5 lg:-my-6"
               : "translate-y-0 opacity-100"
           } bg-black/95 py-2 text-center px-2 text-sm md:text-base text-white`}
         >
@@ -180,7 +180,7 @@ const LandingHeader = () => {
                 alt="logo"
                 width={100}
                 height={100}
-                className="h-[70px] lg:h-full w-full object-contain -my-1.5 lg:my-0 translate-x-5 lg:translate-x-0"
+                className="h-[70px] lg:h-full w-full object-contain -my-1.5 lg:my-0 translate-x-5 lg:translate-x-0 lg:py-5"
               />
             </Link>
 

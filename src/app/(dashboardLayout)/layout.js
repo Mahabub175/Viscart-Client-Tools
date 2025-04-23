@@ -10,7 +10,6 @@ import PrivateRoute from "@/routes/PrivateRoute";
 import LandingHeader from "@/components/Shared/Navbar/LandingHeader";
 import BackToTop from "@/components/Shared/BackToTop";
 import BottomNavigation from "@/components/Shared/Navbar/BottomNavigation";
-import LandingFooter from "@/components/Shared/Footer/LandingFooter";
 
 const DashboardLayout = ({ children }) => {
   return (
@@ -19,20 +18,16 @@ const DashboardLayout = ({ children }) => {
         <PrivateRoute>
           <Layout>
             <LandingHeader />
-            <Layout className="relative mt-28 lg:mt-44">
-              <Content
-                style={{
-                  padding: 24,
-                  minHeight: 280,
-                }}
-              >
+            <Layout className="relative h-full mt-28 lg:mt-44">
+              <div className="fixed top-14 lg:top-[8.5rem] z-50">
                 <Sidebar />
+              </div>
+              <Content className="p-5 lg:pl-56 xl:pl-60 xxl:pl-56 mt-10">
                 {children}
               </Content>
             </Layout>
             <BackToTop />
             <BottomNavigation />
-            <LandingFooter />
           </Layout>
         </PrivateRoute>
       </PersistGate>

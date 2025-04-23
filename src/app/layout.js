@@ -8,7 +8,7 @@ import SEOHead from "@/components/Shared/Sidebar/SEOHead";
 const interFont = Inter({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata = {
-  title: "Akter Corporation",
+  title: "Viscart",
   description: "Complete E-Commerce Site",
 };
 

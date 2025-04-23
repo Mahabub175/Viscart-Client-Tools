@@ -105,7 +105,7 @@ const SignUpForm = () => {
               },
             ]}
           >
-            <Checkbox defaultChecked>
+            <Checkbox>
               I Have Read & Agree To The{" "}
               <Link
                 href={"/privacy-policy"}
@@ -129,7 +129,7 @@ const SignUpForm = () => {
         <div className="border w-full h-0"></div>
       </div>
       <div className="text-center">
-        <span>Already have an account?</span>
+        <span>Already have an account? </span>
         <Link href="/sign-in" className="font-bold text-primary text-lg">
           Sign in
         </Link>
