@@ -19,6 +19,7 @@ const Wishlist = () => {
   const { data: wishlistData, isError } = useGetSingleWishlistByUserQuery(
     user?._id ?? deviceId
   );
+
   const { data: products } = useGetAllProductsQuery();
 
   const wishlistProducts = products?.results

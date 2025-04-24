@@ -183,18 +183,9 @@ const CheckoutDetails = ({
         </div>
 
         <div className="flex justify-between items-center">
-          <p>
-            <span>Shipping Fee </span>
-            <span className="text-xs">(First KG)</span>
-          </p>
-          <p>{globalData?.results?.currency + " " + shippingFee || 0}</p>
-        </div>
-
-        <div className="flex justify-between items-center">
           <div>
             <p>
               <span>Shipping Fee </span>
-              <span className="text-xs">(Additional KGs)</span>
             </p>
             {totalCharge > 0 && (
               <span className="text-[10px]">
@@ -205,7 +196,11 @@ const CheckoutDetails = ({
               </span>
             )}
           </div>
-          <p>{globalData?.results?.currency + " " + totalCharge || 0}</p>
+          <p>
+            {globalData?.results?.currency +
+              " " +
+              (shippingFee + totalCharge) || 0}
+          </p>
         </div>
 
         <div className="flex justify-between items-center">
