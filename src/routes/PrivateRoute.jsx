@@ -12,7 +12,6 @@ const PrivateRoute = ({ children }) => {
   const token = useSelector(useCurrentToken);
 
   let decodedToken;
-
   if (token) {
     decodedToken = jwtDecode(token);
   }
@@ -22,7 +21,13 @@ const PrivateRoute = ({ children }) => {
   });
 
   useEffect(() => {
-    if (!token || isLoading) return;
+    if (!token) {
+      dispatch(logout());
+      router.push("/sign-in");
+      return;
+    }
+
+    if (isLoading) return;
 
     const decodedToken = jwtDecode(token);
     const tokenExpirationTime = decodedToken.exp * 1000;
@@ -30,15 +35,15 @@ const PrivateRoute = ({ children }) => {
 
     if (tokenExpirationTime <= currentTime) {
       toast.error("Your session has expired! Please log in again.");
-      router.push("/sign-in");
       dispatch(logout());
+      router.push("/sign-in");
       return;
     }
 
     if (data && decodedToken.role !== data.role) {
       toast.error("You don't have permission to access this page!");
-      router.push("/sign-in");
       dispatch(logout());
+      router.push("/sign-in");
     }
   }, [token, data, isLoading, dispatch, router]);
 

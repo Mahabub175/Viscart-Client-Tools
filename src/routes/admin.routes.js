@@ -5,6 +5,7 @@ import { CiGift } from "react-icons/ci";
 import { FaUser, FaImage, FaPager, FaRegImage } from "react-icons/fa";
 import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
+import { LiaSmsSolid } from "react-icons/lia";
 import {
   MdAddShoppingCart,
   MdOutlineAcUnit,
@@ -97,6 +98,11 @@ export const adminSidebarRoutes = [
     name: "Global Setting",
     path: "global-setting",
     icon: IoSettingsSharp,
+  },
+  {
+    name: "Bulk SMS",
+    path: "bulk-sms",
+    icon: LiaSmsSolid,
   },
   {
     name: "Message Platform",
