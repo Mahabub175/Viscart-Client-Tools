@@ -83,6 +83,7 @@ const BulkSms = () => {
           size="large"
           className="w-full font-bold"
           htmlType="submit"
+          disabled
           loading={isLoading}
         >
           Send SMS
