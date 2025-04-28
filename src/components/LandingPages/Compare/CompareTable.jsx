@@ -355,7 +355,7 @@ const CompareTable = ({
                     size="small"
                     type="primary"
                     icon={<FaCartShopping />}
-                    onClick={() => showModal(item?._id)}
+                    onClick={() => showModal(item?.slug)}
                     className="mb-2 lg:w-4/6 py-5 font-semibold"
                   >
                     Add to Cart

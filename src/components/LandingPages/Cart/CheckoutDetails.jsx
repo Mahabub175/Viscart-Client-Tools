@@ -187,14 +187,6 @@ const CheckoutDetails = ({
             <p>
               <span>Shipping Fee </span>
             </p>
-            {totalCharge > 0 && (
-              <span className="text-[10px]">
-                {globalData?.results?.currency +
-                  " " +
-                  globalData?.results?.pricePerWeight ?? 0}{" "}
-                Per KG Will Be Added For Extra Weight
-              </span>
-            )}
           </div>
           <p>
             {globalData?.results?.currency +

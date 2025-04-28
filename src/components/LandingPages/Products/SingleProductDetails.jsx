@@ -137,7 +137,7 @@ const SingleProductDetails = ({ params }) => {
   }
 
   return (
-    <section className="py-10 -mt-10">
+    <section className="py-10 -mt-20">
       <div className="">
         <div className="flex items-center justify-between my-container pt-5">
           <div className="lg:mt-5 lg:-mb-5">
@@ -168,7 +168,7 @@ const SingleProductDetails = ({ params }) => {
                 <span>{singleProduct?.productModel}</span>
               </div>
             )}
-            {singleProduct?.weight && (
+            {singleProduct?.weight > 0 && (
               <div className="font-medium">
                 Weight: {singleProduct?.weight} KG
               </div>
@@ -259,7 +259,7 @@ const SingleProductDetails = ({ params }) => {
           <div className="bg-primary px-10 py-2 text-white font-bold rounded-xl inline-block">
             Reviews
           </div>
-          <ProductReview productId={singleProduct?._id} />
+          <ProductReview data={singleProduct?.reviews} />
         </div>
         <div className="mt-20">
           {activeProducts && activeProducts.length > 0 ? (

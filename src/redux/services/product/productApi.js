@@ -85,10 +85,83 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
+    addProductReview: build.mutation({
+      query: (payload) => {
+        return {
+          url: `/product/${payload.id}/review/`,
+          method: "POST",
+          body: payload.data,
+        };
+      },
+
+      invalidatesTags: ["product", "order"],
+    }),
+    getReviewsByUser: build.query({
+      query: ({ id, page = 1, limit = 5 }) => ({
+        url: `/product/review/${id}?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return {
+          meta: response?.data?.meta,
+          results: response?.data?.results,
+        };
+      },
+      providesTags: ["product"],
+    }),
+    getAllReviews: build.query({
+      query: ({ page = 1, limit = 5 }) => ({
+        url: `/product/all/review/?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return {
+          meta: response?.data?.meta,
+          results: response?.data?.results,
+        };
+      },
+      providesTags: ["product"],
+    }),
+    getCompleteReviews: build.query({
+      query: () => ({
+        url: `/product/all/review/`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return { results: response.data?.results };
+      },
+      providesTags: ["product"],
+    }),
+    getSingleProductReview: build.query({
+      query: (id) => ({
+        url: `/product/review/single/${id}/`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return { results: response?.data };
+      },
+      providesTags: ["product"],
+    }),
+    updateProductReview: build.mutation({
+      query: (payload) => ({
+        url: `/product/${payload.productId}/review/${payload.reviewId}/`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ["product"],
+    }),
+    deleteProductReview: build.mutation({
+      query: (payload) => ({
+        url: `/product/${payload.productId}/review/${payload.reviewId}/`,
+        method: "DELETE",
+        body: {},
+      }),
+      invalidatesTags: ["product"],
+    }),
     deleteProduct: build.mutation({
       query: (id) => ({
         url: `/product/${id}/`,
-        method: "Delete",
+        method: "DELETE",
         body: {},
       }),
       invalidatesTags: ["product"],
@@ -116,6 +189,13 @@ export const {
   useGetSingleProductBySkuQuery,
   useGetSingleProductBySlugQuery,
   useUpdateProductMutation,
+  useAddProductReviewMutation,
+  useGetReviewsByUserQuery,
+  useGetAllReviewsQuery,
+  useGetCompleteReviewsQuery,
+  useGetSingleProductReviewQuery,
+  useUpdateProductReviewMutation,
+  useDeleteProductReviewMutation,
   useDeleteProductMutation,
   useDeleteBulkProductMutation,
 } = productApi;

@@ -6,8 +6,7 @@ import CustomInput from "@/components/Reusable/Form/CustomInput";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import { useGetOrdersByUserQuery } from "@/redux/services/order/orderApi";
-import { useAddReviewMutation } from "@/redux/services/review/reviewApi";
-import { appendToFormData } from "@/utilities/lib/appendToFormData";
+import { useAddProductReviewMutation } from "@/redux/services/product/productApi";
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import { Empty, Form, Input, Modal, Rate } from "antd";
 import dayjs from "dayjs";
@@ -31,6 +30,7 @@ const UserOrders = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [singleOrder, setSingleOrder] = useState({});
   const [search, setSearch] = useState("");
+  const [productId, setProductId] = useState(null);
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
@@ -38,28 +38,35 @@ const UserOrders = () => {
     id: user?._id,
   });
 
-  const [addReview, { isLoading: isReviewLoading }] = useAddReviewMutation();
+  const [addProductReview, { isLoading: isReviewLoading }] =
+    useAddProductReviewMutation();
+
+  const handleReviewClick = (productId) => {
+    setProductId(productId);
+    setReviewModalOpen(true);
+  };
 
   const handleReview = async (values) => {
     const toastId = toast.loading("Creating Review...");
 
     try {
       const submittedData = {
-        ...values,
-        user: user?._id,
-        product: singleOrder?.products?.map((item) => item?.product?._id),
+        id: productId,
+        data: {
+          ...values,
+          user: user?._id,
+        },
       };
 
-      const data = new FormData();
-
-      appendToFormData(submittedData, data);
-      const res = await addReview(data);
+      const res = await addProductReview(submittedData);
       if (res.error) {
         toast.error(res?.error?.data?.errorMessage, { id: toastId });
       }
       if (res.data.success) {
         toast.success(res.data.message, { id: toastId });
+        setDetailsModalOpen(false);
         setReviewModalOpen(false);
+        setProductId(null);
       }
     } catch (error) {
       toast.error("An error occurred while creating the review.", {
@@ -110,7 +117,7 @@ const UserOrders = () => {
             {filteredData?.map((item) => (
               <div
                 key={item?._id}
-                className="bg-white rounded-xl shadow-xl lg:w-[350px]"
+                className="bg-white rounded-xl shadow-xl lg:w-[350px] cursor-pointer"
                 onClick={() => handleOrderDetails(item)}
               >
                 <div className="bg-black/70 text-white rounded-t-xl">
@@ -125,12 +132,12 @@ const UserOrders = () => {
                       <p>Order Date:</p>
                       <p>{dayjs(item?.createdAt).format("MMMM DD, YYYY")}</p>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <p>Delivery Status:</p>
-                      <p>{item?.deliveryStatus}</p>
+                    <div className="flex justify-between items-center capitalize">
+                      <p>Order Status:</p>
+                      <p>{item?.orderStatus}</p>
                     </div>
                     <div className="flex justify-between items-center">
-                      <p>Payment Method:</p>
+                      <p>Payment Type:</p>
                       <p>{item?.paymentMethod.toUpperCase()}</p>
                     </div>
 
@@ -176,6 +183,10 @@ const UserOrders = () => {
             </div>
 
             <p className="bg-grey p-3 mt-2">
+              <strong>Order Status:</strong>{" "}
+              {singleOrder?.orderStatus?.toUpperCase()}
+            </p>
+            <p className="bg-grey p-3 mt-2">
               <strong>Delivery Status:</strong>{" "}
               {singleOrder?.deliveryStatus?.toUpperCase()}
             </p>
@@ -200,15 +211,10 @@ const UserOrders = () => {
               {singleOrder?.subTotal}
             </p>
             <p className="bg-grey p-3 mt-2">
-              <strong>Shipping Fee (First KG):</strong>{" "}
-              {globalData?.results?.currency} {singleOrder?.shippingFee}
+              <strong>Shipping Fee:</strong> {globalData?.results?.currency}{" "}
+              {singleOrder?.shippingFee + singleOrder?.extraFee}
             </p>
-            {singleOrder?.extraFee && (
-              <p className="bg-grey p-3 mt-2">
-                <strong>Shipping Fee (Additional KGs):</strong>{" "}
-                {globalData?.results?.currency} {singleOrder?.extraFee}
-              </p>
-            )}
+
             {singleOrder?.discount && (
               <p className="bg-grey p-3 mt-2">
                 <strong>Discount:</strong> {globalData?.results?.currency}{" "}
@@ -223,44 +229,64 @@ const UserOrders = () => {
             <p className="p-3 mt-2 text-lg">
               <strong>Item Details</strong>
             </p>
-            <div className="bg-white shadow-xl p-3 mt-2">
+            <div className="bg-white shadow-xl p-3 rounded-lg">
               <div>
-                {singleOrder?.products?.map((item, index) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between gap-5">
-                      <Image
-                        src={formatImagePath(item?.product?.mainImage)}
-                        alt={item?.productName}
-                        width={100}
-                        height={100}
-                      />
-                      <div>
-                        <Link href={`/products/${item?.product?.slug}`}>
-                          {item?.productName}
-                        </Link>
-                        <p className="mt-2">
-                          <strong>Price:</strong>{" "}
-                          {globalData?.results?.currency}{" "}
-                          {item?.product?.offerPrice ??
-                            item?.product?.sellingPrice}
+                {singleOrder?.products?.map((item, index) => {
+                  const hasReviewed = item?.product?.reviews?.some(
+                    (review) => review?.user === user?._id
+                  );
+
+                  return (
+                    <div key={index}>
+                      <div className="flex items-center justify-between gap-5 mb-4">
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={formatImagePath(item?.product?.mainImage)}
+                            alt={item?.productName}
+                            width={100}
+                            height={100}
+                          />
+                          <div>
+                            <Link href={`/products/${item?.product?.slug}`}>
+                              {item?.productName}
+                            </Link>
+                            <p className="mt-2">
+                              <strong>Price:</strong>{" "}
+                              {globalData?.results?.currency}{" "}
+                              {item?.product?.offerPrice ??
+                                item?.product?.sellingPrice}
+                            </p>
+                          </div>
+                        </div>
+
+                        <p className="bg-black text-white px-3">
+                          x{item?.quantity}
                         </p>
                       </div>
-                      <p className="bg-black text-white px-3">
-                        x{item?.quantity}
-                      </p>
+                      <div className="my-4 text-right">
+                        {singleOrder?.orderStatus === "delivered" && (
+                          <button
+                            className={`text-blue-500 border-2 border-blue-500 px-4 py-2 rounded-md duration-300 ${
+                              hasReviewed
+                                ? "bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300"
+                                : "hover:bg-blue-500 hover:text-white"
+                            }`}
+                            onClick={() =>
+                              handleReviewClick(item?.product?._id)
+                            }
+                            disabled={hasReviewed}
+                          >
+                            {hasReviewed
+                              ? "Review Already Added"
+                              : "Leave a Review"}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
-          </div>
-          <div className="mt-4 text-right">
-            <button
-              className="text-blue-500 border-2 border-blue-500 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white duration-300"
-              onClick={() => setReviewModalOpen(true)}
-            >
-              Leave a Review
-            </button>
           </div>
         </div>
       </Modal>

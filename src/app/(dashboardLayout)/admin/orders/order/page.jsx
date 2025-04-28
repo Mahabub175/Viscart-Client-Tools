@@ -204,16 +204,9 @@ const Orders = () => {
       align: "center",
     },
     {
-      title: "Shipping Fee (First KG)",
+      title: "Shipping Fee",
       dataIndex: "shippingFee",
       key: "shippingFee",
-      align: "center",
-      render: (item) => <div className="w-[100px]">{item}</div>,
-    },
-    {
-      title: "Shipping Fee (Additional KGs)",
-      dataIndex: "extraCharge",
-      key: "extraCharge",
       align: "center",
       render: (item) => <div className="w-[100px]">{item}</div>,
     },
@@ -272,9 +265,10 @@ const Orders = () => {
           case "failed to deliver":
             color = "red";
             text = "Failed To Deliver";
+            break;
           case "returned":
             color = "red";
-            text = "Returned";
+            text = "Return";
             break;
           default:
             color = "gray";
@@ -466,7 +460,7 @@ const Orders = () => {
         .join(" , "),
       quantity: item?.products?.map((product) => product?.quantity).join(" , "),
       subTotal: item?.subTotal,
-      shippingFee: item?.shippingFee,
+      shippingFee: item?.shippingFee + item?.extraFee,
       discount: item?.discount ?? 0,
       weight: item?.products?.map((product) => product?.weight).join(" , "),
       grandTotal: item?.grandTotal,

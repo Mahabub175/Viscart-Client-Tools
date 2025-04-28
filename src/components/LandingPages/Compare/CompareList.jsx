@@ -12,7 +12,7 @@ import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 import {
   useGetAllProductsQuery,
-  useGetSingleProductQuery,
+  useGetSingleProductBySlugQuery,
 } from "@/redux/services/product/productApi";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ const CompareList = () => {
   const { data: compareData, isLoading: isCompareDataLoading } =
     useGetSingleCompareByUserQuery(user?._id ?? deviceId);
   const { data: productData, isLoading: isProductDataLoading } =
-    useGetSingleProductQuery(productId, {
+    useGetSingleProductBySlugQuery(productId, {
       skip: !productId,
     });
   const [deleteCompare] = useDeleteCompareMutation();
@@ -101,7 +101,11 @@ const CompareList = () => {
   };
 
   if (isGlobalDataLoading || isCompareDataLoading || isProductDataLoading) {
-    return <div>Loading...</div>;
+    return (
+      <section className="h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </section>
+    );
   }
 
   const showModal = (id) => {

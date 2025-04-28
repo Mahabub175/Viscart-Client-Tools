@@ -53,16 +53,6 @@ const CheckoutInfo = ({ isLoading }) => {
           },
         ]
       : []),
-    ...(globalData?.results?.bank === "Active"
-      ? [
-          {
-            value: "bank",
-            label: "EFT/RTGS",
-            image: imageMap.bank,
-            info: globalData?.results?.bankMessage,
-          },
-        ]
-      : []),
     ...(globalData?.results?.ssl === "Active"
       ? [
           {
@@ -95,6 +85,16 @@ const CheckoutInfo = ({ isLoading }) => {
             </>
           ),
         }))
+      : []),
+    ...(globalData?.results?.bank === "Active"
+      ? [
+          {
+            value: "bank",
+            label: "EFT/RTGS",
+            image: imageMap.bank,
+            info: globalData?.results?.bankMessage,
+          },
+        ]
       : []),
   ];
 
