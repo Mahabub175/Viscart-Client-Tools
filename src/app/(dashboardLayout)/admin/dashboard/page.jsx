@@ -20,6 +20,8 @@ import carts from "@/assets/images/carts.png";
 import orders from "@/assets/images/orders.png";
 import users from "@/assets/images/users.png";
 import OrderCards from "@/components/Dashboard/OrderCards";
+import CustomMarquee from "@/components/Reusable/Marquee/CustomMarquee";
+import Link from "next/link";
 
 const AdminDashboard = () => {
   useEffect(() => {
@@ -34,8 +36,28 @@ const AdminDashboard = () => {
 
   const { data: dashboardData } = useGetAdminDashboardQuery();
 
+  const orderMessage = (
+    <div className="text-red-500">
+      ⚠️ আপনার অর্ডার লিমিটেশন শেষ। লিমিটেশন এক্সটেন্ড করতে দ্রুত{" "}
+      <Link
+        href="https://your-support-link.com"
+        className="text-blue-600 font-bold underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ক্রেতা
+      </Link>{" "}
+      এর সাপোর্ট এ যোগাযোগ করুন। 📞
+    </div>
+  );
+
   return (
     <section>
+      {dashboardData?.results?.remainingOrders === 0 && (
+        <div className="-mt-16">
+          <CustomMarquee data={orderMessage} />
+        </div>
+      )}
       <div className="mb-10 flex items-center gap-5">
         <div>
           {data?.profile_image ? (
@@ -76,8 +98,8 @@ const AdminDashboard = () => {
         />
         <DashboardCards
           image={orders}
-          title="Orders"
-          data={dashboardData?.results?.orders}
+          title="Remaining Orders"
+          data={dashboardData?.results?.remainingOrders}
           href={"/admin/orders/order"}
         />
         <DashboardCards
