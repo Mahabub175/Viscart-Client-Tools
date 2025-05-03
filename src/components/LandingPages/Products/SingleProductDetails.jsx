@@ -19,9 +19,14 @@ import ProductBreadCrumb from "./ProductBreadCrumb";
 import ProductReview from "./ProductReview";
 import ProductDetailsSlider from "./ProductDetailsSlider";
 import { sendGTMEvent } from "@next/third-parties/google";
+import { useDispatch } from "react-redux";
+import { addProductId } from "@/redux/services/device/deviceSlice";
 
 const SingleProductDetails = ({ params }) => {
+  const dispatch = useDispatch();
+
   const { data: globalData } = useGetAllGlobalSettingQuery();
+
   const { data: singleProduct, isFetching } = useGetSingleProductBySlugQuery(
     params?.productId
   );
@@ -72,6 +77,8 @@ const SingleProductDetails = ({ params }) => {
   };
 
   useEffect(() => {
+    dispatch(addProductId(singleProduct?._id));
+
     sendGTMEvent({ event: "singleProductView", value: singleProduct?.slug });
     if (Object.keys(selectedAttributes).length === 0) {
       setCurrentVariant(null);
@@ -97,7 +104,7 @@ const SingleProductDetails = ({ params }) => {
         setVariantMedia([]);
       }
     }
-  }, [selectedAttributes, singleProduct]);
+  }, [selectedAttributes, singleProduct, dispatch]);
 
   const currentPrice = currentVariant
     ? currentVariant?.sellingPrice

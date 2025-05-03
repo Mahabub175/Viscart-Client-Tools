@@ -5,6 +5,7 @@ import Categories from "@/components/LandingPages/Home/Categories";
 import NewsletterBanner from "@/components/LandingPages/Home/NewsletterBanner";
 import CategoryProducts from "@/components/LandingPages/Home/Products/CategoryProducts";
 import OfferProducts from "@/components/LandingPages/Home/Products/OfferProducts";
+import RecentlyViewedProducts from "@/components/LandingPages/Home/Products/RecentlyViewedProducts";
 import TopProducts from "@/components/LandingPages/Home/Products/TopProducts";
 
 export const metadata = {
@@ -20,6 +21,7 @@ const page = async () => {
       <CategoryProducts />
       <OfferProducts />
       <Brands />
+      <RecentlyViewedProducts />
       <BottomBanner />
       <TopProducts />
       <NewsletterBanner />
