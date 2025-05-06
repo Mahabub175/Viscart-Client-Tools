@@ -156,7 +156,7 @@ const CompareCreate = ({
                   />
                   <div>
                     <p className="text-lg font-medium">{product?.name}</p>
-                    <p className="flex items-center gap-4">
+                    <p className="flex items-center gap-2">
                       Price:{" "}
                       {product?.offerPrice && (
                         <span className="text-xs line-through text-red-500">

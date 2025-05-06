@@ -1,4 +1,4 @@
-import { Button, Input, List, Rate } from "antd";
+import { Button, Input, Rate } from "antd";
 import Image from "next/image";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
@@ -62,62 +62,50 @@ const CompareTable = ({
                           onClear={handleClear1}
                         />
                         {searchQuery1 && (
-                          <List
-                            dataSource={filteredProducts1}
-                            renderItem={(product) => (
-                              <List.Item
+                          <div className="absolute top-full left-0 w-full max-h-52 overflow-y-scroll bg-white z-10 rounded-lg shadow-lg">
+                            {filteredProducts1?.map((product) => (
+                              <div
                                 key={product._id}
-                                className="cursor-pointer hover:bg-gray-100 rounded-md border-b border-b-gray-20"
+                                className="cursor-pointer hover:bg-gray-100 rounded-md border-b border-gray-200"
                                 onClick={() => handleProductSelect1(product)}
                               >
-                                <div className="flex items-center gap-4 hover:text-primary duration-300 p-2">
+                                <div className="flex flex-col lg:flex-row items-center gap-4 hover:text-primary duration-300 p-2">
                                   <Image
                                     src={formatImagePath(product?.mainImage)}
                                     alt="product"
                                     width={80}
                                     height={50}
-                                    className="object-cover rounded-xl w-[50px] h-[50px] lg:w-[80px] lg:h-[80px]"
+                                    className="object-cover rounded-xl"
                                   />
-                                  <div className="text-start">
-                                    <p className="text-xs lg:text-lg lg:font-medium">
+                                  <div>
+                                    <p className="text-sm lg:text-lg font-medium text-center lg:text-start">
                                       {product?.name}
                                     </p>
-                                    <p className="flex items-center gap-4">
-                                      Price:{" "}
-                                      {product?.offerPrice && (
-                                        <span className="text-xs line-through text-red-500">
+                                    <div className="flex flex-col items-center lg:items-start gap-1 my-2 lg:my-0">
+                                      <div className="flex items-center gap-2">
+                                        {product?.offerPrice && (
+                                          <span className="text-xs line-through text-red-500">
+                                            {globalData?.results?.currency +
+                                              " " +
+                                              product?.sellingPrice}
+                                          </span>
+                                        )}
+                                        <span className="text-xs lg:text-sm">
                                           {globalData?.results?.currency +
                                             " " +
-                                            product?.sellingPrice}
+                                            (product?.offerPrice ||
+                                              product?.sellingPrice)}
                                         </span>
-                                      )}
-                                      <span className="text-xs lg:text-sm">
-                                        {globalData?.results?.currency +
-                                          " " +
-                                          (product?.offerPrice ||
-                                            product?.sellingPrice)}
-                                      </span>
-                                    </p>
-                                    <p className="text-xs lg:text-base">
-                                      Category: {product?.category?.name}
-                                    </p>
+                                      </div>
+                                      <p className="text-xs text-gray-500">
+                                        Category: {product?.category?.name}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
-                              </List.Item>
-                            )}
-                            style={{
-                              position: "absolute",
-                              top: "100%",
-                              left: 0,
-                              width: "100%",
-                              maxHeight: "200px",
-                              overflowY: "scroll",
-                              backgroundColor: "white",
-                              zIndex: 10,
-                              borderRadius: "8px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                            }}
-                          />
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </div>
                     )}
@@ -135,62 +123,50 @@ const CompareTable = ({
                           onClear={handleClear2}
                         />
                         {searchQuery2 && (
-                          <List
-                            dataSource={filteredProducts2}
-                            renderItem={(product) => (
-                              <List.Item
+                          <div className="absolute top-full left-0 w-full max-h-52 overflow-y-scroll bg-white z-10 rounded-lg shadow-lg">
+                            {filteredProducts2?.map((product) => (
+                              <div
                                 key={product._id}
-                                className="cursor-pointer hover:bg-gray-100 rounded-md border-b border-b-gray-20"
+                                className="cursor-pointer hover:bg-gray-100 rounded-md border-b border-gray-200"
                                 onClick={() => handleProductSelect2(product)}
                               >
-                                <div className="flex items-center gap-4 hover:text-primary duration-300 p-2">
+                                <div className="flex flex-col lg:flex-row items-center gap-4 hover:text-primary duration-300 p-2">
                                   <Image
                                     src={formatImagePath(product?.mainImage)}
                                     alt="product"
                                     width={80}
                                     height={50}
-                                    className="object-cover rounded-xl w-[50px] h-[50px] lg:w-[80px] lg:h-[80px]"
+                                    className="object-cover rounded-xl"
                                   />
-                                  <div className="text-start">
-                                    <p className="text-xs lg:text-lg font-medium">
+                                  <div>
+                                    <p className="text-sm lg:text-lg font-medium text-center lg:text-start">
                                       {product?.name}
                                     </p>
-                                    <p className="flex items-center gap-4">
-                                      Price:{" "}
-                                      {product?.offerPrice && (
-                                        <span className="text-xs line-through text-red-500">
+                                    <div className="flex flex-col items-center lg:items-start gap-1 my-2 lg:my-0">
+                                      <div className="flex items-center gap-2">
+                                        {product?.offerPrice && (
+                                          <span className="text-xs line-through text-red-500">
+                                            {globalData?.results?.currency +
+                                              " " +
+                                              product?.sellingPrice}
+                                          </span>
+                                        )}
+                                        <span className="text-xs lg:text-sm">
                                           {globalData?.results?.currency +
                                             " " +
-                                            product?.sellingPrice}
+                                            (product?.offerPrice ||
+                                              product?.sellingPrice)}
                                         </span>
-                                      )}
-                                      <span className="text-xs lg:text-sm">
-                                        {globalData?.results?.currency +
-                                          " " +
-                                          (product?.offerPrice ||
-                                            product?.sellingPrice)}
-                                      </span>
-                                    </p>
-                                    <p className="text-xs lg:text-base">
-                                      Category: {product?.category?.name}
-                                    </p>
+                                      </div>
+                                      <p className="text-xs text-gray-500">
+                                        Category: {product?.category?.name}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
-                              </List.Item>
-                            )}
-                            style={{
-                              position: "absolute",
-                              top: "100%",
-                              left: 0,
-                              width: "100%",
-                              maxHeight: "200px",
-                              overflowY: "scroll",
-                              backgroundColor: "white",
-                              zIndex: 10,
-                              borderRadius: "8px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                            }}
-                          />
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </div>
                     )}
@@ -200,10 +176,12 @@ const CompareTable = ({
                     alt={item?.name || "Product Image"}
                     width={200}
                     height={200}
-                    className="mx-auto rounded-md mb-4"
+                    className="mx-auto rounded-md mb-4 w-[200px] h-[160px] object-cover"
                   />
                   <LinkButton href={`/products/${item?.slug}`}>
-                    <span className="text-xs lg:text-base">{item?.name}</span>
+                    <span className="text-xs lg:text-base">
+                      {item?.name || "Product Name"}
+                    </span>
                   </LinkButton>
                   <div
                     className="text-2xl cursor-pointer text-red-500 flex justify-center mt-5 hover:scale-105 duration-300"
@@ -216,23 +194,6 @@ const CompareTable = ({
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
-                Model
-              </td>
-
-              {compareData?.[0]?.product?.map((item) => (
-                <td
-                  key={item?._id}
-                  className="border border-gray-300 p-4 text-center"
-                >
-                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
-                    Model
-                  </div>
-                  {item?.model || "N/A"}
-                </td>
-              ))}
-            </tr>
             <tr>
               <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
                 Category
@@ -262,6 +223,22 @@ const CompareTable = ({
                     Brand
                   </div>
                   {item?.brand?.name || "N/A"}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="border border-gray-300 p-4 font-bold hidden lg:table-cell">
+                Model
+              </td>
+              {compareData?.[0]?.product?.map((item) => (
+                <td
+                  key={item?._id}
+                  className="border border-gray-300 p-4 text-center"
+                >
+                  <div className="lg:hidden bg-gray-500 px-5 py-1 rounded text-white mb-5 text-sm">
+                    Model
+                  </div>
+                  {item?.productModel || "N/A"}
                 </td>
               ))}
             </tr>

@@ -74,30 +74,38 @@ const CompareList = () => {
     setSelectedProducts((prev) => {
       const newSelectedProducts = [...prev];
       newSelectedProducts[0] = product;
+
+      if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+        updateCompareProduct({
+          productIds: [
+            newSelectedProducts[0]?._id,
+            newSelectedProducts[1]?._id,
+          ].filter(Boolean),
+        });
+      }
+
       return newSelectedProducts;
     });
     setSearchQuery1("");
-
-    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
-      updateCompareProduct({
-        productIds: [product._id, selectedProducts[1]?._id],
-      });
-    }
   };
 
   const handleProductSelect2 = (product) => {
     setSelectedProducts((prev) => {
       const newSelectedProducts = [...prev];
       newSelectedProducts[1] = product;
+
+      if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
+        updateCompareProduct({
+          productIds: [
+            newSelectedProducts[0]?._id,
+            newSelectedProducts[1]?._id,
+          ].filter(Boolean),
+        });
+      }
+
       return newSelectedProducts;
     });
     setSearchQuery2("");
-
-    if (compareData?.[0]?._id && compareData[0]?.product?.length > 0) {
-      updateCompareProduct({
-        productIds: [selectedProducts[0]?._id, product._id],
-      });
-    }
   };
 
   if (isGlobalDataLoading || isCompareDataLoading || isProductDataLoading) {
