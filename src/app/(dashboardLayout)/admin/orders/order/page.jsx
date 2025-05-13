@@ -268,7 +268,7 @@ const Orders = () => {
             break;
           case "returned":
             color = "red";
-            text = "Return";
+            text = "Returned";
             break;
           default:
             color = "gray";
