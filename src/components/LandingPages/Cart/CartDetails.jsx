@@ -80,9 +80,8 @@ const CartDetails = () => {
 
   const extraCharge = cartData?.map(
     (item) =>
-      item?.weight *
-      globalData?.results?.pricePerWeight *
-      (counts[item._id] || 1)
+      item?.weight ||
+      0 * globalData?.results?.pricePerWeight * (counts[item._id] || 1)
   );
 
   const totalCharge = Math.max(

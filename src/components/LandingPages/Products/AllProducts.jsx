@@ -18,6 +18,7 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import ProductCard from "../Home/Products/ProductCard";
 import { debounce } from "lodash";
 import { GiCancel } from "react-icons/gi";
+import { useGetAllGenericsQuery } from "@/redux/services/generic/genericApi";
 
 const { Option } = Select;
 
@@ -26,6 +27,7 @@ const AllProducts = ({ searchParams }) => {
   const [pageSize, setPageSize] = useState(20);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedGenerics, setSelectedGenerics] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [sorting, setSorting] = useState("");
   const [filterModal, setFilterModal] = useState(false);
@@ -39,6 +41,7 @@ const AllProducts = ({ searchParams }) => {
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const { data: brandData } = useGetAllBrandsQuery();
   const { data: categoryData } = useGetAllCategoriesQuery();
+  const { data: genericData } = useGetAllGenericsQuery();
   const { data: productData } = useGetAllProductsQuery();
 
   const paginatedProducts = useMemo(() => {
@@ -63,6 +66,12 @@ const AllProducts = ({ searchParams }) => {
     [productData]
   );
 
+  const activeGenerics = useMemo(
+    () =>
+      genericData?.results?.filter((item) => item?.status !== "Inactive") || [],
+    [genericData]
+  );
+
   const debouncedSetSearchFilter = useMemo(
     () => debounce((value) => setSearchFilter(value?.toLowerCase()), 300),
     []
@@ -75,6 +84,7 @@ const AllProducts = ({ searchParams }) => {
       setSearchFilter("");
       setSelectedBrands([]);
       setSelectedCategories([]);
+      setSelectedGenerics([]);
       setPriceRange([0, 10000]);
       setSorting("");
     }
@@ -91,11 +101,17 @@ const AllProducts = ({ searchParams }) => {
           category?.name?.toLowerCase().includes(searchFilter)
         )
         .map((category) => category.name);
+      const matchedGenerics = activeGenerics
+        ?.filter((generic) =>
+          generic?.name?.toLowerCase().includes(searchFilter)
+        )
+        .map((generic) => generic.name);
 
       setSelectedBrands(matchedBrands || []);
       setSelectedCategories(matchedCategories || []);
+      setSelectedGenerics(matchedGenerics || []);
     }
-  }, [searchFilter, activeBrands, activeCategories]);
+  }, [searchFilter, activeBrands, activeCategories, activeGenerics]);
 
   useEffect(() => {
     const applyFilters = () => {
@@ -103,15 +119,23 @@ const AllProducts = ({ searchParams }) => {
 
       let filtered = activeProducts?.filter((product) => {
         if (!product) return false;
+
         const isBrandMatch = selectedBrands.length
           ? selectedBrands.includes(product?.brand?.name)
           : true;
+
         const isCategoryMatch = selectedCategories.length
           ? selectedCategories.includes(product?.category?.name)
           : true;
+
+        const isGenericMatch = selectedGenerics.length
+          ? selectedGenerics.includes(product?.generic?.name)
+          : true;
+
         const isPriceMatch =
           product.sellingPrice >= priceRange[0] &&
           product.sellingPrice <= priceRange[1];
+
         const isAvailabilityMatch =
           availability === "inStock"
             ? product.stock > 0
@@ -123,12 +147,14 @@ const AllProducts = ({ searchParams }) => {
           searchFilter?.length > 0
             ? product?.name?.toLowerCase().includes(searchFilter) ||
               product?.brand?.name?.toLowerCase().includes(searchFilter) ||
-              product?.category?.name?.toLowerCase().includes(searchFilter)
+              product?.category?.name?.toLowerCase().includes(searchFilter) ||
+              product?.generic?.name?.toLowerCase().includes(searchFilter)
             : true;
 
         return (
           isBrandMatch &&
           isCategoryMatch &&
+          isGenericMatch &&
           isPriceMatch &&
           isAvailabilityMatch &&
           isSearchMatch
@@ -161,6 +187,7 @@ const AllProducts = ({ searchParams }) => {
     activeProducts,
     selectedBrands,
     selectedCategories,
+    selectedGenerics,
     priceRange,
     sorting,
     availability,
@@ -269,6 +296,26 @@ const AllProducts = ({ searchParams }) => {
                 className="flex flex-col gap-2"
               />
             </div>
+            {activeGenerics?.length > 0 && (
+              <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
+                <label className="block mb-2 font-semibold">Generics</label>
+                <Checkbox.Group
+                  options={activeGenerics?.map((generic) => {
+                    const productCount = productData?.results?.filter(
+                      (product) => product?.generic?.name === generic?.name
+                    ).length;
+
+                    return {
+                      label: `${generic.name} (${productCount || 0})`,
+                      value: generic.name,
+                    };
+                  })}
+                  value={activeGenerics}
+                  onChange={handleCategoryChange}
+                  className="flex flex-col gap-2"
+                />
+              </div>
+            )}
             <div className="mb-6">
               <label className="block mb-2 font-semibold">Price Range</label>
               <Slider
@@ -363,10 +410,16 @@ const AllProducts = ({ searchParams }) => {
           <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
             <label className="block mb-2 font-semibold">Brands</label>
             <Checkbox.Group
-              options={activeBrands?.map((brand) => ({
-                label: brand.name,
-                value: brand.name,
-              }))}
+              options={activeBrands?.map((brand) => {
+                const productCount = productData?.results?.filter(
+                  (product) => product?.brand?.name === brand.name
+                ).length;
+
+                return {
+                  label: `${brand.name} (${productCount || 0})`,
+                  value: brand.name,
+                };
+              })}
               value={selectedBrands}
               onChange={handleBrandChange}
               className="flex flex-col gap-2"
@@ -375,15 +428,41 @@ const AllProducts = ({ searchParams }) => {
           <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
             <label className="block mb-2 font-semibold">Categories</label>
             <Checkbox.Group
-              options={activeCategories?.map((category) => ({
-                label: category.name,
-                value: category.name,
-              }))}
-              value={selectedCategories}
+              options={activeCategories?.map((category) => {
+                const productCount = productData?.results?.filter(
+                  (product) => product.category.name === category.name
+                ).length;
+
+                return {
+                  label: `${category.name} (${productCount || 0})`,
+                  value: category.name,
+                };
+              })}
+              value={activeGenerics}
               onChange={handleCategoryChange}
               className="flex flex-col gap-2"
             />
           </div>
+          {activeGenerics?.length > 0 && (
+            <div className="mb-6 border p-5 rounded-xl max-h-[500px] overflow-y-auto">
+              <label className="block mb-2 font-semibold">Generics</label>
+              <Checkbox.Group
+                options={activeGenerics?.map((generic) => {
+                  const productCount = productData?.results?.filter(
+                    (product) => product?.generic?.name === generic.name
+                  ).length;
+
+                  return {
+                    label: `${generic.name} (${productCount || 0})`,
+                    value: generic.name,
+                  };
+                })}
+                value={activeGenerics}
+                onChange={handleCategoryChange}
+                className="flex flex-col gap-2"
+              />
+            </div>
+          )}
           <div className="mb-6">
             <label className="block mb-2 font-semibold">Price Range</label>
             <Slider

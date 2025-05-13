@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import { addProductId } from "@/redux/services/device/deviceSlice";
 import useGetURL from "@/utilities/hooks/useGetURL";
 import { useAddServerTrackingMutation } from "@/redux/services/serverTracking/serverTrackingApi";
+import LinkButton from "@/components/Shared/LinkButton";
 
 const SingleProductDetails = ({ params }) => {
   const dispatch = useDispatch();
@@ -161,7 +162,7 @@ const SingleProductDetails = ({ params }) => {
     <section className="py-10 -mt-20">
       <div className="">
         <div className="flex items-center justify-between my-container pt-5">
-          <div className="lg:mt-5 lg:-mb-5">
+          <div className="mt-5 lg:-mb-5">
             <ProductBreadCrumb params={params} />
           </div>
           <div></div>
@@ -173,14 +174,32 @@ const SingleProductDetails = ({ params }) => {
             <h2 className="text-xl md:text-3xl font-medium mb-2">
               {singleProduct?.name}
             </h2>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 hover:text-blue-500 duration-300 cursor-pointer">
               <span className="font-medium">Category:</span>
-              <span>{singleProduct?.category?.name}</span>
+              <LinkButton
+                href={`/products?filter=${singleProduct?.category?.name}`}
+              >
+                {singleProduct?.category?.name}
+              </LinkButton>
             </div>
             {singleProduct?.brand && (
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-1 hover:text-blue-500 duration-300 cursor-pointer">
                 <span className="font-medium">Brand:</span>
-                <span>{singleProduct?.brand?.name}</span>
+                <LinkButton
+                  href={`/products?filter=${singleProduct?.brand?.name}`}
+                >
+                  {singleProduct?.brand?.name}
+                </LinkButton>
+              </div>
+            )}
+            {singleProduct?.generic && (
+              <div className="flex items-center gap-2 mb-1 hover:text-blue-500 duration-300 cursor-pointer">
+                <span className="font-medium">Generic:</span>
+                <LinkButton
+                  href={`/products?filter=${singleProduct?.generic?.name}`}
+                >
+                  {singleProduct?.generic?.name}
+                </LinkButton>
               </div>
             )}
             {singleProduct?.productModel && (
@@ -191,7 +210,7 @@ const SingleProductDetails = ({ params }) => {
             )}
             {singleProduct?.weight > 0 && (
               <div className="font-medium">
-                Weight: {singleProduct?.weight} KG
+                Weight: {singleProduct?.weight} {singleProduct?.unit}
               </div>
             )}
             <div className="flex items-center mt-4 gap-4 font-medium">
@@ -290,7 +309,7 @@ const SingleProductDetails = ({ params }) => {
                   Related Products
                 </h2>
                 <Link
-                  href={`/products?filter=${singleProduct?.category?.names}`}
+                  href={`/products?filter=${singleProduct?.category?.name}`}
                   className="text-primary border-b border-primary font-semibold"
                 >
                   Show All

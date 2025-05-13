@@ -97,14 +97,20 @@ const QuickProductView = ({
           </div>
           <p>{item?.details}</p>
 
+          <p className="font-bold my-2 text-textColor">
+            Category: {item?.category?.name}
+          </p>
+
           {item?.brand && (
             <p className="font-bold my-2 text-textColor">
               Brand: {item?.brand?.name}
             </p>
           )}
-          <p className="font-bold my-2 text-textColor">
-            Category: {item?.category?.name}
-          </p>
+          {item?.generic && (
+            <p className="font-bold my-2 text-textColor">
+              Generic: {item?.generic?.name}
+            </p>
+          )}
           {item?.productModel && (
             <div className="font-bold my-2 text-textColor">
               Model: {item?.productModel}
@@ -112,7 +118,7 @@ const QuickProductView = ({
           )}
           {(item?.weight || item?.weight > 0) && (
             <div className="font-bold my-2 text-textColor">
-              Weight: {item?.weight} KG
+              Weight: {item?.weight} {item?.unit}
             </div>
           )}
 

@@ -12,7 +12,7 @@ import {
 import { appendToFormData } from "@/utilities/lib/appendToFormData";
 import { compressImage } from "@/utilities/lib/compressImage";
 import { transformDefaultValues } from "@/utilities/lib/transformedDefaultValues";
-import { Divider, Form, TimePicker } from "antd";
+import { ColorPicker, Divider, Form, TimePicker } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
@@ -339,6 +339,20 @@ const GlobalSetting = () => {
             type={"number"}
             label={"Point Conversion"}
           />
+          <Form.Item
+            name="primaryColor"
+            label="Website Primary Color"
+            required={true}
+          >
+            <ColorPicker showText />
+          </Form.Item>
+          <Form.Item
+            name="secondaryColor"
+            label="Website Secondary Color"
+            required={true}
+          >
+            <ColorPicker showText />
+          </Form.Item>
         </div>
         {data?.results?.manualPayments?.map((item, i) => (
           <div key={i}>
