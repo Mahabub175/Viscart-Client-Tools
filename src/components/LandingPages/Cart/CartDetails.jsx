@@ -23,6 +23,8 @@ import CheckoutDetails from "./CheckoutDetails";
 import CheckoutInfo from "./CheckoutInfo";
 import { useLoginMutation } from "@/redux/services/auth/authApi";
 import { sendGTMEvent } from "@next/third-parties/google";
+import useGetURL from "@/utilities/hooks/useGetURL";
+import { useAddServerTrackingMutation } from "@/redux/services/serverTracking/serverTrackingApi";
 
 const CartDetails = () => {
   const router = useRouter();
@@ -48,6 +50,9 @@ const CartDetails = () => {
   const [deliveryOption, setDeliveryOption] = useState("insideDhaka");
   const [discount, setDiscount] = useState(null);
   const [grandTotal, setGrandTotal] = useState(0);
+
+  const url = useGetURL();
+  const [addServerTracking] = useAddServerTrackingMutation();
 
   useEffect(() => {
     if (cartData) {
@@ -169,7 +174,15 @@ const CartDetails = () => {
             if (res?.error) {
               toast.error(res?.error?.data?.errorMessage, { id: toastId });
             } else if (res?.data?.success) {
-              sendGTMEvent({ event: "orderData", value: submittedData });
+              sendGTMEvent({ event: "Purchase", value: submittedData });
+              const data = {
+                event: "Purchase",
+                data: {
+                  ...submittedData,
+                  event_source_url: url,
+                },
+              };
+              await addServerTracking(data);
               if (res?.data?.data?.gatewayUrl) {
                 window.location.href = res?.data?.data?.gatewayUrl;
               }

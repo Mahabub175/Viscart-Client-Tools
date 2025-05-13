@@ -10,7 +10,9 @@ import {
 } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
 import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
+import { useAddServerTrackingMutation } from "@/redux/services/serverTracking/serverTrackingApi";
 import { useDeleteWishlistMutation } from "@/redux/services/wishlist/wishlistApi";
+import useGetURL from "@/utilities/hooks/useGetURL";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { Button, Modal } from "antd";
 import { useRouter } from "next/navigation";
@@ -44,6 +46,9 @@ const ProductCountCart = ({
   const { data: userData } = useGetSingleUserQuery(user?._id, {
     skip: !user?._id,
   });
+
+  const url = useGetURL();
+  const [addServerTracking] = useAddServerTrackingMutation();
 
   const handleCount = (action) => {
     if (action === "increment") {
@@ -159,6 +164,11 @@ const ProductCountCart = ({
         userNumber: userData?.number,
         userEmail: userData?.email,
       }),
+      ...(user?._id && {
+        name: userData?.name,
+        number: userData?.number,
+        email: userData?.email,
+      }),
     };
 
     const toastId = toast.loading("Adding to cart");
@@ -167,6 +177,16 @@ const ProductCountCart = ({
       const res = await addCart(data);
       if (res?.data?.success) {
         sendGTMEvent({ event: "addToCart", value: data });
+
+        const serverData = {
+          event: "addToCart",
+          data: {
+            ...data,
+            event_source_url: url,
+          },
+        };
+        await addServerTracking(serverData);
+
         toast.success(res.data.message, { id: toastId });
         if (isWishlist) {
           deleteWishlist(wishlistId);

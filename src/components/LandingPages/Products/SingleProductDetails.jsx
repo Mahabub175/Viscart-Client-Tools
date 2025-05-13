@@ -21,6 +21,8 @@ import ProductDetailsSlider from "./ProductDetailsSlider";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { useDispatch } from "react-redux";
 import { addProductId } from "@/redux/services/device/deviceSlice";
+import useGetURL from "@/utilities/hooks/useGetURL";
+import { useAddServerTrackingMutation } from "@/redux/services/serverTracking/serverTrackingApi";
 
 const SingleProductDetails = ({ params }) => {
   const dispatch = useDispatch();
@@ -32,6 +34,9 @@ const SingleProductDetails = ({ params }) => {
   );
 
   const businessWhatsapp = globalData?.results?.businessWhatsapp;
+
+  const url = useGetURL();
+  const [addServerTracking] = useAddServerTrackingMutation();
 
   const handleWhatsappClick = () => {
     window.open(`https://wa.me/${businessWhatsapp}`, "_blank");
@@ -79,7 +84,16 @@ const SingleProductDetails = ({ params }) => {
   useEffect(() => {
     dispatch(addProductId(singleProduct?._id));
 
-    sendGTMEvent({ event: "singleProductView", value: singleProduct?.slug });
+    sendGTMEvent({ event: "singleProductView", value: url });
+
+    const data = {
+      event: "singleProductView",
+      data: {
+        event_source_url: url,
+      },
+    };
+    addServerTracking(data);
+
     if (Object.keys(selectedAttributes).length === 0) {
       setCurrentVariant(null);
       setVariantMedia([]);

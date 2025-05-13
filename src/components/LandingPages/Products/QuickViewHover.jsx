@@ -6,6 +6,8 @@ import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import { useAddCartMutation } from "@/redux/services/cart/cartApi";
 import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useAddServerTrackingMutation } from "@/redux/services/serverTracking/serverTrackingApi";
+import useGetURL from "@/utilities/hooks/useGetURL";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { Tooltip } from "antd";
 import { useState } from "react";
@@ -23,6 +25,9 @@ const QuickViewHover = ({ item, cartData }) => {
   });
 
   const [addCart] = useAddCartMutation();
+
+  const url = useGetURL();
+  const [addServerTracking] = useAddServerTrackingMutation();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -46,6 +51,11 @@ const QuickViewHover = ({ item, cartData }) => {
         userNumber: userData?.number,
         userEmail: userData?.email,
       }),
+      ...(user?._id && {
+        name: userData?.name,
+        number: userData?.number,
+        email: userData?.email,
+      }),
     };
 
     const toastId = toast.loading("Adding to cart");
@@ -54,6 +64,16 @@ const QuickViewHover = ({ item, cartData }) => {
       const res = await addCart(data);
       if (res?.data?.success) {
         sendGTMEvent({ event: "addToCart", value: data });
+
+        const serverData = {
+          event: "addToCart",
+          data: {
+            ...data,
+            event_source_url: url,
+          },
+        };
+        await addServerTracking(serverData);
+
         toast.success(res.data.message, { id: toastId });
       }
       if (res?.error) {
