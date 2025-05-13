@@ -221,6 +221,16 @@ const GlobalSetting = () => {
             type={"password"}
           />
           <CustomInput
+            name={"fbPixelId"}
+            label={"Facebook Pixel ID"}
+            type={"password"}
+          />
+          <CustomInput
+            name={"fbAccessToken"}
+            label={"Facebook Access Token"}
+            type={"password"}
+          />
+          <CustomInput
             name={"businessNumber"}
             label={"Business Number"}
             type={"number"}
@@ -262,7 +272,6 @@ const GlobalSetting = () => {
             name={"businessWorkHours"}
             label={"Business Work Hours"}
           />
-
           <CustomInput
             name={"bkashMessage"}
             type={"textarea"}
@@ -302,6 +311,33 @@ const GlobalSetting = () => {
               { value: "Active", label: "Active" },
               { value: "Inactive", label: "Inactive" },
             ]}
+          />
+          <CustomSelect
+            name={"useSms"}
+            label={"Use SMS Status"}
+            options={[
+              { value: true, label: "Active" },
+              { value: false, label: "Inactive" },
+            ]}
+          />
+          <CustomInput
+            name={"smsToken"}
+            label={"SMS Token"}
+            type={"password"}
+          />
+          <CustomInput name={"smsUrl"} label={"SMS Url"} type={"password"} />
+          <CustomSelect
+            name={"usePointSystem"}
+            label={"Use Point System Status"}
+            options={[
+              { value: true, label: "Active" },
+              { value: false, label: "Inactive" },
+            ]}
+          />
+          <CustomInput
+            name={"pointConversion"}
+            type={"number"}
+            label={"Point Conversion"}
           />
         </div>
         {data?.results?.manualPayments?.map((item, i) => (

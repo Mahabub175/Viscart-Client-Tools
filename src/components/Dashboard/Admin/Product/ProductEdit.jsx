@@ -137,6 +137,11 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
           errors: "",
         },
         {
+          name: "generic",
+          value: productData?.generic?._id,
+          errors: "",
+        },
+        {
           name: "tags",
           value: productData?.tags,
           errors: "",

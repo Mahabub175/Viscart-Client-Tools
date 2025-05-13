@@ -13,12 +13,15 @@ import ForgotPassword from "./ForgotPassword";
 import LoginWithOtp from "./LoginWithOtp";
 import { Checkbox, Form } from "antd";
 import { useEffect, useState } from "react";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const LoginForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [fields, setFields] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -63,8 +66,12 @@ const LoginForm = () => {
           type={"password"}
           required={true}
         />
-        <LoginWithOtp />
-        <ForgotPassword />
+        {globalData?.results?.useSms && (
+          <>
+            <LoginWithOtp />
+            <ForgotPassword />
+          </>
+        )}
         <Form.Item name="isAdmin" valuePropName="checked">
           <Checkbox
             checked={isAdmin}

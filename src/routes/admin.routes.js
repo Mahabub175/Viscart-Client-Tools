@@ -3,14 +3,14 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { BsFillCartCheckFill, BsFillCartFill } from "react-icons/bs";
 import { CiGift } from "react-icons/ci";
 import { FaUser, FaImage, FaPager, FaRegImage } from "react-icons/fa";
-import { FaCartFlatbed, FaCartPlus } from "react-icons/fa6";
+import { FaCartFlatbed, FaCartPlus, FaImages } from "react-icons/fa6";
 import { IoSettingsSharp } from "react-icons/io5";
-import { LiaSmsSolid } from "react-icons/lia";
 import {
   MdAddShoppingCart,
   MdOutlineAcUnit,
   MdOutlineMergeType,
   MdOutlineReviews,
+  MdOutlineBrandingWatermark,
 } from "react-icons/md";
 import {
   RiCoupon3Line,
@@ -41,6 +41,11 @@ export const adminSidebarRoutes = [
       },
 
       { name: "Brand", path: "products/brand", icon: TbBrandAirtable },
+      {
+        name: "Generic",
+        path: "products/generic",
+        icon: MdOutlineBrandingWatermark,
+      },
       { name: "Category", path: "products/category", icon: BiCategoryAlt },
       { name: "Product", path: "products/product", icon: MdAddShoppingCart },
     ],
@@ -68,6 +73,11 @@ export const adminSidebarRoutes = [
     name: "Blog",
     path: "blog",
     icon: FaPager,
+  },
+  {
+    name: "Gallery",
+    path: "gallery",
+    icon: FaImages,
   },
   {
     name: "Reviews",
@@ -98,11 +108,6 @@ export const adminSidebarRoutes = [
     name: "Global Setting",
     path: "global-setting",
     icon: IoSettingsSharp,
-  },
-  {
-    name: "Bulk SMS",
-    path: "bulk-sms",
-    icon: LiaSmsSolid,
   },
   {
     name: "Message Platform",

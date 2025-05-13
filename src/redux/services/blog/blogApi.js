@@ -63,10 +63,26 @@ const blogApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["blog"],
     }),
+    updateBlogComment: build.mutation({
+      query: (payload) => ({
+        url: `/blog/${payload.blogId}/comment/${payload.commentId}/`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ["blog"],
+    }),
+    deleteBlogComment: build.mutation({
+      query: (payload) => ({
+        url: `/blog/${payload.blogId}/comment/${payload.commentId}/`,
+        method: "DELETE",
+        body: payload.data,
+      }),
+      invalidatesTags: ["blog"],
+    }),
     deleteBlog: build.mutation({
       query: (id) => ({
         url: `/blog/${id}/`,
-        method: "Delete",
+        method: "DELETE",
         body: {},
       }),
       invalidatesTags: ["blog"],
@@ -92,6 +108,8 @@ export const {
   useGetSingleBlogQuery,
   useGetSingleBlogBySlugQuery,
   useUpdateBlogMutation,
+  useUpdateBlogCommentMutation,
+  useDeleteBlogCommentMutation,
   useDeleteBlogMutation,
   useDeleteBulkBlogMutation,
 } = blogApi;

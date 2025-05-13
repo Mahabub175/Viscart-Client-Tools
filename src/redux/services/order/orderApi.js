@@ -10,7 +10,7 @@ const orderApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["order"],
+      invalidatesTags: ["order", "dashboard"],
     }),
     getOrders: build.query({
       query: ({ page = 1, limit = 5 }) => ({

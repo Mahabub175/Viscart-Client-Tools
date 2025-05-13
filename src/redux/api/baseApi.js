@@ -36,7 +36,10 @@ export const baseApi = createApi({
     "compare",
     "blog",
     "newsletter",
+    "dashboard",
     "sms",
+    "photo",
+    "generic",
   ],
   endpoints: () => ({}),
 });
