@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 
 import review from "@/assets/images/review.png";
 import settings2 from "@/assets/images/settings2.png";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const UserDashboard = () => {
   useEffect(() => {
@@ -28,6 +29,8 @@ const UserDashboard = () => {
   const { data } = useGetSingleUserQuery(user?._id);
 
   const { data: dashboardData } = useGetSingleUserDashboardQuery(user?._id);
+
+  const { data: globalData } = useGetAllGlobalSettingQuery();
 
   return (
     <section>
@@ -52,6 +55,11 @@ const UserDashboard = () => {
         <div>
           <p>Hello,</p>
           <p className="text-base lg:text-4xl font-medium">{data?.name}</p>
+          {globalData?.results?.usePointSystem && (
+            <p className="text-base font-medium mt-2">
+              Total Points: {data?.point?.toFixed(2)}
+            </p>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-10">

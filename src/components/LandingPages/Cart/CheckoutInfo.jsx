@@ -10,13 +10,38 @@ import nagad from "@/assets/images/nagad.png";
 import rocket from "@/assets/images/rocket.png";
 import upay from "@/assets/images/upay.png";
 import surecash from "@/assets/images/surecash.png";
+import point from "@/assets/images/point.png";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { useCurrentUser } from "@/redux/services/auth/authSlice";
+import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
+import { useEffect, useState } from "react";
 
-const CheckoutInfo = ({ isLoading }) => {
+const CheckoutInfo = ({
+  subTotal,
+  shippingFee,
+  discountAmount,
+  grandTotal,
+  setGrandTotal,
+  isLoading,
+}) => {
   const form = Form.useFormInstance();
   const selectedPayment = Form.useWatch("paymentMethod", form);
 
   const { data: globalData } = useGetAllGlobalSettingQuery();
+
+  const user = useSelector(useCurrentUser);
+
+  const [remainingAmount, setRemainingAmount] = useState(grandTotal);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const { data: userData } = useGetSingleUserQuery(user?._id, {
+    skip: !user?._id,
+  });
+
+  const userPoints = userData?.point?.toFixed(2) || 0;
+  const pointConversion = globalData?.results?.pointConversion || 1;
+  const pointsAsCurrency = userPoints / pointConversion;
 
   const imageMap = {
     cod: cod,
@@ -96,7 +121,46 @@ const CheckoutInfo = ({ isLoading }) => {
           },
         ]
       : []),
+    ...(globalData?.results?.usePointSystem
+      ? [
+          {
+            value: "point",
+            label: `Use Points (${userPoints} points)`,
+            image: point,
+            info: `
+              <p><strong>Available Points:</strong> ${userPoints}</p>
+              <p><strong>Conversion Rate:</strong> ${pointConversion} points = 1 ${
+              globalData?.results?.currency
+            }</p>
+              <p><strong>Points Value:</strong> ${pointsAsCurrency.toFixed(
+                2
+              )} ${globalData?.results?.currency}</p>
+            `,
+          },
+        ]
+      : []),
   ];
+
+  useEffect(() => {
+    if (selectedPayment === "point") {
+      const total = subTotal + shippingFee - discountAmount;
+      if (pointsAsCurrency >= total) {
+        setRemainingAmount(0);
+        setIsDisabled(false);
+        setGrandTotal(0);
+      } else {
+        const remaining = total - pointsAsCurrency;
+        setRemainingAmount(remaining);
+        setIsDisabled(true);
+        setGrandTotal(remaining);
+      }
+    } else {
+      const total = subTotal + shippingFee - discountAmount;
+      setRemainingAmount(total);
+      setGrandTotal(total);
+      setIsDisabled(false);
+    }
+  }, [selectedPayment, userPoints, subTotal, shippingFee, discountAmount]);
 
   return (
     <div>
@@ -150,13 +214,33 @@ const CheckoutInfo = ({ isLoading }) => {
         </Radio.Group>
       </Form.Item>
 
+      {selectedPayment === "point" && (
+        <div className="mb-5 pl-1">
+          {grandTotal === 0 ? (
+            <p className="text-green-600">
+              Your order is fully covered by points!
+            </p>
+          ) : remainingAmount > 0 ? (
+            <p className="text-red-600">
+              You need{" "}
+              <strong>{(remainingAmount * pointConversion).toFixed(2)}</strong>{" "}
+              more points to complete the purchase.
+            </p>
+          ) : (
+            <p className="text-green-600">
+              Your order is fully covered by points!
+            </p>
+          )}
+        </div>
+      )}
+
       <Button
         htmlType="submit"
         size="large"
         icon={<FaCartShopping />}
         className={`bg-navyBlue text-white font-bold px-10 w-full`}
         loading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || isDisabled}
       >
         Order Now
       </Button>

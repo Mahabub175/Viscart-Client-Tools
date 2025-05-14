@@ -360,6 +360,7 @@ const GlobalSetting = () => {
               <CustomInput
                 name={`manualPayments[${i}].name`}
                 label={`Manual Payment ${i + 1} Name`}
+                disabled
               />
 
               <CustomSelect
