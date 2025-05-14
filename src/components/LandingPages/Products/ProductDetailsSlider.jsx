@@ -5,13 +5,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import Image from "next/image";
+import { Image as AntdImage } from "antd";
 
 const ProductDetailsSlider = ({ allMedia }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
     <div className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-      {/* Main Image Swiper */}
       <Swiper
         spaceBetween={10}
         navigation
@@ -21,7 +21,7 @@ const ProductDetailsSlider = ({ allMedia }) => {
       >
         {allMedia.map((media, index) => (
           <SwiperSlide key={index} className="flex justify-center items-center">
-            <Image
+            <AntdImage
               src={media}
               alt={`Product image ${index}`}
               width={500}
@@ -33,7 +33,6 @@ const ProductDetailsSlider = ({ allMedia }) => {
         ))}
       </Swiper>
 
-      {/* Thumbnail Swiper */}
       <Swiper
         onSwiper={setThumbsSwiper}
         spaceBetween={10}
