@@ -172,7 +172,7 @@ const CheckoutDetails = ({
       <div className="bg-primaryLight p-5 rounded-lg border-2 border-primary space-y-3 font-semibold">
         <Link
           href={"/delivery"}
-          className="text-white rounded px-2 py-2 flex items-center gap-2 justify-center hover:underline font-medium bg-black lg:w-4/6 mx-auto text-sm"
+          className="text-white rounded px-2 py-2 flex items-center gap-2 justify-center hover:underline font-medium bg-primary lg:w-4/6 mx-auto text-sm"
         >
           Shipping Fee Details
           <FaInfoCircle />
