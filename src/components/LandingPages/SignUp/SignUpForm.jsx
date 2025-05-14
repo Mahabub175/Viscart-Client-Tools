@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
 import { verifyToken } from "@/utilities/lib/verifyToken";
+import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/globalSettingApi";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -24,30 +25,47 @@ const SignUpForm = () => {
   const [otpModalVisible, setOtpModalVisible] = useState(false);
   const [formValues, setFormValues] = useState(null);
 
+  const { data: globalData } = useGetAllGlobalSettingQuery();
+
   const handleSignUp = async (values) => {
-    if (!isOtpSent) {
-      if (values.password !== values.confirmPassword) {
-        toast.error("Passwords do not match");
-        return;
+    if (values.password !== values.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setFormValues(values);
+
+    if (globalData?.results?.useSms) {
+      if (!isOtpSent) {
+        try {
+          const response = await sendOtp({ number: values.number }).unwrap();
+          if (response.success) {
+            const decodedToken = verifyToken(response.data.otp);
+            setOtp(decodedToken?.otp);
+            toast.success("OTP sent successfully!");
+            setIsOtpSent(true);
+            setOtpModalVisible(true);
+          } else {
+            toast.error("Failed to send OTP. Please try again.");
+          }
+        } catch (error) {
+          toast.error(
+            error.data?.message || "Error sending OTP. Please try again."
+          );
+        }
       }
-
-      setFormValues(values);
-
+    } else {
+      const toastId = toast.loading("Signing Up...");
       try {
-        const response = await sendOtp({ number: values.number }).unwrap();
-        if (response.success) {
-          const decodedToken = verifyToken(response.data.otp);
-          setOtp(decodedToken?.otp);
-          toast.success("OTP sent successfully!");
-          setIsOtpSent(true);
-          setOtpModalVisible(true);
-        } else {
-          toast.error("Failed to send OTP. Please try again.");
+        const res = await signUp(values).unwrap();
+        if (res.success) {
+          toast.success("Signed Up Successfully!", { id: toastId });
+          router.push("/sign-in");
         }
       } catch (error) {
-        toast.error(
-          error.data?.message || "Error sending OTP. Please try again."
-        );
+        toast.error(error.data?.errorMessage || "Sign up failed.", {
+          id: toastId,
+        });
       }
     }
   };
@@ -118,7 +136,13 @@ const SignUpForm = () => {
         </div>
 
         <SubmitButton
-          text={isOtpSent ? "Resend OTP" : "Send OTP"}
+          text={
+            globalData?.results?.useSms
+              ? isOtpSent
+                ? "Resend OTP"
+                : "Send OTP"
+              : "Sign Up"
+          }
           loading={isLoading || isOtpLoading}
           fullWidth
         />
@@ -135,34 +159,36 @@ const SignUpForm = () => {
         </Link>
       </div>
 
-      <Modal
-        title="Enter OTP"
-        centered
-        open={otpModalVisible}
-        onCancel={() => setOtpModalVisible(false)}
-        footer={null}
-      >
-        <Input
-          maxLength={4}
-          onChange={(e) => setOtp(e.target.value)}
-          placeholder="Enter 4-digit OTP"
-          style={{
-            textAlign: "center",
-            fontSize: "16px",
-            padding: "10px",
-            width: "100%",
-            marginBottom: "10px",
-          }}
-        />
-        <Button
-          loading={isLoading}
-          onClick={() => verifyOtpAndSignUp(otp)}
-          className="w-full"
-          type="primary"
+      {globalData?.results?.useSms && (
+        <Modal
+          title="Enter OTP"
+          centered
+          open={otpModalVisible}
+          onCancel={() => setOtpModalVisible(false)}
+          footer={null}
         >
-          Verify OTP
-        </Button>
-      </Modal>
+          <Input
+            maxLength={4}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Enter 4-digit OTP"
+            style={{
+              textAlign: "center",
+              fontSize: "16px",
+              padding: "10px",
+              width: "100%",
+              marginBottom: "10px",
+            }}
+          />
+          <Button
+            loading={isLoading}
+            onClick={() => verifyOtpAndSignUp(otp)}
+            className="w-full"
+            type="primary"
+          >
+            Verify OTP
+          </Button>
+        </Modal>
+      )}
     </div>
   );
 };
