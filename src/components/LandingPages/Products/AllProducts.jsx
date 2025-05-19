@@ -438,7 +438,7 @@ const AllProducts = ({ searchParams }) => {
                   value: category.name,
                 };
               })}
-              value={activeGenerics}
+              value={selectedCategories}
               onChange={handleCategoryChange}
               className="flex flex-col gap-2"
             />
