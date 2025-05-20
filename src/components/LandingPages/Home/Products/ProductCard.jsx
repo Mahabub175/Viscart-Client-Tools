@@ -137,7 +137,7 @@ const ProductCard = ({ item }) => {
         }`}
       >
         <div className="flex items-center gap-2 lg:gap-3 mb-3">
-          {item?.offerPrice && (
+          {item?.offerPrice > 0 && (
             <p className="text-xs lg:text-sm line-through text-red-500">
               {globalData?.results?.currency + " " + item?.sellingPrice}
             </p>
