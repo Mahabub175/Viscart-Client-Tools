@@ -142,7 +142,7 @@ const ProductCard = ({ item }) => {
               {globalData?.results?.currency + " " + item?.sellingPrice}
             </p>
           )}
-          {item?.offerPrice ? (
+          {item?.offerPrice > 0 ? (
             <p className="text-black text-xs lg:text-sm text-primary">
               {globalData?.results?.currency + " " + item?.offerPrice}
             </p>

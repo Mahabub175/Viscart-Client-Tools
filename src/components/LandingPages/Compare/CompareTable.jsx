@@ -83,7 +83,7 @@ const CompareTable = ({
                                     </p>
                                     <div className="flex flex-col items-center lg:items-start gap-1 my-2 lg:my-0">
                                       <div className="flex items-center gap-2">
-                                        {product?.offerPrice && (
+                                        {product?.offerPrice > 0 && (
                                           <span className="text-xs line-through text-red-500">
                                             {globalData?.results?.currency +
                                               " " +
@@ -144,7 +144,7 @@ const CompareTable = ({
                                     </p>
                                     <div className="flex flex-col items-center lg:items-start gap-1 my-2 lg:my-0">
                                       <div className="flex items-center gap-2">
-                                        {product?.offerPrice && (
+                                        {product?.offerPrice > 0 && (
                                           <span className="text-xs line-through text-red-500">
                                             {globalData?.results?.currency +
                                               " " +
@@ -255,14 +255,14 @@ const CompareTable = ({
                     Price
                   </div>
                   <span className="flex justify-center gap-4">
-                    {item?.offerPrice && (
+                    {item?.offerPrice > 0 && (
                       <p className="text-sm font-bold line-through text-red-500 ">
                         {globalData?.results?.currency +
                           " " +
                           item?.sellingPrice}
                       </p>
                     )}
-                    {item?.offerPrice ? (
+                    {item?.offerPrice > 0 ? (
                       <p className="text-primary font-bold">
                         {globalData?.results?.currency + " " + item?.offerPrice}
                       </p>
