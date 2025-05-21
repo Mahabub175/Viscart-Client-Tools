@@ -93,8 +93,9 @@ const CompareTable = ({
                                         <span className="text-xs lg:text-sm">
                                           {globalData?.results?.currency +
                                             " " +
-                                            (product?.offerPrice ||
-                                              product?.sellingPrice)}
+                                            (product?.offerPrice > 0
+                                              ? product?.offerPrice
+                                              : product?.sellingPrice)}
                                         </span>
                                       </div>
                                       <p className="text-xs text-gray-500">
@@ -154,8 +155,9 @@ const CompareTable = ({
                                         <span className="text-xs lg:text-sm">
                                           {globalData?.results?.currency +
                                             " " +
-                                            (product?.offerPrice ||
-                                              product?.sellingPrice)}
+                                            (product?.offerPrice > 0
+                                              ? product?.offerPrice
+                                              : product?.sellingPrice)}
                                         </span>
                                       </div>
                                       <p className="text-xs text-gray-500">

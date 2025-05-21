@@ -44,7 +44,7 @@ const QuickViewHover = ({ item, cartData }) => {
       quantity: 1,
       sku: item?.sku,
       weight: item?.weight,
-      price: item?.offerPrice ? item?.offerPrice : item?.sellingPrice,
+      price: item?.offerPrice > 0 ? item?.offerPrice : item?.sellingPrice,
       productName: item?.name,
       ...(user?._id && {
         userName: userData?.name,

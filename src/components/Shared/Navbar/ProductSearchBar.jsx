@@ -120,7 +120,9 @@ const ProductSearchBar = ({
                         <span className="text-xs lg:text-sm">
                           {globalData?.results?.currency +
                             " " +
-                            (product?.offerPrice || product?.sellingPrice)}
+                            (product?.offerPrice > 0
+                              ? product?.offerPrice
+                              : product?.sellingPrice)}
                         </span>
                       </p>
                       <p>Category: {product?.category?.name}</p>
