@@ -2,11 +2,14 @@
 
 import LinkButton from "@/components/Shared/LinkButton";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
+import { setFilter } from "@/redux/services/device/deviceSlice";
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import Image from "next/image";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Categories = () => {
+  const dispatch = useDispatch();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: products } = useGetAllProductsQuery();
 
@@ -46,8 +49,9 @@ const Categories = () => {
           <div
             className="group relative w-[160px] h-[160px] mx-auto rounded-xl"
             key={item?._id}
+            onClick={() => dispatch(setFilter(item?.name))}
           >
-            <LinkButton href={`/products?filter=${item?.name}`}>
+            <LinkButton href={`/products`}>
               <div className="overflow-hidden w-full h-full rounded-xl">
                 <Image
                   src={
@@ -65,7 +69,7 @@ const Categories = () => {
                   </h2>
                 </div>
                 <div className="absolute bottom-10 left-0 right-0 text-white text-center py-1 opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-transform duration-500 text-sm">
-                  {item.productCount} products
+                  {item?.productCount} products
                 </div>
               </div>
             </LinkButton>

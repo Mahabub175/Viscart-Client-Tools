@@ -4,8 +4,11 @@ import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi"
 import { useGetAllProductsQuery } from "@/redux/services/product/productApi";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { setFilter } from "@/redux/services/device/deviceSlice";
 
 const CategoryProducts = () => {
+  const dispatch = useDispatch();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: productData } = useGetAllProductsQuery();
 
@@ -29,6 +32,12 @@ const CategoryProducts = () => {
       : activeProducts?.filter(
           (product) => product?.category?.name === activeCategory
         );
+
+  const itemClickHandler = (item) => {
+    if (item?.category?.name) {
+      dispatch(setFilter(item?.category?.name));
+    }
+  };
 
   return (
     <section className="my-container mt-10">
@@ -82,14 +91,10 @@ const CategoryProducts = () => {
       {filteredProducts?.length > 8 && (
         <div className="flex justify-center mt-10">
           <Link
-            href={`${
-              activeCategory === "all-products"
-                ? "/products"
-                : `/products?filter=${activeCategory}`
-            }`}
+            href={`${"/products"}`}
             className="bg-primary text-white px-6 py-2 rounded duration-300"
           >
-            View All
+            <p onClick={() => itemClickHandler(filteredProducts)}>View All</p>
           </Link>
         </div>
       )}

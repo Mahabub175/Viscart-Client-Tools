@@ -7,8 +7,12 @@ import "swiper/css/pagination";
 import ProductCard from "./ProductCard";
 import { useGetAllCategoriesQuery } from "@/redux/services/category/categoryApi";
 import Link from "next/link";
+import { setFilter } from "@/redux/services/device/deviceSlice";
+import { useDispatch } from "react-redux";
 
 const TopProducts = () => {
+  const dispatch = useDispatch();
+
   const { data: productData } = useGetAllProductsQuery();
   const { data: categories } = useGetAllCategoriesQuery();
 
@@ -37,6 +41,10 @@ const TopProducts = () => {
     (a, b) => b.count - a.count
   );
 
+  const handleClick = (item) => {
+    dispatch(setFilter(item));
+  };
+
   return (
     <section className="my-container mt-10">
       {sortedCategories?.length > 0
@@ -47,10 +55,10 @@ const TopProducts = () => {
                   {category?.name}
                 </h2>
                 <Link
-                  href={`/products?filter=${category?.name}`}
+                  href={`/products`}
                   className="text-primary border-b border-primary font-semibold"
                 >
-                  Show All
+                  <p onClick={() => handleClick(category?.name)}>Show All</p>
                 </Link>
               </div>
               {products?.length > 0 ? (

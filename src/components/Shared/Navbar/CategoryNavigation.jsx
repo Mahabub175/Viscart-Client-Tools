@@ -1,78 +1,11 @@
+import { resetFilter } from "@/redux/services/device/deviceSlice";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const CategoryNavigation = () => {
   const pathname = usePathname();
-  // const { data: categories } = useGetAllCategoriesQuery();
-
-  // const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  // const handleDropdownToggle = () => {
-  //   setDropdownVisible(!dropdownVisible);
-  // };
-
-  // const renderSubcategories = (category) => {
-  //   if (category?.subcategories && category?.subcategories.length > 0) {
-  //     return (
-  //       <Menu>
-  //         {category.subcategories.map((subCategory) => (
-  //           <Menu.Item key={subCategory?._id}>
-  //             <Link href={`/products?filter=${subCategory?.name}`}>
-  //               {subCategory?.name}
-  //             </Link>
-  //           </Menu.Item>
-  //         ))}
-  //       </Menu>
-  //     );
-  //   }
-  //   return null;
-  // };
-
-  // const renderCategories = (parentCategory) => {
-  //   return (
-  //     <Menu>
-  //       {parentCategory?.categories?.map((category) => (
-  //         <Menu.SubMenu
-  //           key={category?._id}
-  //           icon={null}
-  //           title={
-  //             <Link
-  //               href={`/products?filter=${category?.name}`}
-  //               className="flex items-center"
-  //             >
-  //               {category?.name}
-  //             </Link>
-  //           }
-  //         >
-  //           {renderSubcategories(category)}
-  //         </Menu.SubMenu>
-  //       ))}
-  //     </Menu>
-  //   );
-  // };
-
-  // const renderParentCategories = () => {
-  //   return categories?.results
-  //     ?.filter((item) => item?.level === "parentCategory")
-  //     .map((parentCategory) => (
-  //       <Dropdown
-  //         key={parentCategory?._id}
-  //         overlay={renderCategories(parentCategory)}
-  //         trigger={["hover"]}
-  //       >
-  //         <Link
-  //           href={`/products?filter=${parentCategory?.name}`}
-  //           className={`hover:text-orange duration-300 flex items-center cursor-pointer ${
-  //             pathname.includes(parentCategory?.name)
-  //               ? "text-orange"
-  //               : "text-white"
-  //           }`}
-  //         >
-  //           <span>{parentCategory?.name}</span>
-  //         </Link>
-  //       </Dropdown>
-  //     ));
-  // };
+  const dispatch = useDispatch();
 
   const links = [
     { id: 1, to: "/", name: "Home" },
@@ -94,43 +27,9 @@ const CategoryNavigation = () => {
               pathname === link.to ? "text-orange" : "text-white"
             }`}
           >
-            {link.name}
+            <p onClick={() => dispatch(resetFilter())}>{link.name}</p>
           </Link>
         ))}
-
-        {/* <Dropdown
-          overlay={
-            <Menu>
-              {categories?.results
-                ?.filter((item) => item?.level === "parentCategory")
-                .map((parentCategory) => (
-                  <Menu.SubMenu
-                    key={parentCategory?._id}
-                    icon={null}
-                    title={
-                      <Link
-                        href={`/products?filter=${parentCategory?.name}`}
-                        className="flex items-center"
-                      >
-                        <div className="flex items-center justify-between">
-                          {parentCategory?.name}
-                        </div>
-                      </Link>
-                    }
-                  >
-                    {renderCategories(parentCategory)}
-                  </Menu.SubMenu>
-                ))}
-            </Menu>
-          }
-          open={dropdownVisible}
-          onOpenChange={setDropdownVisible}
-        >
-          <div onClick={handleDropdownToggle} className="cursor-pointer">
-            Shop By Categories
-          </div>
-        </Dropdown>
-        {renderParentCategories()} */}
       </div>
     </div>
   );

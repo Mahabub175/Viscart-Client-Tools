@@ -10,8 +10,11 @@ import { FaLocationDot, FaBoxArchive } from "react-icons/fa6";
 import { MdContactPhone } from "react-icons/md";
 import { RiChatQuoteFill } from "react-icons/ri";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const LandingFooter = () => {
+  const pathname = usePathname();
+
   const { data: globalData } = useGetAllGlobalSettingQuery();
 
   const footersData = [
@@ -57,7 +60,13 @@ const LandingFooter = () => {
         <div className="my-container flex flex-wrap justify-center gap-2 lg:gap-5 mb-10">
           {footerLinks?.map((item, i) => (
             <Link key={i} href={item?.to}>
-              <p className="border border-primaryLight p-2 rounded-full text-xs hover:bg-primary hover:text-primaryLight duration-300">
+              <p
+                className={`border border-primaryLight p-2 rounded-full text-xs hover:bg-primary hover:text-primaryLight duration-300 ${
+                  pathname === item?.to
+                    ? "bg-primary text-primaryLight font-medium"
+                    : ""
+                }`}
+              >
                 {item?.name}
               </p>
             </Link>
@@ -117,7 +126,11 @@ const LandingFooter = () => {
                       : "_self"
                   }
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 border border-primaryLight p-4 rounded hover:bg-primary hover:text-primaryLight duration-300"
+                  className={`flex items-center gap-4 border border-primaryLight p-4 rounded duration-300 hover:bg-primary hover:text-primaryLight ${
+                    pathname === footer?.to
+                      ? "bg-primary text-primaryLight"
+                      : ""
+                  }`}
                 >
                   <div>
                     {React.createElement(footer.icon, {

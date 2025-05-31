@@ -38,7 +38,6 @@ const AddToCompare = ({ item }) => {
   };
 
   const addToWishlist = async (id) => {
-    console.log(id);
     const data = {
       ...(user?._id ? { user: user._id } : { deviceId }),
       product: id,

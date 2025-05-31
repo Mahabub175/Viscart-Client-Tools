@@ -19,17 +19,12 @@ import { base_url_image } from "@/utilities/configs/base_api";
 const ProductEdit = ({ open, setOpen, itemId }) => {
   const [fields, setFields] = useState([]);
   const [content, setContent] = useState("");
-  const [video, setVideo] = useState(null);
 
   const variantProductRef = useRef(null);
 
   const handleVariantProduct = useCallback((submitFunction) => {
     variantProductRef.current = submitFunction;
   }, []);
-
-  const onChange = (fileList) => {
-    setVideo(fileList);
-  };
 
   const { data: productData, isFetching: isProductFetching } =
     useGetSingleProductQuery(itemId, {
@@ -47,13 +42,12 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
     const variantData = variantProductRef.current
       ? variantProductRef.current()
       : null;
-
     const toastId = toast.loading("Updating Product...");
     try {
       const submittedData = {
         ...values,
-        ...(variantData?.selectedRowData && {
-          variants: variantData.selectedRowData.map((variant) => {
+        ...(variantData?.selectedRowData?.length > 0 && {
+          variants: variantData?.selectedRowData?.map((variant) => {
             const { images, ...rest } = variant;
 
             const processedImages = images.map((image) => {
@@ -73,7 +67,6 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
           }),
         }),
         ...(content && { description: content }),
-        ...(video && { video: video?.[0]?.originFileObj }),
       };
 
       if (values?.images?.length > 0) {
@@ -98,7 +91,6 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
       } else {
         delete submittedData.mainImage;
       }
-
       const updatedProductData = new FormData();
       appendToFormData(submittedData, updatedProductData);
 
@@ -173,7 +165,6 @@ const ProductEdit = ({ open, setOpen, itemId }) => {
           videoData={formatImagePath(productData?.video)}
           content={content}
           setContent={setContent}
-          onChange={onChange}
         />
 
         <CustomSelect

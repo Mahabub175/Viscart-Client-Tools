@@ -6,8 +6,8 @@ import { useGetAllGlobalSettingQuery } from "@/redux/services/globalSetting/glob
 import { formatImagePath } from "@/utilities/lib/formatImagePath";
 import LinkButton from "@/components/Shared/LinkButton";
 import QuickProductView from "@/components/Shared/Product/QuickProductView";
-import { useSelector } from "react-redux";
-import { useDeviceId } from "@/redux/services/device/deviceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilter, useDeviceId } from "@/redux/services/device/deviceSlice";
 import {
   useAddWishlistMutation,
   useGetSingleWishlistByUserQuery,
@@ -21,6 +21,7 @@ import { useGetSingleUserQuery } from "@/redux/services/auth/authApi";
 import { sendGTMEvent } from "@next/third-parties/google";
 
 const ProductCard = ({ item }) => {
+  const dispatch = useDispatch();
   const { data: globalData } = useGetAllGlobalSettingQuery();
   const [isHovered, setIsHovered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -79,6 +80,12 @@ const ProductCard = ({ item }) => {
     );
   }, [wishlistData, item?._id]);
 
+  const itemClickHandler = (item) => {
+    if (item?.category?.name) {
+      dispatch(setFilter(item?.category?.name));
+    }
+  };
+
   return (
     <div
       className="relative group lg:w-[200px] mx-auto h-[340px] flex flex-col border border-gray-200 bg-white rounded-xl overflow-hidden hover:-translate-y-2 duration-500"
@@ -124,8 +131,11 @@ const ProductCard = ({ item }) => {
               </h2>
             </Tooltip>
           </LinkButton>
-          <LinkButton href={`/products?filter=${item?.category?.name}`}>
-            <h2 className="text-[10px] lg:text-xs text-start md:text-sm hover:text-gray-500 duration-300 text-gray-400">
+          <LinkButton href={`/products`}>
+            <h2
+              className="text-[10px] lg:text-xs text-start md:text-sm hover:text-gray-500 duration-300 text-gray-400"
+              onClick={() => itemClickHandler(item)}
+            >
               {item?.category?.name}
             </h2>
           </LinkButton>
