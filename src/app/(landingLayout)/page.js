@@ -7,7 +7,6 @@ import CategoryProducts from "@/components/LandingPages/Home/Products/CategoryPr
 import OfferProducts from "@/components/LandingPages/Home/Products/OfferProducts";
 import RecentlyViewedProducts from "@/components/LandingPages/Home/Products/RecentlyViewedProducts";
 import TopProducts from "@/components/LandingPages/Home/Products/TopProducts";
-import IpAddressFetcher from "@/components/Shared/Test/IpAddressFetcher";
 
 export const metadata = {
   title: "Home | Viscart",
@@ -17,7 +16,7 @@ export const metadata = {
 const page = async () => {
   return (
     <div className="overflow-x-hidden">
-      <IpAddressFetcher />
+      {/* <IpAddressFetcher /> */}
       <Banner />
       <Categories />
       <CategoryProducts />
