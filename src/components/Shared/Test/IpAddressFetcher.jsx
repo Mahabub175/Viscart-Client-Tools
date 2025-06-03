@@ -99,7 +99,7 @@ const IpAddressFetcher = () => {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
+    const watchId = navigator.geolocation.watchPosition(
       async (pos) => {
         const coords = {
           lat: pos.coords.latitude,
@@ -121,15 +121,21 @@ const IpAddressFetcher = () => {
       (err) => {
         setError(err.message);
       },
-      { enableHighAccuracy: true }
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
     );
+
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!position) return <p>Getting your exact location...</p>;
 
   return (
-    <div className="p-4 bg-white rounded shadow max-w-md mx-auto my-10">
+    <div className="p-4 bg-white rounded shadow max-w-md mx-auto mb-10">
       <h2 className="text-xl font-semibold mb-2">Your Exact Location</h2>
       <ul className="text-sm space-y-1">
         <li>
