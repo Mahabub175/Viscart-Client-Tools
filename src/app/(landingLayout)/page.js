@@ -16,6 +16,7 @@ export const metadata = {
 const page = async () => {
   return (
     <div className="overflow-x-hidden">
+      {/* <IpAddressFetcher /> */}
       <Banner />
       <Categories />
       <CategoryProducts />
