@@ -3,8 +3,8 @@
 import { paginationNumbers } from "@/assets/data/paginationData";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import DetailsModal from "@/components/Reusable/Modal/DetailsModal";
-import { useDeleteAttributeMutation } from "@/redux/services/attribute/attributeApi";
 import {
+  useDeleteCartMutation,
   useGetCartsQuery,
   useGetSingleCartQuery,
 } from "@/redux/services/cart/cartApi";
@@ -46,7 +46,7 @@ const Cart = () => {
     skip: !itemId,
   });
 
-  const [deleteAttribute] = useDeleteAttributeMutation();
+  const [deleteCart] = useDeleteCartMutation();
 
   const handleMenuClick = (key, id) => {
     setItemId(id);
@@ -205,7 +205,7 @@ const Cart = () => {
         modalOpen={deleteModalOpen}
         setModalOpen={setDeleteModalOpen}
         text={"cart"}
-        func={deleteAttribute}
+        func={deleteCart}
       />
     </div>
   );

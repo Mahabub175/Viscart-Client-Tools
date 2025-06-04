@@ -3,7 +3,6 @@
 import { paginationNumbers } from "@/assets/data/paginationData";
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import DetailsModal from "@/components/Reusable/Modal/DetailsModal";
-import { useDeleteAttributeMutation } from "@/redux/services/attribute/attributeApi";
 import {
   useGetSingleWishlistQuery,
   useGetWishlistsQuery,
@@ -23,6 +22,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
+import { useDeleteWishlistMutation } from "../../../../../redux/services/wishlist/wishlistApi";
 
 const Wishlist = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -46,7 +46,7 @@ const Wishlist = () => {
     skip: !itemId,
   });
 
-  const [deleteAttribute] = useDeleteAttributeMutation();
+  const [deleteWishlist] = useDeleteWishlistMutation();
 
   const handleMenuClick = (key, id) => {
     setItemId(id);
@@ -201,7 +201,7 @@ const Wishlist = () => {
         modalOpen={deleteModalOpen}
         setModalOpen={setDeleteModalOpen}
         text={"wishlist"}
-        func={deleteAttribute}
+        func={deleteWishlist}
       />
     </div>
   );

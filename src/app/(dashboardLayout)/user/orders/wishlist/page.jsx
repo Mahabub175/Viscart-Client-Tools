@@ -2,9 +2,9 @@
 
 import DeleteModal from "@/components/Reusable/Modal/DeleteModal";
 import DetailsModal from "@/components/Reusable/Modal/DetailsModal";
-import { useDeleteAttributeMutation } from "@/redux/services/attribute/attributeApi";
 import { useCurrentUser } from "@/redux/services/auth/authSlice";
 import {
+  useDeleteWishlistMutation,
   useGetSingleWishlistByUserQuery,
   useGetSingleWishlistQuery,
 } from "@/redux/services/wishlist/wishlistApi";
@@ -31,7 +31,7 @@ const UserWishlist = () => {
     skip: !itemId,
   });
 
-  const [deleteAttribute] = useDeleteAttributeMutation();
+  const [deleteWishlist] = useDeleteWishlistMutation();
 
   const handleMenuClick = (key, id) => {
     setItemId(id);
@@ -168,7 +168,7 @@ const UserWishlist = () => {
         modalOpen={deleteModalOpen}
         setModalOpen={setDeleteModalOpen}
         text={"wishlist"}
-        func={deleteAttribute}
+        func={deleteWishlist}
       />
     </div>
   );
